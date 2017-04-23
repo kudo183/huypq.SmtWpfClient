@@ -1,0 +1,20 @@
+﻿<Abstraction:BaseComplexView
+    x:Class="huypq.SmtWpfClientTest.ManageUserView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:SimpleDataGrid="clr-namespace:SimpleDataGrid;assembly=SimpleDataGrid"
+    xmlns:Dto="clr-namespace:huypq.SmtSharedTest;assembly=huypq.SmtSharedTest"
+    xmlns:Abstraction="clr-namespace:huypq.SmtWpfClient.Abstraction;assembly=huypq.SmtWpfClient"
+    xmlns:local="clr-namespace:huypq.SmtWpfClientTest">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <local:SmtUserView Abstraction:BaseComplexView.ViewLevel="0"/>
+        <local:SmtUserClaimView Grid.Column="1" Abstraction:BaseComplexView.ViewLevel="1" Abstraction:BaseComplexView.FilterProperty="UserID"/>
+        <GridSplitter Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="5"/>
+    </Grid>
+</Abstraction:BaseComplexView>
