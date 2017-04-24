@@ -63,20 +63,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ManageUserView.xaml.cs">
+    <Compile Include="Smt\ManageUserView.xaml.cs">
       <DependentUpon>ManageUserView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SmtUserClaimView.xaml.cs">
-      <DependentUpon>SmtUserClaimView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SmtUserView.xaml.cs">
-      <DependentUpon>SmtUserView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SmtUserClaimViewModel.cs" />
-    <Compile Include="SmtUserViewModel.cs" />
+    <Compile Include="Smt\SmtUserClaimView.cs" />
+    <Compile Include="Smt\SmtUserClaimViewModel.cs" />
+    <Compile Include="Smt\SmtUserView.cs" />
+    <Compile Include="Smt\SmtUserViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -89,15 +83,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ManageUserView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SmtUserClaimView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SmtUserView.xaml">
+    <Page Include="Smt\ManageUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

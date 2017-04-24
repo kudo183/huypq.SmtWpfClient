@@ -11,7 +11,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <local:SmtUserView Abstraction:BaseComplexView.ViewLevel="0"/>
         <local:SmtUserClaimView Grid.Column="1" Abstraction:BaseComplexView.ViewLevel="1" Abstraction:BaseComplexView.FilterProperty="UserID"/>

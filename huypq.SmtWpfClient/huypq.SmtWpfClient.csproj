@@ -79,6 +79,8 @@
     <Compile Include="ProtobufDataService.cs" />
     <Compile Include="ReferenceDataManager.cs" />
     <Compile Include="ServiceLocator.cs" />
+    <Compile Include="View\SmtUserBaseView.cs" />
+    <Compile Include="View\SmtUserClaimBaseView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\huypq.SimpleDataGrid\SimpleDataGrid\SimpleDataGrid.csproj">

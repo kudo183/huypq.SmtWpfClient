@@ -28,18 +28,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
             UpdateCommand = new SimpleDataGrid.SimpleCommand("UpdateCommand", () =>
             {
-                var selected = SelectedItem as SmtIUserDto;
-                var dto = new T()
-                {
-                    UserName = selected.UserName,
-                    PasswordHash = selected.PasswordHash,
-                    CreateDate = selected.CreateDate,
-                    Email = selected.Email,
-                    ID = selected.ID,
-                    LastUpdateTime = selected.LastUpdateTime,
-                    TokenValidTime = selected.TokenValidTime,
-                    TenantID = selected.TenantID
-                };
+                var dto = SelectedItem as SmtIUserDto;                
                 var de = new View.DataEditor();
                 de.Add(nameof(SmtIUserDto.UserName), nameof(SmtIUserDto.UserName), View.DataEditor.DataType.Text);
                 de.DataContext = dto;
