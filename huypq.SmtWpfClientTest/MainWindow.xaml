@@ -3,12 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:control="clr-namespace:huypq.SmtWpfClient.View;assembly=huypq.SmtWpfClient"
+        xmlns:converter="clr-namespace:huypq.SmtWpfClient.Converter;assembly=huypq.SmtWpfClient"
         xmlns:local="clr-namespace:huypq.SmtWpfClientTest"
         mc:Ignorable="d"
         Title="Test">
-    <StackPanel>
-        <Button Content="Logout" Width="200" Height="30" Click="LogoutButton_Click"/>
-        <Button Content="Change Password" Width="200" Height="30" Click="ChangePasswordButton_Click"/>
-        <Button Content="ManageUser" Width="200" Height="30" Click="ManageUserButton_Click"/>
-    </StackPanel>
+    <Window.Resources>
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVis"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Grid>
+        <control:LoginView x:Name="loginView" Visibility="{Binding IsLoggedIn, Converter={StaticResource InverseBoolToVis}}"/>
+        <StackPanel DataContext="{Binding ElementName=loginView, Path=DataContext}" Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVis}}">
+            <Button Content="Logout" Width="200" Height="30" Click="LogoutButton_Click"/>
+            <Button Content="Change Password" Width="200" Height="30" Click="ChangePasswordButton_Click"/>
+            <Button Content="ManageUser" Width="200" Height="30" Click="ManageUserButton_Click" Visibility="{Binding IsTenant, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+    </Grid>
 </Window>

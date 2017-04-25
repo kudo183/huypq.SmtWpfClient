@@ -8,10 +8,9 @@ namespace huypq.SmtWpfClient.Abstraction
     {
         void SetToken(string token);
         void SetRootUri(string rootUri);
-        string Register(string tenantLoginName, string tenantName, string password);
+        string Register(string tenantLoginName, string tenantName);
         string TenantRequestToken(string email, string purpose);
         string UserRequestToken(string email, string tenantName, string purpose);
-        string ConfirmEmail(string token);
         string ResetPassword(string token, string pass);
         void TenantLogin(string tenantLoginName, string password);
         void UserLogin(string tenantName, string username, string password);

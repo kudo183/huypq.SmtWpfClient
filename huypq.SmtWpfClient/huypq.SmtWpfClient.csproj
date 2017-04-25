@@ -55,6 +55,7 @@
     <Compile Include="BaseComplexView.cs" />
     <Compile Include="BaseView.cs" />
     <Compile Include="BaseViewModel.cs" />
+    <Compile Include="Converter\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Converter\LongToDateTimeStringConverter.cs" />
     <Compile Include="ViewModelFactory.cs" />
     <Compile Include="ViewModel\SmtUserClaimBaseViewModel.cs" />
@@ -70,8 +71,8 @@
     <Compile Include="Interface\IDataService.cs" />
     <Compile Include="Interface\IViewModelFactory.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="View\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="NameManager.cs" />
@@ -108,7 +109,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\LoginWindow.xaml">
+    <Page Include="View\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

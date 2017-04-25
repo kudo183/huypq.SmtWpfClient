@@ -59,16 +59,6 @@ namespace huypq.SmtWpfClient.View
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.IsConfirmed),
-                Binding = new Binding()
-                {
-                    Path = new PropertyPath(nameof(SmtIUserDto.IsConfirmed)),
-                    Mode = BindingMode.OneWay
-                }
-            });
-            grid.Columns.Add(new DataGridTextColumnExt()
-            {
-                Width = 80,
                 Header = nameof(SmtIUserDto.CreateDate),
                 Binding = new Binding()
                 {

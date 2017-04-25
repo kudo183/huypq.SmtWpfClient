@@ -1,6 +1,7 @@
 ﻿using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.SmtWpfClient.View;
+using huypq.SmtWpfClient.ViewModel;
 using System.Windows;
 
 namespace huypq.SmtWpfClientTest
@@ -19,6 +20,7 @@ namespace huypq.SmtWpfClientTest
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             _dataService.Logout();
+            (loginView.DataContext as LoginViewModel).ClearData();
         }
 
         private void ChangePasswordButton_Click(object sender, RoutedEventArgs e)

@@ -9,6 +9,36 @@ namespace huypq.SmtWpfClient.ViewModel
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
+        IDataService _dataService;
+
+        private bool _isLoggedIn;
+        public bool IsLoggedIn
+        {
+            get { return _isLoggedIn; }
+            set
+            {
+                if (_isLoggedIn != value)
+                {
+                    _isLoggedIn = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isTenant;
+        public bool IsTenant
+        {
+            get { return _isTenant; }
+            set
+            {
+                if (_isTenant != value)
+                {
+                    _isTenant = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _tenantName;
         public string TenantName
         {
@@ -21,7 +51,6 @@ namespace huypq.SmtWpfClient.ViewModel
                     OnPropertyChanged();
                     RegisterCommand.RaiseCanExecuteChanged();
                     UserLoginCommand.RaiseCanExecuteChanged();
-                    UserResendCommand.RaiseCanExecuteChanged();
                     UserResetCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -39,10 +68,8 @@ namespace huypq.SmtWpfClient.ViewModel
                     OnPropertyChanged();
                     RegisterCommand.RaiseCanExecuteChanged();
                     UserLoginCommand.RaiseCanExecuteChanged();
-                    UserResendCommand.RaiseCanExecuteChanged();
                     UserResetCommand.RaiseCanExecuteChanged();
                     TenantLoginCommand.RaiseCanExecuteChanged();
-                    TenantResendCommand.RaiseCanExecuteChanged();
                     TenantResetCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -60,7 +87,6 @@ namespace huypq.SmtWpfClient.ViewModel
                     OnPropertyChanged();
                     UserLoginCommand.RaiseCanExecuteChanged();
                     TenantLoginCommand.RaiseCanExecuteChanged();
-                    RegisterCommand.RaiseCanExecuteChanged();
                     ResetCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -76,7 +102,6 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     _token = value;
                     OnPropertyChanged();
-                    ConfirmCommand.RaiseCanExecuteChanged();
                     ResetCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -96,9 +121,8 @@ namespace huypq.SmtWpfClient.ViewModel
             }
         }
 
-        public LoginViewModel(Window window)
+        public LoginViewModel()
         {
-            _window = window;
             _dataService = ServiceLocator.Get<IDataService>();
 
             UserLoginCommand = new SimpleCommand("UserLoginCommand",
@@ -127,31 +151,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     return
                     (string.IsNullOrEmpty(_tenantName) == false
-                    && string.IsNullOrEmpty(_email) == false
-                    && string.IsNullOrEmpty(_pass) == false);
-                }
-            );
-            TenantResendCommand = new SimpleCommand("ResendTenantCommand",
-                () => { TenantResendButtonClick(); },
-                () =>
-                {
-                    return string.IsNullOrEmpty(_email) == false;
-                }
-            );
-            UserResendCommand = new SimpleCommand("ResendUserCommand",
-                () => { UserResendButtonClick(); },
-                () =>
-                {
-                    return
-                    (string.IsNullOrEmpty(_tenantName) == false
                     && string.IsNullOrEmpty(_email) == false);
-                }
-            );
-            ConfirmCommand = new SimpleCommand("ConfirmCommand",
-                () => { ConfirmButtonClick(); },
-                () =>
-                {
-                    return string.IsNullOrEmpty(_token) == false;
                 }
             );
             TenantResetCommand = new SimpleCommand("TenantResetCommand",
@@ -179,8 +179,16 @@ namespace huypq.SmtWpfClient.ViewModel
              );
         }
 
-        IDataService _dataService;
-        Window _window;
+        public void ClearData()
+        {
+            IsLoggedIn = false;
+            IsTenant = false;
+            TenantName = string.Empty;
+            Email = string.Empty;
+            Pass = string.Empty;
+            Token = string.Empty;
+            Msg = string.Empty;
+        }
 
         void UserLoginButtonClick()
         {
@@ -189,8 +197,9 @@ namespace huypq.SmtWpfClient.ViewModel
                 Msg = "";
 
                 _dataService.UserLogin(TenantName, Email, Pass);
-                _window.DialogResult = true;
-                _window.Close();
+
+                IsLoggedIn = true;
+                IsTenant = false;
             }
             catch (WebException ex)
             {
@@ -216,8 +225,9 @@ namespace huypq.SmtWpfClient.ViewModel
                 Msg = "";
 
                 _dataService.TenantLogin(Email, Pass);
-                _window.DialogResult = true;
-                _window.Close();
+
+                IsLoggedIn = true;
+                IsTenant = true;
             }
             catch (WebException ex)
             {
@@ -242,82 +252,7 @@ namespace huypq.SmtWpfClient.ViewModel
             {
                 Msg = "";
 
-                Msg = _dataService.Register(Email, TenantName, Pass);
-            }
-            catch (WebException ex)
-            {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
-            }
-        }
-
-        void TenantResendButtonClick()
-        {
-            try
-            {
-                Msg = "";
-
-                Msg = _dataService.TenantRequestToken(Email, "confirmemail");
-            }
-            catch (WebException ex)
-            {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
-            }
-        }
-
-        void UserResendButtonClick()
-        {
-            try
-            {
-                Msg = "";
-
-                Msg = _dataService.UserRequestToken(Email, TenantName, "confirmemail");
-            }
-            catch (WebException ex)
-            {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
-            }
-        }
-
-        void ConfirmButtonClick()
-        {
-            try
-            {
-                Msg = "";
-
-                Msg = _dataService.ConfirmEmail(Token);
+                Msg = _dataService.Register(Email, TenantName);
             }
             catch (WebException ex)
             {
@@ -416,12 +351,6 @@ namespace huypq.SmtWpfClient.ViewModel
         public SimpleCommand TenantLoginCommand { get; private set; }
 
         public SimpleCommand RegisterCommand { get; private set; }
-
-        public SimpleCommand TenantResendCommand { get; private set; }
-
-        public SimpleCommand UserResendCommand { get; private set; }
-
-        public SimpleCommand ConfirmCommand { get; private set; }
 
         public SimpleCommand UserResetCommand { get; private set; }
 

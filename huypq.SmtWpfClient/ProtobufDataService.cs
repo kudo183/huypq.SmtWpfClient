@@ -87,13 +87,12 @@ namespace huypq.SmtWpfClient
             return FromBytes<List<T>>(PostValues(GetFullUri("report", reportName), reportParams, "protobuf"));
         }
 
-        public string Register(string tenantLoginName, string tenantName, string password)
+        public string Register(string tenantLoginName, string tenantName)
         {
             var uri = GetFullUri("smt", "register");
 
             var data = new NameValueCollection();
             data["user"] = tenantLoginName;
-            data["pass"] = password;
             data["tenantname"] = tenantName;
 
             //choose json response type because when respone is a string, json is better than protobuf
@@ -130,20 +129,7 @@ namespace huypq.SmtWpfClient
 
             return GetStringFromBytes(result);
         }
-
-        public string ConfirmEmail(string token)
-        {
-            var uri = GetFullUri("smt", "confirmemail");
-
-            var data = new NameValueCollection();
-            data["token"] = token;
-
-            //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
-
-            return GetStringFromBytes(result);
-        }
-
+        
         public string ResetPassword(string token, string pass)
         {
             var uri = GetFullUri("smt", "resetpassword");
