@@ -42,7 +42,7 @@ namespace huypq.SmtWpfClient
                 controller = NameManager.Instance.GetControllerName<T>();
             }
             var uri = GetFullUri(controller, "get");
-            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe)));
+            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe), "protobuf"));
             foreach (var item in result.Items)
             {
                 item.SetCurrentValueAsOriginalValue();
@@ -58,9 +58,9 @@ namespace huypq.SmtWpfClient
             }
             var uri = GetFullUri(controller, "save");
 
-            var response = Post(uri, ToBytes(changedItems));
+            var result = Post(uri, ToBytes(changedItems));
 
-            return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
+            return GetStringFromBytes(result);
         }
 
         public string Add<T>(T item, string controller = null) where T : SmtIDto
@@ -71,9 +71,9 @@ namespace huypq.SmtWpfClient
             }
             var uri = GetFullUri(controller, "add");
 
-            var response = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item));
 
-            return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
+            return GetStringFromBytes(result);
         }
 
         public string Update<T>(T item, string controller = null) where T : SmtIDto
@@ -84,9 +84,9 @@ namespace huypq.SmtWpfClient
             }
             var uri = GetFullUri(controller, "update");
 
-            var response = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item));
 
-            return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
+            return GetStringFromBytes(result);
         }
 
         public string Delete<T>(T item, string controller = null) where T : SmtIDto
@@ -97,9 +97,9 @@ namespace huypq.SmtWpfClient
             }
             var uri = GetFullUri(controller, "delete");
 
-            var response = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item));
 
-            return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
+            return GetStringFromBytes(result);
         }
 
         public List<T> Report<T>(string reportName, NameValueCollection reportParams)
@@ -240,11 +240,11 @@ namespace huypq.SmtWpfClient
             return client.UploadValues(uri, reportParameters);
         }
 
-        private byte[] Post(string uri, byte[] data)
+        private byte[] Post(string uri, byte[] data, string responseType = "json")
         {
             var client = new MyWebClient();
             client.Headers["request"] = "protobuf";
-            client.Headers["response"] = "protobuf";
+            client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
             var response = client.UploadData(uri, data);

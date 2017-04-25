@@ -10,7 +10,7 @@ using huypq.SmtShared;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public abstract class BaseViewModel<T>: IEditableGridViewModel<T> where T : class, SmtIDto, new()
+    public abstract class BaseViewModel<T> : IEditableGridViewModel<T> where T : class, SmtIDto, new()
     {
         protected string _debugName;
 
@@ -190,24 +190,33 @@ namespace huypq.SmtWpfClient.Abstraction
 
             qe.WhereOptions = WhereOptionsFromHeaderFilter(HeaderFilters);
             qe.OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters);
-            
-            result = DataService.Get<T>(qe);
 
-            _originalEntities.Clear();
-
-            foreach (var dto in result.Items)
+            try
             {
-                ProcessDtoBeforeAddToEntities(dto);
-                _originalEntities.Add(dto);
+                result = DataService.Get<T>(qe);
+
+                _originalEntities.Clear();
+
+                foreach (var dto in result.Items)
+                {
+                    ProcessDtoBeforeAddToEntities(dto);
+                    _originalEntities.Add(dto);
+                }
+
+                Entities.Reset(result.Items);
+
+                PagerViewModel.ItemCount = Entities.Count;
+                PagerViewModel.PageCount = result.PageCount;
+                PagerViewModel.SetCurrentPageIndexWithoutAction(result.PageIndex);
+
+                AfterLoad();
+
+                Msg = "OK";
             }
-
-            Entities.Reset(result.Items);
-
-            PagerViewModel.ItemCount = Entities.Count;
-            PagerViewModel.PageCount = result.PageCount;
-            PagerViewModel.SetCurrentPageIndexWithoutAction(result.PageIndex);
-
-            AfterLoad();
+            catch (Exception ex)
+            {
+                Msg = ex.Message;
+            }
         }
 
         public void Save()
@@ -242,8 +251,15 @@ namespace huypq.SmtWpfClient.Abstraction
                 return;
             }
 
-            var response = DataService.Save(changedItems);
-
+            try
+            {
+                var response = DataService.Save(changedItems);
+                Msg = response;
+            }
+            catch (Exception ex)
+            {
+                Msg = ex.Message;
+            }
             Load();
         }
 
