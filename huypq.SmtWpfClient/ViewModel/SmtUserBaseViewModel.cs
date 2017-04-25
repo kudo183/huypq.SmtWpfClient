@@ -8,6 +8,21 @@ namespace huypq.SmtWpfClient.ViewModel
     {
         IDataService _dataService;
 
+        private string _lockUserButtonContent;
+
+        public string LockUserButtonContent
+        {
+            get { return _lockUserButtonContent; }
+            set
+            {
+                if (_lockUserButtonContent != value)
+                {
+                    _lockUserButtonContent = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public SmtUserBaseViewModel()
         {
             _dataService = ServiceLocator.Get<IDataService>();
@@ -28,7 +43,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
             UpdateCommand = new SimpleDataGrid.SimpleCommand("UpdateCommand", () =>
             {
-                var dto = SelectedItem as SmtIUserDto;                
+                var dto = SelectedItem as T;
                 var de = new View.DataEditor();
                 de.Add(nameof(SmtIUserDto.UserName), nameof(SmtIUserDto.UserName), View.DataEditor.DataType.Text);
                 de.DataContext = dto;
@@ -41,7 +56,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
             DeleteCommand = new SimpleDataGrid.SimpleCommand("DeleteCommand", () =>
             {
-                var dto = SelectedItem as SmtIUserDto;
+                var dto = SelectedItem as T;
                 if (MessageBox.Show(string.Format("delete user [{0}] ?", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     _dataService.Delete(dto);
@@ -49,12 +64,12 @@ namespace huypq.SmtWpfClient.ViewModel
                 }
             }, () => SelectedValue != null);
 
-            ResetPasswordCommand = new SimpleDataGrid.SimpleCommand("ResetPasswordCommand", () =>
+            LockUserCommand = new SimpleDataGrid.SimpleCommand("LockUserCommand", () =>
             {
                 var dto = SelectedItem as SmtIUserDto;
-                if (MessageBox.Show(string.Format("reset password of user [{0}] ?", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(string.Format("{0} user [{1}] ?", dto.IsLocked ? "unlock" : "lock", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    _dataService.ResetUserPassword((SelectedItem as SmtIUserDto).Email);
+                    _dataService.LockUser((SelectedItem as SmtIUserDto).Email, dto.IsLocked == false);
                     Load();
                 }
             }, () => SelectedValue != null);
@@ -64,12 +79,18 @@ namespace huypq.SmtWpfClient.ViewModel
         {
             UpdateCommand.RaiseCanExecuteChanged();
             DeleteCommand.RaiseCanExecuteChanged();
-            ResetPasswordCommand.RaiseCanExecuteChanged();
+            LockUserCommand.RaiseCanExecuteChanged();
+        }
+
+        protected override void OnSelectedValueChanged()
+        {
+            var dto = SelectedItem as SmtIUserDto;
+            LockUserButtonContent = dto.IsLocked ? "Unlock" : "Lock";
         }
 
         public SimpleDataGrid.SimpleCommand AddCommand { get; set; }
         public SimpleDataGrid.SimpleCommand UpdateCommand { get; set; }
         public SimpleDataGrid.SimpleCommand DeleteCommand { get; set; }
-        public SimpleDataGrid.SimpleCommand ResetPasswordCommand { get; set; }
+        public SimpleDataGrid.SimpleCommand LockUserCommand { get; set; }
     }
 }

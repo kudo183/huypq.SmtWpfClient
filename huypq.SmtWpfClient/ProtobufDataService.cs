@@ -35,9 +35,13 @@ namespace huypq.SmtWpfClient
             _rootUri = rootUri;
         }
 
-        public PagingResultDto<T> Get<T>(QueryExpression qe) where T : SmtIDto
+        public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : SmtIDto
         {
-            var uri = GetFullUri(NameManager.Instance.GetControllerName<T>(), "get");
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, "get");
             var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe)));
             foreach (var item in result.Items)
             {
@@ -46,36 +50,52 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
-        public string Save<T>(List<T> changedItems) where T : SmtIDto
+        public string Save<T>(List<T> changedItems, string controller = null) where T : SmtIDto
         {
-            var uri = GetFullUri(NameManager.Instance.GetControllerName<T>(), "save");
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, "save");
 
             var response = Post(uri, ToBytes(changedItems));
 
             return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
         }
 
-        public string Add<T>(T item) where T : SmtIDto
+        public string Add<T>(T item, string controller = null) where T : SmtIDto
         {
-            var uri = GetFullUri(NameManager.Instance.GetControllerName<T>(), "add");
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, "add");
 
             var response = Post(uri, ToBytes(item));
 
             return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
         }
 
-        public string Update<T>(T item) where T : SmtIDto
+        public string Update<T>(T item, string controller = null) where T : SmtIDto
         {
-            var uri = GetFullUri(NameManager.Instance.GetControllerName<T>(), "update");
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, "update");
 
             var response = Post(uri, ToBytes(item));
 
             return System.Text.Encoding.UTF8.GetString(response, 1, response.Length - 2);
         }
 
-        public string Delete<T>(T item) where T : SmtIDto
+        public string Delete<T>(T item, string controller = null) where T : SmtIDto
         {
-            var uri = GetFullUri(NameManager.Instance.GetControllerName<T>(), "delete");
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, "delete");
 
             var response = Post(uri, ToBytes(item));
 
@@ -129,7 +149,7 @@ namespace huypq.SmtWpfClient
 
             return GetStringFromBytes(result);
         }
-        
+
         public string ResetPassword(string token, string pass)
         {
             var uri = GetFullUri("smt", "resetpassword");
@@ -173,17 +193,18 @@ namespace huypq.SmtWpfClient
             _token = GetStringFromBytes(result);
         }
 
-        public void ResetUserPassword(string username)
+        public string LockUser(string username, bool isLocked)
         {
-            var uri = GetFullUri("smt", "resetuserpassword");
+            var uri = GetFullUri("smt", "lockuser");
 
             var data = new NameValueCollection();
             data["user"] = username;
+            data["islocked"] = isLocked.ToString();
 
             //choose json response type because when respone is a string, json is better than protobuf
             var result = PostValues(uri, data, "json");
 
-            _token = GetStringFromBytes(result);
+            return GetStringFromBytes(result);
         }
 
         public string ChangePassword(string currentPass, string newPass)

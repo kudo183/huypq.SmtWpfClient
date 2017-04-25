@@ -116,14 +116,14 @@ namespace huypq.SmtWpfClient.View
             grid.CustomMenuItems.Add(btnDelete);
             btnDelete.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.DeleteCommand)));
 
-            var btnResetPassword = new Button()
+            var btnLockUser = new Button()
             {
-                Content = "ResetPassword",
-                Width = 110,
+                Width = 75,
                 Margin = new Thickness(5)
             };
-            grid.CustomMenuItems.Add(btnResetPassword);
-            btnResetPassword.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.ResetPasswordCommand)));
+            grid.CustomMenuItems.Add(btnLockUser);
+            btnLockUser.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserCommand)));
+            btnLockUser.SetBinding(Button.ContentProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserButtonContent)));
 
             Content = grid;
         }

@@ -140,6 +140,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
                 _selectedValue = value;
 
+                OnSelectedValueChanged();
                 RaiseCommandCanExecuteChanged();
                 ActionSelectedValueChanged?.Invoke(_selectedValue);
             }
@@ -172,6 +173,8 @@ namespace huypq.SmtWpfClient.Abstraction
         public SimpleCommand SaveCommand { get; set; }
 
         protected virtual void RaiseCommandCanExecuteChanged() { }
+
+        protected virtual void OnSelectedValueChanged() { }
 
         public void Load()
         {
