@@ -7,6 +7,7 @@ using SimpleDataGrid;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using huypq.SmtShared;
+using huypq.SmtShared.Constant;
 
 namespace huypq.SmtWpfClient.Abstraction
 {

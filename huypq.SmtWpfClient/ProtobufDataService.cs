@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using huypq.SmtShared;
-using huypq.SmtWpfClient.Abstraction;
-using QueryBuilder;
 using System.Net;
 using System.IO;
+using huypq.SmtShared;
+using huypq.SmtShared.Constant;
+using huypq.SmtWpfClient.Abstraction;
+using QueryBuilder;
 
 namespace huypq.SmtWpfClient
 {
@@ -41,8 +42,8 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            var uri = GetFullUri(controller, "get");
-            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe), "protobuf"));
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
+            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe), SerializeType.Protobuf));
             foreach (var item in result.Items)
             {
                 item.SetCurrentValueAsOriginalValue();
@@ -56,9 +57,9 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            var uri = GetFullUri(controller, "save");
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Save);
 
-            var result = Post(uri, ToBytes(changedItems));
+            var result = Post(uri, ToBytes(changedItems), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
@@ -69,9 +70,9 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            var uri = GetFullUri(controller, "add");
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Add);
 
-            var result = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
@@ -82,9 +83,9 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            var uri = GetFullUri(controller, "update");
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Update);
 
-            var result = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
@@ -95,49 +96,49 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            var uri = GetFullUri(controller, "delete");
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Delete);
 
-            var result = Post(uri, ToBytes(item));
+            var result = Post(uri, ToBytes(item), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public List<T> Report<T>(string reportName, NameValueCollection reportParams)
         {
-            return FromBytes<List<T>>(PostValues(GetFullUri("report", reportName), reportParams, "protobuf"));
+            return FromBytes<List<T>>(PostValues(GetFullUri("report", reportName), reportParams, SerializeType.Protobuf));
         }
 
         public string Register(string tenantLoginName, string tenantName)
         {
-            var uri = GetFullUri("smt", "register");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.Register);
 
             var data = new NameValueCollection();
             data["user"] = tenantLoginName;
             data["tenantname"] = tenantName;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public string TenantRequestToken(string email, string purpose)
         {
-            var uri = GetFullUri("smt", "tenantrequesttoken");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.TenantRequestToken);
 
             var data = new NameValueCollection();
             data["email"] = email;
             data["purpose"] = purpose;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public string UserRequestToken(string email, string tenantName, string purpose)
         {
-            var uri = GetFullUri("smt", "userrequesttoken");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.UserRequestToken);
 
             var data = new NameValueCollection();
             data["email"] = email;
@@ -145,42 +146,42 @@ namespace huypq.SmtWpfClient
             data["purpose"] = purpose;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public string ResetPassword(string token, string pass)
         {
-            var uri = GetFullUri("smt", "resetpassword");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.ResetPassword);
 
             var data = new NameValueCollection();
             data["token"] = token;
             data["pass"] = pass;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public void TenantLogin(string tenantLoginName, string password)
         {
-            var uri = GetFullUri("smt", "tenantlogin");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.TenantLogin);
 
             var data = new NameValueCollection();
             data["user"] = tenantLoginName;
             data["pass"] = password;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             _token = GetStringFromBytes(result);
         }
 
         public void UserLogin(string tenantName, string username, string password)
         {
-            var uri = GetFullUri("smt", "userlogin");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.UserLogin);
 
             var data = new NameValueCollection();
             data["tenant"] = tenantName;
@@ -188,35 +189,35 @@ namespace huypq.SmtWpfClient
             data["pass"] = password;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             _token = GetStringFromBytes(result);
         }
 
         public string LockUser(string username, bool isLocked)
         {
-            var uri = GetFullUri("smt", "lockuser");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.LockUser);
 
             var data = new NameValueCollection();
             data["user"] = username;
             data["islocked"] = isLocked.ToString();
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
         public string ChangePassword(string currentPass, string newPass)
         {
-            var uri = GetFullUri("smt", "changepassword");
+            var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.ChangePassword);
 
             var data = new NameValueCollection();
             data["currentpass"] = currentPass;
             data["newpass"] = newPass;
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
@@ -240,10 +241,10 @@ namespace huypq.SmtWpfClient
             return client.UploadValues(uri, reportParameters);
         }
 
-        private byte[] Post(string uri, byte[] data, string responseType = "json")
+        private byte[] Post(string uri, byte[] data, string responseType)
         {
             var client = new MyWebClient();
-            client.Headers["request"] = "protobuf";
+            client.Headers["request"] = SerializeType.Protobuf;
             client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
