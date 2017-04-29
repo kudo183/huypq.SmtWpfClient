@@ -43,7 +43,12 @@ namespace huypq.SmtWpfClientTest
             {
                 DefaultValue = System.Windows.Markup.XmlLanguage.GetLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture.Name)
             });
-            
+
+            ReferenceDataManager<SmtSharedTest.TestDataDto>.Instance.SetOrderChecker((p1, p2) =>
+            {
+                return string.Compare(p1.Data, p2.Data) <= 0;
+            });
+
             StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
         }
     }

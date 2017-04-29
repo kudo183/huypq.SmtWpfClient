@@ -1,4 +1,5 @@
-﻿using huypq.SmtWpfClient;
+﻿using huypq.SmtSharedTest;
+using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.SmtWpfClient.View;
 using huypq.SmtWpfClient.ViewModel;
@@ -15,6 +16,11 @@ namespace huypq.SmtWpfClientTest
         public MainWindow()
         {
             InitializeComponent();
+        }
+        
+        private void TestButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReferenceDataManager<TestDataDto>.Instance.Update();
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
@@ -35,7 +41,25 @@ namespace huypq.SmtWpfClientTest
             {
                 Content = new ManageUserView()
             };
-            w.ShowDialog();
+            w.Show();
+        }
+
+        private void TestDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            var w = new Window()
+            {
+                Content = new TestDataView()
+            };
+            w.Show();
+        }
+
+        private void TestChildDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            var w = new Window()
+            {
+                Content = new TestChildDataView()
+            };
+            w.Show();
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using huypq.SmtShared;
+﻿using System.Collections.Generic;
+using huypq.SmtShared;
 using huypq.SmtWpfClient.Abstraction;
 using SimpleDataGrid;
-using System.Collections.Generic;
+using QueryBuilder;
+using huypq.SmtShared.Constant;
+using System.Linq;
 
 namespace huypq.SmtWpfClient
 {
@@ -29,34 +32,98 @@ namespace huypq.SmtWpfClient
             private set { }
         }
 
-        private readonly ObservableCollectionEx<T> _datas
-            = new ObservableCollectionEx<T>();
+        private readonly SortedObservableCollection<T> _datas = new SortedObservableCollection<T>();
 
-        private readonly List<T> _datasList = new List<T>();
-        private readonly QueryBuilder.QueryExpression _qe = new QueryBuilder.QueryExpression() { PageIndex = -1 };
+        private List<WhereExpression.IWhereOption> _whereOptions = new List<WhereExpression.IWhereOption>();
+        private long _lastUpdate;
+        private bool _isLoaded = false;
+        private const string LastUpdateTimePropertyName = nameof(SmtIDto.LastUpdateTime);
 
-        public void SetOrderByOptions(List<QueryBuilder.OrderByExpression.OrderOption> orderOptions)
+        public void SetOrderChecker(System.Func<T, T, bool> checker)
         {
-            _qe.OrderOptions = orderOptions;
+            _datas.SetOrderChecker(checker);
         }
 
-        public void SetWhereOptions(List<QueryBuilder.WhereExpression.IWhereOption> whereOptions)
+        public void SetWhereOptions(List<WhereExpression.IWhereOption> whereOptions)
         {
-            _qe.WhereOptions = whereOptions;
+            if (whereOptions == null)
+            {
+                _whereOptions.Clear();
+            }
+            else
+            {
+                _whereOptions = whereOptions;
+            }
         }
 
-        public void Load()
+        private void Load()
         {
-            _datasList.Clear();
-            _datasList.AddRange(DataService.Get<T>(_qe).Items);
-            _datas.Reset(_datasList);
+            _lastUpdate = System.DateTime.UtcNow.Ticks;
+            _datas.Reset(DataService.GetAll<T>(_whereOptions));
+
+            _isLoaded = true;
+        }
+
+        public void Update()
+        {
+            if (_isLoaded == false)
+            {
+                Load();
+                return;
+            }
+
+            try
+            {
+                var we = new List<WhereExpression.IWhereOption>();
+
+                foreach (var w in _whereOptions)
+                {
+                    if (w.PropertyPath != LastUpdateTimePropertyName)
+                    {
+                        we.Add(w);
+                    }
+                }
+                we.Add(new WhereExpression.WhereOptionLong()
+                {
+                    Predicate = WhereExpression.GreaterThan,
+                    PropertyPath = LastUpdateTimePropertyName,
+                    Value = _lastUpdate
+                });
+
+                _lastUpdate = System.DateTime.UtcNow.Ticks;
+                var updates = DataService.GetUpdate<T>(_whereOptions);
+                
+                foreach (var item in updates)
+                {
+                    switch (item.State)
+                    {
+                        case DtoState.Add:
+                            _datas.Add(item);
+                            break;
+                        case DtoState.Update:
+                            _datas.UpdateFirst(p => p.ID == item.ID, p => p.Update(item));
+                            break;
+                        case DtoState.Delete:
+                            _datas.RemoveFirst(p => p.ID == item.ID);
+                            break;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Load();
+            }
         }
 
         public ObservableCollectionEx<T> Get(bool forceReload = false)
         {
-            if (forceReload)
+            if (forceReload == true)
             {
                 Load();
+            }
+            else
+            {
+                Update();
             }
             return _datas;
         }
@@ -67,12 +134,16 @@ namespace huypq.SmtWpfClient
             {
                 Load();
             }
-            return _datasList;
+            else
+            {
+                Update();
+            }
+            return _datas.ToList();
         }
 
         public T GetByID(int id)
         {
-            return _datasList.Find(p => p.ID == id);
+            return _datas.FindFirst(p => p.ID == id);
         }
     }
 }

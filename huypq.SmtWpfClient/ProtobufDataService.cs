@@ -51,6 +51,36 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
+        public List<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetAll);
+            var result = FromBytes<List<T>>(Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf));
+            foreach (var item in result)
+            {
+                item.SetCurrentValueAsOriginalValue();
+            }
+            return result;
+        }
+
+        public List<T> GetUpdate<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetUpdate);
+            var result = FromBytes<List<T>>(Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf));
+            foreach (var item in result)
+            {
+                item.SetCurrentValueAsOriginalValue();
+            }
+            return result;
+        }
+
         public string Save<T>(List<T> changedItems, string controller = null) where T : SmtIDto
         {
             if (controller == null)

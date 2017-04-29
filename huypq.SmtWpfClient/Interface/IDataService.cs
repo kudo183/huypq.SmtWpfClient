@@ -18,6 +18,8 @@ namespace huypq.SmtWpfClient.Abstraction
         void Logout();
         string ChangePassword(string currentPass, string newPass);
         PagingResultDto<T> Get<T>(QueryBuilder.QueryExpression qe, string controller = null) where T : SmtIDto;
+        List<T> GetAll<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto;
+        List<T> GetUpdate<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto;
         string Save<T>(List<T> changedItems, string controller = null) where T : SmtIDto;
         string Add<T>(T item, string controller = null) where T : SmtIDto;
         string Update<T>(T item, string controller = null) where T : SmtIDto;

@@ -15,9 +15,12 @@
     <Grid>
         <control:LoginView x:Name="loginView" Visibility="{Binding IsLoggedIn, Converter={StaticResource InverseBoolToVis}}"/>
         <StackPanel DataContext="{Binding ElementName=loginView, Path=DataContext}" Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVis}}">
+            <Button Content="Test" Width="200" Height="30" Click="TestButton_Click"/>
             <Button Content="Logout" Width="200" Height="30" Click="LogoutButton_Click"/>
             <Button Content="Change Password" Width="200" Height="30" Click="ChangePasswordButton_Click"/>
             <Button Content="ManageUser" Width="200" Height="30" Click="ManageUserButton_Click" Visibility="{Binding IsTenant, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="TestData" Width="200" Height="30" Click="TestDataButton_Click"/>
+            <Button Content="TestChildData" Width="200" Height="30" Click="TestChildDataButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

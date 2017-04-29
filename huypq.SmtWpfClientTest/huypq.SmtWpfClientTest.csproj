@@ -71,6 +71,14 @@
     <Compile Include="Smt\SmtUserClaimViewModel.cs" />
     <Compile Include="Smt\SmtUserView.cs" />
     <Compile Include="Smt\SmtUserViewModel.cs" />
+    <Compile Include="TestChildDataViewModel.cs" />
+    <Compile Include="TestChildDataView.xaml.cs">
+      <DependentUpon>TestChildDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TestDataView.xaml.cs">
+      <DependentUpon>TestDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TestDataViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,6 +94,14 @@
     <Page Include="Smt\ManageUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TestChildDataView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TestDataView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +144,10 @@
     <ProjectReference Include="..\..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtShared\huypq.SmtShared.csproj">
       <Project>{D0EA0474-D927-4193-9DDA-58363E8A64C4}</Project>
       <Name>huypq.SmtShared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QueryBuilder\old.NET\QueryBuilder\QueryBuilder\QueryBuilder.csproj">
+      <Project>{e9fbfac6-4189-4eb2-bea0-d81d78687c17}</Project>
+      <Name>QueryBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\huypq.SmtWpfClient\huypq.SmtWpfClient.csproj">
       <Project>{8e941c6e-74ca-4baa-af1d-9d98283db1d1}</Project>
