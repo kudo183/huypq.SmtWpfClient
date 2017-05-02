@@ -58,8 +58,9 @@ namespace huypq.SmtWpfClient
 
         private void Load()
         {
-            _lastUpdate = System.DateTime.UtcNow.Ticks;
-            _datas.Reset(DataService.GetAll<T>(_whereOptions));
+            var result = DataService.GetAll<T>(_whereOptions);
+            _lastUpdate = result.LastUpdateTime;
+            _datas.Reset(result.Items);
 
             _isLoaded = true;
         }
@@ -90,10 +91,10 @@ namespace huypq.SmtWpfClient
                     Value = _lastUpdate
                 });
 
-                _lastUpdate = System.DateTime.UtcNow.Ticks;
-                var updates = DataService.GetUpdate<T>(_whereOptions);
+                var result = DataService.GetUpdate<T>(_whereOptions);
+                _lastUpdate = result.LastUpdateTime;
                 
-                foreach (var item in updates)
+                foreach (var item in result.Items)
                 {
                     switch (item.State)
                     {
