@@ -26,16 +26,7 @@ namespace huypq.SmtWpfClient
             _token = option.Token;
             _rootUri = option.RootUri;
         }
-
-        public void SetToken(string token)
-        {
-            _token = token;
-        }
-        public void SetRootUri(string rootUri)
-        {
-            _rootUri = rootUri;
-        }
-
+        
         public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : SmtIDto
         {
             if (controller == null)

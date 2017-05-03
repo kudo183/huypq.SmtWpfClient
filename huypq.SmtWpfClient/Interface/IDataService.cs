@@ -6,8 +6,6 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public interface IDataService
     {
-        void SetToken(string token);
-        void SetRootUri(string rootUri);
         string Register(string tenantLoginName, string tenantName);
         string TenantRequestToken(string email, string purpose);
         string UserRequestToken(string email, string tenantName, string purpose);
