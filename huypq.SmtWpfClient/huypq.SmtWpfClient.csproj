@@ -61,6 +61,9 @@
     <Compile Include="ViewModelFactory.cs" />
     <Compile Include="ViewModel\SmtUserClaimBaseViewModel.cs" />
     <Compile Include="ViewModel\SmtUserBaseViewModel.cs" />
+    <Compile Include="View\AllView.xaml.cs">
+      <DependentUpon>AllView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataEditor.xaml.cs">
       <DependentUpon>DataEditor.xaml</DependentUpon>
     </Compile>
@@ -102,6 +105,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\AllView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\DataEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
