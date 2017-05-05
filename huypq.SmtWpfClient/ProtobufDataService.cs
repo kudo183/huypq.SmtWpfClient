@@ -27,7 +27,7 @@ namespace huypq.SmtWpfClient
             _rootUri = option.RootUri;
         }
         
-        public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : SmtIDto
+        public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -42,7 +42,7 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
-        public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto
+        public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -57,7 +57,7 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
-        public PagingResultDto<T> GetUpdate<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto
+        public PagingResultDto<T> GetUpdate<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -72,7 +72,7 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
-        public string Save<T>(List<T> changedItems, string controller = null) where T : SmtIDto
+        public string Save<T>(List<T> changedItems, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -85,7 +85,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Add<T>(T item, string controller = null) where T : SmtIDto
+        public string Add<T>(T item, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -98,7 +98,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Update<T>(T item, string controller = null) where T : SmtIDto
+        public string Update<T>(T item, string controller = null) where T : IDto
         {
             if (controller == null)
             {
@@ -111,7 +111,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Delete<T>(T item, string controller = null) where T : SmtIDto
+        public string Delete<T>(T item, string controller = null) where T : IDto
         {
             if (controller == null)
             {

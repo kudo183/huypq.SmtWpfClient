@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public class BaseView<T> : UserControl, IBaseView where T : class, SmtIDto
+    public class BaseView<T> : UserControl, IBaseView where T : class, IDto
     {
         protected string _debugName;
 

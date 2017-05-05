@@ -7,7 +7,7 @@ using System.Windows.Data;
 
 namespace huypq.SmtWpfClient.View
 {
-    public class SmtUserBaseView<T> : BaseView<T> where T : class, SmtIUserDto, new()
+    public class SmtUserBaseView<T> : BaseView<T> where T : class, IUserDto, new()
     {
         public SmtUserBaseView()
         {
@@ -19,60 +19,60 @@ namespace huypq.SmtWpfClient.View
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.ID),
+                Header = nameof(IUserDto.ID),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.ID)),
+                    Path = new PropertyPath(nameof(IUserDto.ID)),
                     Mode = BindingMode.OneWay
                 }
             });
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 180,
-                Header = nameof(SmtIUserDto.Email),
+                Header = nameof(IUserDto.Email),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.Email)),
+                    Path = new PropertyPath(nameof(IUserDto.Email)),
                     Mode = BindingMode.OneWay
                 }
             });
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 120,
-                Header = nameof(SmtIUserDto.UserName),
+                Header = nameof(IUserDto.UserName),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.UserName)),
+                    Path = new PropertyPath(nameof(IUserDto.UserName)),
                     Mode = BindingMode.OneWay
                 }
             });
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.IsLocked),
+                Header = nameof(IUserDto.IsLocked),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.IsLocked)),
+                    Path = new PropertyPath(nameof(IUserDto.IsLocked)),
                     Mode = BindingMode.OneWay
                 }
             });
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.CreateDate),
+                Header = nameof(IUserDto.CreateDate),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.CreateDate)),
+                    Path = new PropertyPath(nameof(IUserDto.CreateDate)),
                     Mode = BindingMode.OneWay
                 }
             });
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.LastUpdateTime),
+                Header = nameof(IUserDto.LastUpdateTime),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.LastUpdateTime)),
+                    Path = new PropertyPath(nameof(IUserDto.LastUpdateTime)),
                     Mode = BindingMode.OneWay,
                     Converter = Converter.LongToDateTimeStringConverter.Instance
                 }
@@ -80,10 +80,10 @@ namespace huypq.SmtWpfClient.View
             grid.Columns.Add(new DataGridTextColumnExt()
             {
                 Width = 80,
-                Header = nameof(SmtIUserDto.TokenValidTime),
+                Header = nameof(IUserDto.TokenValidTime),
                 Binding = new Binding()
                 {
-                    Path = new PropertyPath(nameof(SmtIUserDto.TokenValidTime)),
+                    Path = new PropertyPath(nameof(IUserDto.TokenValidTime)),
                     Mode = BindingMode.OneWay,
                     Converter = Converter.LongToDateTimeStringConverter.Instance
                 }
@@ -96,7 +96,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnAdd);
-            btnAdd.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.AddCommand)));
+            btnAdd.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.AddCommand)));
 
             var btnUpdate = new Button()
             {
@@ -105,7 +105,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnUpdate);
-            btnUpdate.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.UpdateCommand)));
+            btnUpdate.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.UpdateCommand)));
 
             var btnDelete = new Button()
             {
@@ -114,7 +114,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnDelete);
-            btnDelete.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.DeleteCommand)));
+            btnDelete.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.DeleteCommand)));
 
             var btnLockUser = new Button()
             {
@@ -122,8 +122,8 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnLockUser);
-            btnLockUser.SetBinding(Button.CommandProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserCommand)));
-            btnLockUser.SetBinding(Button.ContentProperty, new Binding(nameof(huypq.SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserButtonContent)));
+            btnLockUser.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserCommand)));
+            btnLockUser.SetBinding(Button.ContentProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserButtonContent)));
 
             Content = grid;
         }

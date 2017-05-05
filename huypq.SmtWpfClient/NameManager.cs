@@ -11,17 +11,17 @@ namespace huypq.SmtWpfClient.Abstraction
             get { return _instance; }
         }
 
-        public string GetControllerName<T>() where T : SmtIDto
+        public string GetControllerName<T>() where T : IDto
         {
             return typeof(T).Name.Replace("Dto", "").ToLower();
         }
 
-        public string GetViewName<T>() where T : SmtIDto
+        public string GetViewName<T>() where T : IDto
         {
             return typeof(T).Name.Replace("Dto", "View");
         }
 
-        public string GetViewModelName<T>() where T : SmtIDto
+        public string GetViewModelName<T>() where T : IDto
         {
             return typeof(T).Name.Replace("Dto", "ViewModel");
         }

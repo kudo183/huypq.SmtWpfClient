@@ -5,7 +5,7 @@ using System;
 
 namespace huypq.SmtWpfClient.ViewModel
 {
-    public class SmtUserBaseViewModel<T> : BaseViewModel<T> where T : class, SmtIUserDto, new()
+    public class SmtUserBaseViewModel<T> : BaseViewModel<T> where T : class, IUserDto, new()
     {
         IDataService _dataService;
 
@@ -32,8 +32,8 @@ namespace huypq.SmtWpfClient.ViewModel
             {
                 var dto = new T();
                 var de = new View.DataEditor();
-                de.Add(nameof(SmtIUserDto.Email), nameof(SmtIUserDto.Email), View.DataEditor.DataType.Text);
-                de.Add(nameof(SmtIUserDto.UserName), nameof(SmtIUserDto.UserName), View.DataEditor.DataType.Text);
+                de.Add(nameof(IUserDto.Email), nameof(IUserDto.Email), View.DataEditor.DataType.Text);
+                de.Add(nameof(IUserDto.UserName), nameof(IUserDto.UserName), View.DataEditor.DataType.Text);
                 de.DataContext = dto;
                 if (de.ShowDialog(400, 200) == true)
                 {
@@ -53,7 +53,7 @@ namespace huypq.SmtWpfClient.ViewModel
             {
                 var dto = SelectedItem as T;
                 var de = new View.DataEditor();
-                de.Add(nameof(SmtIUserDto.UserName), nameof(SmtIUserDto.UserName), View.DataEditor.DataType.Text);
+                de.Add(nameof(IUserDto.UserName), nameof(IUserDto.UserName), View.DataEditor.DataType.Text);
                 de.DataContext = dto;
                 if (de.ShowDialog(400, 150) == true)
                 {
@@ -88,12 +88,12 @@ namespace huypq.SmtWpfClient.ViewModel
 
             LockUserCommand = new SimpleDataGrid.SimpleCommand("LockUserCommand", () =>
             {
-                var dto = SelectedItem as SmtIUserDto;
+                var dto = SelectedItem as IUserDto;
                 if (MessageBox.Show(string.Format("{0} user [{1}] ?", dto.IsLocked ? "unlock" : "lock", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        Msg = _dataService.LockUser((SelectedItem as SmtIUserDto).Email, dto.IsLocked == false);
+                        Msg = _dataService.LockUser((SelectedItem as IUserDto).Email, dto.IsLocked == false);
                     }
                     catch (Exception ex)
                     {
@@ -113,7 +113,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
         protected override void OnSelectedValueChanged()
         {
-            var dto = SelectedItem as SmtIUserDto;
+            var dto = SelectedItem as IUserDto;
             LockUserButtonContent = dto.IsLocked ? "Unlock" : "Lock";
         }
 

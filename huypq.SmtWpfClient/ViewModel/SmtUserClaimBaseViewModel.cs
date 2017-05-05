@@ -4,12 +4,12 @@ using SimpleDataGrid.ViewModel;
 
 namespace huypq.SmtWpfClient.ViewModel
 {
-    public partial class SmtUserClaimBaseViewModel<T> : BaseViewModel<T> where T : class, SmtIUserClaimDto, new()
+    public partial class SmtUserClaimBaseViewModel<T> : BaseViewModel<T> where T : class, IUserClaimDto, new()
     {
         HeaderFilterBaseModel _UserIDFilter;
         public SmtUserClaimBaseViewModel() : base()
         {
-            _UserIDFilter = new HeaderTextFilterModel(nameof(SmtIUserClaimDto.UserID), nameof(SmtIUserClaimDto.UserID), typeof(int));
+            _UserIDFilter = new HeaderTextFilterModel(nameof(IUserClaimDto.UserID), nameof(IUserClaimDto.UserID), typeof(int));
             _UserIDFilter.IsShowInUI = false;
             AddHeaderFilter(_UserIDFilter);
         }

@@ -11,7 +11,7 @@ using huypq.SmtShared.Constant;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public abstract class BaseViewModel<T> : IEditableGridViewModel<T> where T : class, SmtIDto, new()
+    public abstract class BaseViewModel<T> : IEditableGridViewModel<T> where T : class, IDto, new()
     {
         protected string _debugName;
 
@@ -51,7 +51,7 @@ namespace huypq.SmtWpfClient.Abstraction
             PagerViewModel.ActionCurrentPageIndexChanged = Load;
             PagerViewModel.ActionIsEnablePagingChanged = Load;
 
-            SelectedValuePath = nameof(SmtIDto.ID);
+            SelectedValuePath = nameof(IDto.ID);
         }
 
         protected void AddHeaderFilter(HeaderFilterBaseModel filter)

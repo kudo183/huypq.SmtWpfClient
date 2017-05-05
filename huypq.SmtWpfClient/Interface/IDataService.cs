@@ -15,13 +15,13 @@ namespace huypq.SmtWpfClient.Abstraction
         string LockUser(string username, bool isLocked);
         void Logout();
         string ChangePassword(string currentPass, string newPass);
-        PagingResultDto<T> Get<T>(QueryBuilder.QueryExpression qe, string controller = null) where T : SmtIDto;
-        PagingResultDto<T> GetAll<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto;
-        PagingResultDto<T> GetUpdate<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : SmtIDto;
-        string Save<T>(List<T> changedItems, string controller = null) where T : SmtIDto;
-        string Add<T>(T item, string controller = null) where T : SmtIDto;
-        string Update<T>(T item, string controller = null) where T : SmtIDto;
-        string Delete<T>(T item, string controller = null) where T : SmtIDto;
+        PagingResultDto<T> Get<T>(QueryBuilder.QueryExpression qe, string controller = null) where T : IDto;
+        PagingResultDto<T> GetAll<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto;
+        PagingResultDto<T> GetUpdate<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto;
+        string Save<T>(List<T> changedItems, string controller = null) where T : IDto;
+        string Add<T>(T item, string controller = null) where T : IDto;
+        string Update<T>(T item, string controller = null) where T : IDto;
+        string Delete<T>(T item, string controller = null) where T : IDto;
         List<T> Report<T>(string reportName, NameValueCollection reportParams);
     }
 }
