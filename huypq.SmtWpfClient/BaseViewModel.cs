@@ -189,11 +189,11 @@ namespace huypq.SmtWpfClient.Abstraction
             qe.PageIndex = PagerViewModel.IsEnablePaging ? PagerViewModel.CurrentPageIndex : 0;
             qe.PageSize = 30;
 
-            qe.WhereOptions = WhereOptionsFromHeaderFilter(HeaderFilters);
-            qe.OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters);
-
             try
             {
+                qe.WhereOptions = WhereOptionsFromHeaderFilter(HeaderFilters);
+                qe.OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters);
+
                 result = DataService.Get<T>(qe);
 
                 _originalEntities.Clear();
@@ -283,97 +283,164 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             var result = new List<QueryBuilder.WhereExpression.IWhereOption>();
 
-            foreach (var filter in headerFilters)
+            foreach (var filter in headerFilters.Where(p => p.IsUsed == true))
             {
-                if (filter.IsUsed == true && filter.FilterValue != null)
+                if (filter.FilterValue != null && filter.PropertyType == typeof(string))
                 {
-                    if (filter.PropertyType == typeof(string))
+                    var wo = new QueryBuilder.WhereExpression.WhereOptionString()
                     {
-                        var wo = new QueryBuilder.WhereExpression.WhereOptionString()
-                        {
-                            PropertyPath = filter.PropertyName,
-                            Value = (string)filter.FilterValue
-                        };
-                        wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(wo.Value);
-                        wo.Value = wo.Value.Substring(wo.Predicate.Length);
+                        PropertyPath = filter.PropertyName,
+                        Value = (string)filter.FilterValue
+                    };
+                    wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(wo.Value);
+                    wo.Value = wo.Value.Substring(wo.Predicate.Length);
+                    result.Add(wo);
+                }
+                else if (filter.FilterValue != null && filter.PropertyType == typeof(int))
+                {
+                    var text = filter.FilterValue.ToString();
+                    var wo = new QueryBuilder.WhereExpression.WhereOptionInt()
+                    {
+                        PropertyPath = filter.PropertyName
+                    };
+                    wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
+                    int number;
+                    if (int.TryParse(text.Substring(wo.Predicate.Length), out number) == true)
+                    {
+                        wo.Value = number;
                         result.Add(wo);
                     }
-                    else if (filter.PropertyType == typeof(int))
+                    else
+                    {
+                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
+                    }
+                }
+                else if (filter.PropertyType == typeof(int?))
+                {
+                    var wo = new QueryBuilder.WhereExpression.WhereOptionNullableInt()
+                    {
+                        PropertyPath = filter.PropertyName
+                    };
+                    if (filter.FilterValue == null)
+                    {
+                        wo.Predicate = "=";
+                        wo.Value = null;
+                    }
+                    else
                     {
                         var text = filter.FilterValue.ToString();
-                        var wo = new QueryBuilder.WhereExpression.WhereOptionInt()
-                        {
-                            PropertyPath = filter.PropertyName
-                        };
                         wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
-                        wo.Value = int.Parse(text.Substring(wo.Predicate.Length));
+                        int number;
+                        if (int.TryParse(text.Substring(wo.Predicate.Length), out number) == true)
+                        {
+                            wo.Value = number;
+                            result.Add(wo);
+                        }
+                        else
+                        {
+                            throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
+                        }
+                    }
+                }
+                else if (filter.FilterValue != null && filter.PropertyType == typeof(long))
+                {
+                    var text = filter.FilterValue.ToString();
+                    var wo = new QueryBuilder.WhereExpression.WhereOptionLong()
+                    {
+                        PropertyPath = filter.PropertyName
+                    };
+                    wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
+                    long number;
+                    if (long.TryParse(text.Substring(wo.Predicate.Length), out number) == true)
+                    {
+                        wo.Value = number;
                         result.Add(wo);
                     }
-                    else if (filter.PropertyType == typeof(int?))
+                    else
+                    {
+                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
+                    }
+                }
+                else if (filter.PropertyType == typeof(long?))
+                {
+                    var wo = new QueryBuilder.WhereExpression.WhereOptionNullableLong()
+                    {
+                        PropertyPath = filter.PropertyName
+                    };
+                    if (filter.FilterValue == null)
+                    {
+                        wo.Predicate = "=";
+                        wo.Value = null;
+                    }
+                    else
                     {
                         var text = filter.FilterValue.ToString();
-                        var wo = new QueryBuilder.WhereExpression.WhereOptionNullableInt()
-                        {
-                            PropertyPath = filter.PropertyName
-                        };
                         wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
-                        wo.Value = int.Parse(text.Substring(wo.Predicate.Length));
-                        result.Add(wo);
-                    }
-                    else if (filter.PropertyType == typeof(bool))
-                    {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionBool()
+                        long number;
+                        if (long.TryParse(text.Substring(wo.Predicate.Length), out number) == true)
                         {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (bool)filter.FilterValue
-                        });
-                    }
-                    else if (filter.PropertyType == typeof(bool?))
-                    {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableBool()
+                            wo.Value = number;
+                            result.Add(wo);
+                        }
+                        else
                         {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (bool?)filter.FilterValue
-                        });
+                            throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
+                        }
                     }
-                    else if (filter.PropertyType == typeof(DateTime))
+                }
+                else if (filter.FilterValue != null && filter.PropertyType == typeof(bool))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionBool()
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionDate()
-                        {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (DateTime)filter.FilterValue
-                        });
-                    }
-                    else if (filter.PropertyType == typeof(DateTime?))
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (bool)filter.FilterValue
+                    });
+                }
+                else if (filter.PropertyType == typeof(bool?))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableBool()
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableDate()
-                        {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (DateTime?)filter.FilterValue
-                        });
-                    }
-                    else if (filter.PropertyType == typeof(TimeSpan))
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (bool?)filter.FilterValue
+                    });
+                }
+                else if (filter.FilterValue != null && filter.PropertyType == typeof(DateTime))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionDate()
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionTime()
-                        {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (TimeSpan)filter.FilterValue
-                        });
-                    }
-                    else if (filter.PropertyType == typeof(TimeSpan?))
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (DateTime)filter.FilterValue
+                    });
+                }
+                else if (filter.PropertyType == typeof(DateTime?))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableDate()
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableTime()
-                        {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = (TimeSpan?)filter.FilterValue
-                        });
-                    }
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (DateTime?)filter.FilterValue
+                    });
+                }
+                else if (filter.FilterValue != null && filter.PropertyType == typeof(TimeSpan))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionTime()
+                    {
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (TimeSpan)filter.FilterValue
+                    });
+                }
+                else if (filter.PropertyType == typeof(TimeSpan?))
+                {
+                    result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableTime()
+                    {
+                        Predicate = "=",
+                        PropertyPath = filter.PropertyName,
+                        Value = (TimeSpan?)filter.FilterValue
+                    });
                 }
             }
 
