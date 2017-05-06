@@ -289,30 +289,36 @@ namespace huypq.SmtWpfClient.Abstraction
                 {
                     if (filter.PropertyType == typeof(string))
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionString()
+                        var wo = new QueryBuilder.WhereExpression.WhereOptionString()
                         {
-                            Predicate = "=",
                             PropertyPath = filter.PropertyName,
                             Value = (string)filter.FilterValue
-                        });
+                        };
+                        wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(wo.Value);
+                        wo.Value = wo.Value.Substring(wo.Predicate.Length);
+                        result.Add(wo);
                     }
                     else if (filter.PropertyType == typeof(int))
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionInt()
+                        var text = filter.FilterValue.ToString();
+                        var wo = new QueryBuilder.WhereExpression.WhereOptionInt()
                         {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = int.Parse(filter.FilterValue.ToString())
-                        });
+                            PropertyPath = filter.PropertyName
+                        };
+                        wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
+                        wo.Value = int.Parse(text.Substring(wo.Predicate.Length));
+                        result.Add(wo);
                     }
                     else if (filter.PropertyType == typeof(int?))
                     {
-                        result.Add(new QueryBuilder.WhereExpression.WhereOptionNullableInt()
+                        var text = filter.FilterValue.ToString();
+                        var wo = new QueryBuilder.WhereExpression.WhereOptionNullableInt()
                         {
-                            Predicate = "=",
-                            PropertyPath = filter.PropertyName,
-                            Value = int.Parse(filter.FilterValue.ToString())
-                        });
+                            PropertyPath = filter.PropertyName
+                        };
+                        wo.Predicate = QueryBuilder.WhereExpression.GetPredicateFromText(text);
+                        wo.Value = int.Parse(text.Substring(wo.Predicate.Length));
+                        result.Add(wo);
                     }
                     else if (filter.PropertyType == typeof(bool))
                     {
