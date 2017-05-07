@@ -91,7 +91,7 @@ namespace huypq.SmtWpfClient
                     Value = _lastUpdate
                 });
 
-                var result = DataService.GetUpdate<T>(_whereOptions);
+                var result = DataService.GetUpdate<T>(we);
                 _lastUpdate = result.LastUpdateTime;
                 
                 foreach (var item in result.Items)

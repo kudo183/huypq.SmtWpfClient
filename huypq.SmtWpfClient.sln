@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientTest", "h
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtSharedTest", "..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtSharedTest\huypq.SmtSharedTest.csproj", "{8D59423A-9325-484D-A398-FEDD48375155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientSQL", "huypq.SmtWpfClientSQL\huypq.SmtWpfClientSQL.csproj", "{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientSQL.Test", "huypq.SmtWpfClientSQL.Test\huypq.SmtWpfClientSQL.Test.csproj", "{BE1614DF-4DE8-4ABD-A52C-A27330EF4626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{8D59423A-9325-484D-A398-FEDD48375155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D59423A-9325-484D-A398-FEDD48375155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D59423A-9325-484D-A398-FEDD48375155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE1614DF-4DE8-4ABD-A52C-A27330EF4626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE1614DF-4DE8-4ABD-A52C-A27330EF4626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE1614DF-4DE8-4ABD-A52C-A27330EF4626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE1614DF-4DE8-4ABD-A52C-A27330EF4626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

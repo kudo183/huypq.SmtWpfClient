@@ -14,6 +14,11 @@ namespace huypq.SmtWpfClient.View
         public AllView()
         {
             InitializeComponent();
+            
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()) == true)
+            {
+                return;
+            }
 
             var viewTypes = System.Reflection.Assembly.GetEntryAssembly().GetTypes().ToList();
 
@@ -36,7 +41,6 @@ namespace huypq.SmtWpfClient.View
                     HorizontalContentAlignment = HorizontalAlignment.Left
                 });
             }
-
         }
 
         private void StackPanel_Click(object sender, RoutedEventArgs e)
