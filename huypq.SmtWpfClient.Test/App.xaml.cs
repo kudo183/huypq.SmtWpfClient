@@ -1,10 +1,11 @@
-﻿using huypq.SmtWpfClient;
+﻿using huypq.SmtShared.Test;
+using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.SmtWpfClient.View;
 using System;
 using System.Windows;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -22,7 +23,7 @@ namespace huypq.SmtWpfClientTest
             var type = assembly.GetTypes();
             ServiceLocator.AddTypeMapping(typeof(IViewModelFactory), typeof(ViewModelFactory), true, new ViewModelFactory.Options()
             {
-                ViewModelNamespace = "huypq.SmtWpfClientTest",
+                ViewModelNamespace = "huypq.SmtWpfClient.Test",
                 ViewModelAssembly = System.Reflection.Assembly.GetExecutingAssembly()
             });
 
@@ -44,7 +45,7 @@ namespace huypq.SmtWpfClientTest
                 DefaultValue = System.Windows.Markup.XmlLanguage.GetLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture.Name)
             });
 
-            ReferenceDataManager<SmtSharedTest.TestDataDto>.Instance.SetOrderChecker((p1, p2) =>
+            ReferenceDataManager<TestDataDto>.Instance.SetOrderChecker((p1, p2) =>
             {
                 return string.Compare(p1.Data, p2.Data) <= 0;
             });

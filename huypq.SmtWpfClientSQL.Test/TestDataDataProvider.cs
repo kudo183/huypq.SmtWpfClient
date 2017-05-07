@@ -1,4 +1,4 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 
 namespace huypq.SmtWpfClientSQL.Test
 {

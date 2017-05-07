@@ -1,4 +1,4 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.SmtWpfClientSQL.Test.View;

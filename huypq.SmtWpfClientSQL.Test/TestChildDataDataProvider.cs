@@ -1,4 +1,4 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,8 +1,8 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 using huypq.SmtWpfClient.Abstraction;
 using SimpleDataGrid.ViewModel;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     public partial class TestDataViewModel : BaseViewModel<TestDataDto>
     {

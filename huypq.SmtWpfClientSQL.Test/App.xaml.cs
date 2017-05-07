@@ -1,4 +1,5 @@
-﻿using huypq.SmtWpfClient;
+﻿using huypq.SmtShared.Test;
+using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace huypq.SmtWpfClientSQL.Test
                 DefaultValue = System.Windows.Markup.XmlLanguage.GetLanguage(System.Threading.Thread.CurrentThread.CurrentUICulture.Name)
             });
 
-            ReferenceDataManager<SmtSharedTest.TestDataDto>.Instance.SetOrderChecker((p1, p2) =>
+            ReferenceDataManager<TestDataDto>.Instance.SetOrderChecker((p1, p2) =>
             {
                 return string.Compare(p1.Data, p2.Data) <= 0;
             });

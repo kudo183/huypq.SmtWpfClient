@@ -7,8 +7,8 @@
     <ProjectGuid>{7780A792-8D68-4BB4-A7A8-6AC05146FC08}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>huypq.SmtWpfClientTest</RootNamespace>
-    <AssemblyName>huypq.SmtWpfClientTest</AssemblyName>
+    <RootNamespace>huypq.SmtWpfClient.Test</RootNamespace>
+    <AssemblyName>huypq.SmtWpfClient.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -137,9 +137,9 @@
       <Project>{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}</Project>
       <Name>SimpleDataGrid</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtSharedTest\huypq.SmtSharedTest.csproj">
+    <ProjectReference Include="..\..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtShared.Test\huypq.SmtShared.Test.csproj">
       <Project>{8D59423A-9325-484D-A398-FEDD48375155}</Project>
-      <Name>huypq.SmtSharedTest</Name>
+      <Name>huypq.SmtShared.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtShared\huypq.SmtShared.csproj">
       <Project>{D0EA0474-D927-4193-9DDA-58363E8A64C4}</Project>

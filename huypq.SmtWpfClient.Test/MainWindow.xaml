@@ -1,11 +1,11 @@
-﻿<Window x:Class="huypq.SmtWpfClientTest.MainWindow"
+﻿<Window x:Class="huypq.SmtWpfClient.Test.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:control="clr-namespace:huypq.SmtWpfClient.View;assembly=huypq.SmtWpfClient"
         xmlns:converter="clr-namespace:huypq.SmtWpfClient.Converter;assembly=huypq.SmtWpfClient"
-        xmlns:local="clr-namespace:huypq.SmtWpfClientTest"
+        xmlns:local="clr-namespace:huypq.SmtWpfClient.Test"
         mc:Ignorable="d"
         Title="Test">
     <Window.Resources>

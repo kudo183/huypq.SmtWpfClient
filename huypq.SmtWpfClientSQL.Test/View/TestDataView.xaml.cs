@@ -1,5 +1,5 @@
 ﻿
-using huypq.SmtSharedTest;
+using huypq.SmtShared.Test;
 using huypq.SmtWpfClient.Abstraction;
 
 namespace huypq.SmtWpfClientSQL.Test.View

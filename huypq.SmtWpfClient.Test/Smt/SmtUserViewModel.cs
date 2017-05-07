@@ -1,6 +1,6 @@
 ﻿using huypq.SmtWpfClient.ViewModel;
-using huypq.SmtSharedTest;
-namespace huypq.SmtWpfClientTest
+using huypq.SmtShared.Test;
+namespace huypq.SmtWpfClient.Test
 {
     public class SmtUserViewModel : SmtUserBaseViewModel<SmtUserDto>
     {

@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtShared", "..\huypq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryBuilder", "..\QueryBuilder\old.NET\QueryBuilder\QueryBuilder\QueryBuilder.csproj", "{E9FBFAC6-4189-4EB2-BEA0-D81D78687C17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientTest", "huypq.SmtWpfClientTest\huypq.SmtWpfClientTest.csproj", "{7780A792-8D68-4BB4-A7A8-6AC05146FC08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClient.Test", "huypq.SmtWpfClient.Test\huypq.SmtWpfClient.Test.csproj", "{7780A792-8D68-4BB4-A7A8-6AC05146FC08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtSharedTest", "..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtSharedTest\huypq.SmtSharedTest.csproj", "{8D59423A-9325-484D-A398-FEDD48375155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtShared.Test", "..\huypq.SmtShared\old.NET\huypq.SmtShared\huypq.SmtShared.Test\huypq.SmtShared.Test.csproj", "{8D59423A-9325-484D-A398-FEDD48375155}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientSQL", "huypq.SmtWpfClientSQL\huypq.SmtWpfClientSQL.csproj", "{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}"
 EndProject

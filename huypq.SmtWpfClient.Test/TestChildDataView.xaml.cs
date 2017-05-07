@@ -1,8 +1,8 @@
 ﻿
-using huypq.SmtSharedTest;
+using huypq.SmtShared.Test;
 using huypq.SmtWpfClient.Abstraction;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     public partial class TestChildDataView : BaseView<TestChildDataDto>
     {

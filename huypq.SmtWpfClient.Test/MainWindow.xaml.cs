@@ -1,11 +1,11 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 using huypq.SmtWpfClient;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.SmtWpfClient.View;
 using huypq.SmtWpfClient.ViewModel;
 using System.Windows;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

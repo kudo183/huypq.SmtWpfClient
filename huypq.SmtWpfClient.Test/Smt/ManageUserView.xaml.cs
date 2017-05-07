@@ -1,6 +1,6 @@
 ﻿using huypq.SmtWpfClient.Abstraction;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     /// <summary>
     /// Interaction logic for ManageUserView.xaml

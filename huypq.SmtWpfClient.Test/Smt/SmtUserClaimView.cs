@@ -1,6 +1,6 @@
-﻿using huypq.SmtSharedTest;
+﻿using huypq.SmtShared.Test;
 
-namespace huypq.SmtWpfClientTest
+namespace huypq.SmtWpfClient.Test
 {
     public class SmtUserClaimView : SmtWpfClient.View.SmtUserClaimBaseView<SmtUserClaimDto>
     {

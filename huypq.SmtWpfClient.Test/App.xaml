@@ -1,7 +1,7 @@
-﻿<Application x:Class="huypq.SmtWpfClientTest.App"
+﻿<Application x:Class="huypq.SmtWpfClient.Test.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:huypq.SmtWpfClientTest">
+             xmlns:local="clr-namespace:huypq.SmtWpfClient.Test">
     <Application.Resources>
         <!--Window-->
         <Style TargetType="{x:Type Window}">
