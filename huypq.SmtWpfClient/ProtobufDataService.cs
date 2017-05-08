@@ -250,7 +250,7 @@ namespace huypq.SmtWpfClient
             var data = new NameValueCollection();
 
             //choose json response type because when respone is a string, json is better than protobuf
-            var result = PostValues(uri, data, "json");
+            var result = PostValues(uri, data, SerializeType.Json);
         }
 
         private byte[] PostValues(string uri, NameValueCollection reportParameters, string responseType)
