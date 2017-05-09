@@ -26,19 +26,26 @@ namespace huypq.SmtWpfClient
             _token = option.Token;
             _rootUri = option.RootUri;
         }
-        
+
         public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
         {
             if (controller == null)
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
+
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
-            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(qe), SerializeType.Protobuf));
+            var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
+            var result = FromBytes<PagingResultDto<T>>(response);
             foreach (var item in result.Items)
             {
                 item.SetCurrentValueAsOriginalValue();
             }
+
+            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
             return result;
         }
 
@@ -48,12 +55,19 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
+            
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetAll);
-            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf));
+            var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
+            var result = FromBytes<PagingResultDto<T>>(response);
             foreach (var item in result.Items)
             {
                 item.SetCurrentValueAsOriginalValue();
             }
+
+            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
             return result;
         }
 
@@ -63,12 +77,19 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
+            
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetUpdate);
-            var result = FromBytes<PagingResultDto<T>>(Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf));
+            var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
+            var result = FromBytes<PagingResultDto<T>>(response);
             foreach (var item in result.Items)
             {
                 item.SetCurrentValueAsOriginalValue();
             }
+
+            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
             return result;
         }
 
@@ -270,6 +291,10 @@ namespace huypq.SmtWpfClient
             client.Headers["token"] = _token;
 
             var response = client.UploadData(uri, data);
+
+            var logMsg = string.Format("{0} Post {1} request {2:N0} response {3:N0}",
+                nameof(ProtobufDataService), uri, Logger.Instance.FormatByteCount(data.LongLength), Logger.Instance.FormatByteCount(response.LongLength));
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
 
             return response;
         }

@@ -43,6 +43,33 @@ namespace huypq.SmtWpfClient.Abstraction
 
         DateTime _lastTime = DateTime.Now;
 
+        const int KBSize = 1024;
+        const int MBSize = 1024 * KBSize;
+        const int GBSize = 1024 * MBSize;
+        public string FormatByteCount(int count)
+        {
+            if (count < KBSize)
+                return string.Format("{0} B", count);
+            if (count < MBSize)
+                return string.Format("{0} KB", count / KBSize);
+            if (count < GBSize)
+                return string.Format("{0} MB", count / MBSize);
+
+            return string.Format("{0} GB", count / GBSize);
+        }
+
+        public string FormatByteCount(long count)
+        {
+            if (count < KBSize)
+                return string.Format("{0} B", count);
+            if (count < MBSize)
+                return string.Format("{0} KB", count / KBSize);
+            if (count < GBSize)
+                return string.Format("{0} MB", count / MBSize);
+
+            return string.Format("{0} GB", count / GBSize);
+        }
+
         public void Error(string msg, string category)
         {
             Log(LogLevelEnum.Error, msg, category);
