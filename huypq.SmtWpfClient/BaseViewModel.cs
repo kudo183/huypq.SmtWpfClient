@@ -34,9 +34,7 @@ namespace huypq.SmtWpfClient.Abstraction
         public BaseViewModel()
         {
             _debugName = NameManager.Instance.GetViewModelName<T>();
-
-            LoadReferenceData();
-
+            
             Entities = new ObservableCollectionEx<T>();
             Entities.CollectionChanged += Entities_CollectionChanged;
             HeaderFilters = new List<HeaderFilterBaseModel>();

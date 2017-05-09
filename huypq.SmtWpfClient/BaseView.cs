@@ -134,6 +134,7 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             Logger.Instance.Debug(_debugName + " Loaded", Logger.Categories.UI);
 
+            ViewModel.LoadReferenceData();
             ViewModel.Load();
         }
     }
