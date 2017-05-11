@@ -65,14 +65,8 @@ namespace huypq.SmtWpfClient
             _isLoaded = true;
         }
 
-        public void Update()
+        private void Update()
         {
-            if (_isLoaded == false)
-            {
-                Load();
-                return;
-            }
-
             try
             {
                 var we = new List<WhereExpression.IWhereOption>();
@@ -116,24 +110,21 @@ namespace huypq.SmtWpfClient
             }
         }
 
-        public ObservableCollectionEx<T> Get(bool checkForUpdate = false)
+        public void LoadOrUpdate()
         {
-            if (checkForUpdate == true)
+            if (_isLoaded == false)
+            {
+                Load();
+            }
+            else
             {
                 Update();
             }
-
-            return _datas;
         }
 
-        public List<T> GetList(bool checkForUpdate = false)
+        public ObservableCollectionEx<T> Get()
         {
-            if (checkForUpdate == true)
-            {
-                Update();
-            }
-
-            return _datas.ToList();
+            return _datas;
         }
 
         public T GetByID(int id)
