@@ -14,7 +14,7 @@ namespace huypq.SmtWpfClient.View
         public AllView()
         {
             InitializeComponent();
-            
+
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()) == true)
             {
                 return;
@@ -22,7 +22,7 @@ namespace huypq.SmtWpfClient.View
 
             var viewTypes = System.Reflection.Assembly.GetEntryAssembly().GetTypes().ToList();
 
-            foreach (var viewType in viewTypes.Where(p => p.Namespace.EndsWith("View") && p.DeclaringType == null).OrderBy(p => p.Name))
+            foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View") && p.DeclaringType == null).OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
                 {
@@ -32,7 +32,7 @@ namespace huypq.SmtWpfClient.View
                 });
             }
 
-            foreach (var viewType in viewTypes.Where(p => p.Namespace.EndsWith("View.Report") && p.DeclaringType == null).OrderBy(p => p.Name))
+            foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View.Report") && p.DeclaringType == null).OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
                 {
