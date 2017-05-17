@@ -31,8 +31,9 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public class Categories
         {
-            public static readonly string UI = "UI";
-            public static readonly string Data = "Data";
+            public const string UI = "UI";
+            public const string Data = "Data";
+            public const string Unknow = "Unknow";
         }
 
         public bool LogToConsole = true;
