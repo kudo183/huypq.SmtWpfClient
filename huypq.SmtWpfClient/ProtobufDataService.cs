@@ -49,6 +49,26 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
+        public T GetByID<T>(int ID, string controller = null) where T : IDto
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetByID);
+            var data = new NameValueCollection();
+            data["id"] = ID.ToString();
+            var response = PostValues(uri, data, SerializeType.Protobuf);
+            var result = FromBytes<T>(response);
+
+            var logMsg = string.Format("{0} GetByID {1} {2}",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength));
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
+            return result;
+        }
+
         public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
         {
             if (controller == null)
@@ -280,7 +300,18 @@ namespace huypq.SmtWpfClient
             client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
-            return client.UploadValues(uri, reportParameters);
+            var response = client.UploadValues(uri, reportParameters);
+
+            int totalRequestLength = 0;
+            foreach (var item in reportParameters.AllKeys)
+            {
+                totalRequestLength = reportParameters[item].Length + item.Length;
+            }
+            var logMsg = string.Format("{0} PostValues {1} request {2:N0} response {3:N0}",
+                nameof(ProtobufDataService), uri, totalRequestLength, Logger.Instance.FormatByteCount(response.LongLength));
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
+            return response;
         }
 
         private byte[] Post(string uri, byte[] data, string responseType)
