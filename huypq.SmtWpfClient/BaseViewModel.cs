@@ -142,6 +142,7 @@ namespace huypq.SmtWpfClient.Abstraction
                 OnSelectedValueChanged();
                 RaiseCommandCanExecuteChanged();
                 ActionSelectedValueChanged?.Invoke(_selectedValue);
+                OnPropertyChanged();
             }
         }
 
