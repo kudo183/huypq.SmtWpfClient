@@ -12,9 +12,27 @@ namespace huypq.SmtWpfClient.Abstraction
     {
         protected string _debugName;
 
+        protected bool _isLoaded = false;
+        public bool LoadModelOnLoaded { get; set; } = true;
         public Action ActionAfterSave { get; set; }
         public Action ActionAfterLoad { get; set; }
         public Action ActionMoveFocusToNextView { get; set; }
+
+        public DataGridExt.KeepSelection KeepSelectionType
+        {
+            get
+            {
+                if (GridView != null && GridView.dataGrid != null)
+                    return GridView.dataGrid.KeepSelectionType;
+
+                return DataGridExt.KeepSelection.KeepSelectedIndex;
+            }
+            set
+            {
+                if (GridView != null && GridView.dataGrid != null)
+                    GridView.dataGrid.KeepSelectionType = value;
+            }
+        }
 
         public EditableGridView GridView { get; set; }
 
@@ -134,8 +152,12 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             Logger.Instance.Debug(_debugName + " Loaded", Logger.Categories.UI);
 
-            ViewModel.LoadReferenceData();
-            ViewModel.Load();
+            if (_isLoaded == false && LoadModelOnLoaded)
+            {
+                ViewModel.LoadReferenceData();
+                ViewModel.Load();
+                _isLoaded = true;
+            }
         }
     }
 }
