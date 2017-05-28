@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace huypq.SmtWpfClient
 {
-    public sealed class ReferenceDataManager<T> where T : IDto
+    public sealed class ReferenceDataManager<T> where T : IDto, IDisplayText
     {
         private static readonly ReferenceDataManager<T> _instance = new ReferenceDataManager<T>();
 
@@ -38,6 +38,11 @@ namespace huypq.SmtWpfClient
         private long _lastUpdate;
         private bool _isLoaded = false;
         private const string LastUpdateTimePropertyName = nameof(IDto.LastUpdateTime);
+
+        public ReferenceDataManager()
+        {
+            _datas.SetOrderChecker((p1, p2) => { return string.Compare(p1.DisplayText, p2.DisplayText) < 0; });
+        }
 
         public void SetOrderChecker(System.Func<T, T, bool> checker)
         {
