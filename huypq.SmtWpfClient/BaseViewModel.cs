@@ -34,7 +34,7 @@ namespace huypq.SmtWpfClient.Abstraction
         public BaseViewModel()
         {
             _debugName = NameManager.Instance.GetViewModelName<T>();
-            
+
             Entities = new ObservableCollectionEx<T>();
             Entities.CollectionChanged += Entities_CollectionChanged;
             HeaderFilters = new List<HeaderFilterBaseModel>();
@@ -212,6 +212,11 @@ namespace huypq.SmtWpfClient.Abstraction
                 AfterLoad();
 
                 Msg = "OK";
+            }
+            catch (System.Net.WebException ex)
+            {
+                var statusCode = ((System.Net.HttpWebResponse)ex.Response).StatusCode;
+                Msg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
             }
             catch (Exception ex)
             {

@@ -154,7 +154,19 @@ namespace huypq.SmtWpfClient.Abstraction
 
             if (_isLoaded == false && LoadModelOnLoaded)
             {
-                ViewModel.LoadReferenceData();
+                try
+                {
+                    ViewModel.LoadReferenceData();
+                }
+                catch (System.Net.WebException ex)
+                {
+                    var statusCode = ((System.Net.HttpWebResponse)ex.Response).StatusCode;
+                    ViewModel.Msg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+                }
+                catch (Exception ex)
+                {
+                    ViewModel.Msg = ex.Message;
+                }
                 ViewModel.Load();
                 _isLoaded = true;
             }
