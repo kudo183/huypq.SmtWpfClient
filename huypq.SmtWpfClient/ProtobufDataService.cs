@@ -69,13 +69,43 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
+        public List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T>();
+            }
+
+            if (listInt == null || listInt.Count == 0)
+            {
+                return new List<T>();
+            }
+
+            var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
+            var qe = new QueryExpression();
+            qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
+                WhereExpression.In, path, listInt);
+            var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
+            var result = FromBytes<PagingResultDto<T>>(response);
+            foreach (var item in result.Items)
+            {
+                item.SetCurrentValueAsOriginalValue();
+            }
+
+            var logMsg = string.Format("{0} GetByListInt {1} {2}",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength));
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
+            return result.Items;
+        }
+
         public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
         {
             if (controller == null)
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            
+
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetAll);
             var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
             var result = FromBytes<PagingResultDto<T>>(response);
@@ -97,7 +127,7 @@ namespace huypq.SmtWpfClient
             {
                 controller = NameManager.Instance.GetControllerName<T>();
             }
-            
+
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetUpdate);
             var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
             var result = FromBytes<PagingResultDto<T>>(response);
