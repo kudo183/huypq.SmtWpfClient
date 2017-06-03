@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,12 +23,37 @@ namespace huypq.SmtWpfClient.View
 
             var viewTypes = System.Reflection.Assembly.GetEntryAssembly().GetTypes().ToList();
 
-            foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View") && p.DeclaringType == null).OrderBy(p => p.Name))
+            var views = new List<Type>();
+            var complexViews = new List<Type>();
+
+            foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View") && p.DeclaringType == null))
+            {
+                if (viewType.Name.EndsWith("ComplexView"))
+                {
+                    complexViews.Add(viewType);
+                }
+                else
+                {
+                    views.Add(viewType);
+                }
+            }
+
+            foreach (var item in complexViews.OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
                 {
-                    Content = viewType.Name,
-                    Tag = viewType,
+                    Content = item.Name,
+                    Tag = item,
+                    HorizontalContentAlignment = HorizontalAlignment.Left
+                });
+            }
+
+            foreach (var item in views.OrderBy(p => p.Name))
+            {
+                sp.Children.Add(new Button()
+                {
+                    Content = item.Name,
+                    Tag = item,
                     HorizontalContentAlignment = HorizontalAlignment.Left
                 });
             }
