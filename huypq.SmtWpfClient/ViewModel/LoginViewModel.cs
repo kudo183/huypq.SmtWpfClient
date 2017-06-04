@@ -179,15 +179,24 @@ namespace huypq.SmtWpfClient.ViewModel
              );
         }
 
-        public void ClearData()
+        public void Logout()
         {
-            IsLoggedIn = false;
-            IsTenant = false;
-            TenantName = string.Empty;
-            Email = string.Empty;
-            Pass = string.Empty;
-            Token = string.Empty;
-            Msg = string.Empty;
+            try
+            {
+                Msg = "";
+                _dataService.Logout();
+                IsLoggedIn = false;
+                IsTenant = false;
+                TenantName = string.Empty;
+                Email = string.Empty;
+                Pass = string.Empty;
+                Token = string.Empty;
+                Msg = string.Empty;
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(HandleWebException(ex));
+            }
         }
 
         void UserLoginButtonClick()
@@ -203,18 +212,7 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
         }
 
@@ -231,18 +229,7 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
         }
 
@@ -256,18 +243,7 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
         }
 
@@ -281,18 +257,7 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
         }
 
@@ -306,18 +271,7 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
         }
 
@@ -331,19 +285,23 @@ namespace huypq.SmtWpfClient.ViewModel
             }
             catch (WebException ex)
             {
-                switch (ex.Status)
-                {
-                    case WebExceptionStatus.ConnectFailure:
-                        Msg = "ConnectFailure";
-                        break;
-                    case WebExceptionStatus.Timeout:
-                        Msg = "Timeout";
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        Msg = "ProtocolError";
-                        break;
-                }
+                Msg = HandleWebException(ex);
             }
+        }
+
+        private string HandleWebException(WebException ex)
+        {
+            var msg = string.Empty;
+            if (ex.Response != null)
+            {
+                var statusCode = ((System.Net.HttpWebResponse)ex.Response).StatusCode;
+                msg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+            }
+            else
+            {
+                msg = ex.Message;
+            }
+            return msg;
         }
 
         public SimpleCommand UserLoginCommand { get; private set; }
