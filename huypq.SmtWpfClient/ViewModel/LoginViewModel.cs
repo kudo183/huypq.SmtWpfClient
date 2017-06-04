@@ -185,6 +185,13 @@ namespace huypq.SmtWpfClient.ViewModel
             {
                 Msg = "";
                 _dataService.Logout();
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(HandleWebException(ex));
+            }
+            finally
+            {
                 IsLoggedIn = false;
                 IsTenant = false;
                 TenantName = string.Empty;
@@ -192,10 +199,6 @@ namespace huypq.SmtWpfClient.ViewModel
                 Pass = string.Empty;
                 Token = string.Empty;
                 Msg = string.Empty;
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show(HandleWebException(ex));
             }
         }
 
