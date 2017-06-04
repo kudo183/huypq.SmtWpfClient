@@ -267,12 +267,24 @@ namespace huypq.SmtWpfClient.Abstraction
             {
                 var response = DataService.Save(changedItems);
                 Msg = response;
+                Load();
+            }
+            catch (System.Net.WebException ex)
+            {
+                if (ex.Response != null)
+                {
+                    var statusCode = ((System.Net.HttpWebResponse)ex.Response).StatusCode;
+                    Msg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+                }
+                else
+                {
+                    Msg = ex.Message;
+                }
             }
             catch (Exception ex)
             {
                 Msg = ex.Message;
             }
-            Load();
         }
 
         public virtual void LoadReferenceData()
