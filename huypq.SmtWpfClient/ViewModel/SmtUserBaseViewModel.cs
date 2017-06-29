@@ -39,11 +39,11 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        Msg = _dataService.Add(dto);
+                        SysMsg = _dataService.Add(dto);
                     }
                     catch (Exception ex)
                     {
-                        Msg = ex.Message;
+                        SysMsg = ex.Message;
                     }
                     Load();
                 }
@@ -59,11 +59,11 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        Msg = _dataService.Update(dto);
+                        SysMsg = _dataService.Update(dto);
                     }
                     catch (Exception ex)
                     {
-                        Msg = ex.Message;
+                        SysMsg = ex.Message;
                     }
                     Load();
                 }
@@ -76,11 +76,11 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        Msg = _dataService.Delete(dto);
+                        SysMsg = _dataService.Delete(dto);
                     }
                     catch (Exception ex)
                     {
-                        Msg = ex.Message;
+                        SysMsg = ex.Message;
                     }
                     Load();
                 }
@@ -93,11 +93,11 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        Msg = _dataService.LockUser((SelectedItem as IUserDto).Email, dto.IsLocked == false);
+                        SysMsg = _dataService.LockUser((SelectedItem as IUserDto).Email, dto.IsLocked == false);
                     }
                     catch (Exception ex)
                     {
-                        Msg = ex.Message;
+                        SysMsg = ex.Message;
                     }
                     Load();
                 }

@@ -161,11 +161,11 @@ namespace huypq.SmtWpfClient.Abstraction
                 catch (System.Net.WebException ex)
                 {
                     var statusCode = ((System.Net.HttpWebResponse)ex.Response).StatusCode;
-                    ViewModel.Msg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+                    ViewModel.SysMsg = string.Format("[{0}] {1}", statusCode, new System.IO.StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
                 }
                 catch (Exception ex)
                 {
-                    ViewModel.Msg = ex.Message;
+                    ViewModel.SysMsg = ex.Message;
                 }
                 ViewModel.Load();
                 _isLoaded = true;
