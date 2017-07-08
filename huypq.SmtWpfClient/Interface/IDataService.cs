@@ -24,6 +24,6 @@ namespace huypq.SmtWpfClient.Abstraction
         string Add<T>(T item, string controller = null) where T : IDto;
         string Update<T>(T item, string controller = null) where T : IDto;
         string Delete<T>(T item, string controller = null) where T : IDto;
-        List<T> Report<T>(string reportName, NameValueCollection reportParams);
+        PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams);
     }
 }

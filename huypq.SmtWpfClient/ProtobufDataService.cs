@@ -195,9 +195,18 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public List<T> Report<T>(string reportName, NameValueCollection reportParams)
+        public PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams)
         {
-            return FromBytes<List<T>>(PostValues(GetFullUri("report", reportName), reportParams, SerializeType.Protobuf));
+            var controller = "report";
+            var uri = GetFullUri(controller, reportName);
+            var response = PostValues(uri, reportParams, SerializeType.Protobuf);
+            var result = FromBytes<PagingResultDto<T>>(response);
+
+            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
+                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
+            return result;
         }
 
         public string Register(string tenantLoginName, string tenantName)
