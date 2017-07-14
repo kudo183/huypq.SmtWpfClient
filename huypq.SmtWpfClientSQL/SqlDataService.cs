@@ -62,12 +62,7 @@ namespace huypq.SmtWpfClientSQL
         {
             throw new NotImplementedException();
         }
-
-        public List<T> Report<T>(string reportName, NameValueCollection reportParams)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public string ResetPassword(string token, string pass)
         {
             throw new NotImplementedException();
@@ -120,6 +115,21 @@ namespace huypq.SmtWpfClientSQL
             var methodInfo = dataProviderType.GetMethod(methodName);
             var dataProvider = Activator.CreateInstance(dataProviderType);
             return methodInfo.Invoke(dataProvider, parameters);
+        }
+
+        public T GetByID<T>(int ID, string controller = null) where T : IDto
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams)
+        {
+            throw new NotImplementedException();
         }
     }
 }

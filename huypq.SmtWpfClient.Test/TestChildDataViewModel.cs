@@ -41,7 +41,7 @@ namespace huypq.SmtWpfClient.Test
             {
                 AddCommand = new SimpleCommand("TestDataIDAddCommand",
                     () => base.ProccessHeaderAddCommand(
-                    new TestDataView(), "TestData", ReferenceDataManager<TestDataDto>.Instance.Update)),
+                    new TestDataView(), "TestData", ReferenceDataManager<TestDataDto>.Instance.LoadOrUpdate)),
                 ItemSource = ReferenceDataManager<TestDataDto>.Instance.Get()
             };
 
@@ -57,7 +57,7 @@ namespace huypq.SmtWpfClient.Test
 
         public override void LoadReferenceData()
         {
-            ReferenceDataManager<TestDataDto>.Instance.Update();
+            ReferenceDataManager<TestDataDto>.Instance.LoadOrUpdate();
 
             LoadReferenceDataPartial();
         }
