@@ -121,5 +121,20 @@ namespace huypq.SmtWpfClientSQL
             var dataProvider = Activator.CreateInstance(dataProviderType);
             return methodInfo.Invoke(dataProvider, parameters);
         }
+
+        public T GetByID<T>(int ID, string controller = null) where T : IDto
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto
+        {
+            throw new NotImplementedException();
+        }
+
+        PagingResultDto<T> IDataService.Report<T>(string reportName, NameValueCollection reportParams)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
