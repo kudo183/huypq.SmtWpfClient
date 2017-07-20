@@ -2,7 +2,7 @@
 using huypq.SmtShared;
 using huypq.SmtWpfClient.Abstraction;
 using SimpleDataGrid;
-using QueryBuilder;
+using huypq.QueryBuilder;
 using huypq.SmtShared.Constant;
 using System.Linq;
 

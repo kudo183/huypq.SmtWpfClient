@@ -6,7 +6,7 @@ using System.IO;
 using huypq.SmtShared;
 using huypq.SmtShared.Constant;
 using huypq.SmtWpfClient.Abstraction;
-using QueryBuilder;
+using huypq.QueryBuilder;
 
 namespace huypq.SmtWpfClient
 {

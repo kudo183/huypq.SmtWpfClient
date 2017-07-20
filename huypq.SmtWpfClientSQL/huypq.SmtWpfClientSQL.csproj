@@ -58,13 +58,13 @@
     <Compile Include="SqlDataService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj">
+      <Project>{c3b36888-e0f1-4e30-8549-50d20dd636c5}</Project>
+      <Name>huypq.QueryBuilder.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj">
       <Project>{dbb09141-9d0c-4867-9248-1fc2e8a5eec5}</Project>
       <Name>huypq.SmtShared.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\QueryBuilder\old.NET\QueryBuilder\QueryBuilder\QueryBuilder.csproj">
-      <Project>{e9fbfac6-4189-4eb2-bea0-d81d78687c17}</Project>
-      <Name>QueryBuilder</Name>
     </ProjectReference>
     <ProjectReference Include="..\huypq.SmtWpfClient\huypq.SmtWpfClient.csproj">
       <Project>{8e941c6e-74ca-4baa-af1d-9d98283db1d1}</Project>

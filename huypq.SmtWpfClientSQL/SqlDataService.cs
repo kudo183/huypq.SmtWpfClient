@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using huypq.SmtShared;
 using huypq.SmtWpfClient.Abstraction;
-using QueryBuilder;
+using huypq.QueryBuilder;
 using System.Linq;
 
 namespace huypq.SmtWpfClientSQL

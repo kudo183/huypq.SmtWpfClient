@@ -1,7 +1,7 @@
 ﻿using huypq.SmtShared;
 using huypq.SmtShared.Constant;
 using huypq.SmtWpfClient;
-using QueryBuilder;
+using huypq.QueryBuilder;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
