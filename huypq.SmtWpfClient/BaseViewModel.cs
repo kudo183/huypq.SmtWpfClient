@@ -105,7 +105,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public string SysMsg
         {
-            get { return sysMsg; }
+            get { return string.Format("{0:hh:mm:ss.fff}  {1}", DateTime.Now, sysMsg); }
             set
             {
                 if (sysMsg == value)
