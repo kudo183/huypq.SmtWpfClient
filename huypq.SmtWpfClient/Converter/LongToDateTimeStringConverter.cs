@@ -16,8 +16,8 @@ namespace huypq.SmtWpfClient.Converter
         public object Convert(object value, Type targetType, object parameter,
                           System.Globalization.CultureInfo culture)
         {
-            var date = new DateTime((long)value);
-            return date.ToString();
+            var date = new DateTime((long)value, DateTimeKind.Utc);
+            return date.ToLocalTime().ToString();
         }
         public object ConvertBack(object value, Type targetType, object parameter,
                         System.Globalization.CultureInfo culture)
