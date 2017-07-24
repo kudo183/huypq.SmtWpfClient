@@ -38,6 +38,12 @@ namespace huypq.SmtWpfClient.View
                 }
             }
 
+            sp.Children.Add(new TextBlock()
+            {
+                Text = "ComplexView",
+                Foreground = System.Windows.Media.Brushes.Blue,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
             foreach (var item in complexViews.OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
@@ -48,6 +54,12 @@ namespace huypq.SmtWpfClient.View
                 });
             }
 
+            sp.Children.Add(new TextBlock()
+            {
+                Text = "View",
+                Foreground = System.Windows.Media.Brushes.Blue,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
             foreach (var item in views.OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
@@ -58,6 +70,12 @@ namespace huypq.SmtWpfClient.View
                 });
             }
 
+            sp.Children.Add(new TextBlock()
+            {
+                Text = "Report",
+                Foreground = System.Windows.Media.Brushes.Blue,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
             foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View.Report") && p.DeclaringType == null).OrderBy(p => p.Name))
             {
                 sp.Children.Add(new Button()
