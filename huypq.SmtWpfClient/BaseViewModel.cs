@@ -108,8 +108,8 @@ namespace huypq.SmtWpfClient.Abstraction
             get { return string.Format("{0:hh:mm:ss.fff}  {1}", DateTime.Now, sysMsg); }
             set
             {
-                if (sysMsg == value)
-                    return;
+                //if (sysMsg == value)
+                //    return;
 
                 sysMsg = value;
                 OnPropertyChanged();
