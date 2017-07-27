@@ -339,15 +339,20 @@ namespace huypq.SmtWpfClient
             client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
-            var response = client.UploadValues(uri, reportParameters);
-
             int totalRequestLength = 0;
             foreach (var item in reportParameters.AllKeys)
             {
                 totalRequestLength = reportParameters[item].Length + item.Length;
             }
-            var logMsg = string.Format("{0} PostValues {1} request {2:N0} response {3:N0}",
-                nameof(ProtobufDataService), uri, totalRequestLength, Logger.Instance.FormatByteCount(response.LongLength));
+
+            var logMsg = string.Format("{0} PostValues {1} request {2:N0}",
+                nameof(ProtobufDataService), uri, totalRequestLength);
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
+            var response = client.UploadValues(uri, reportParameters);
+
+            logMsg = string.Format("{0} PostValues response {1:N0}",
+                nameof(ProtobufDataService), Logger.Instance.FormatByteCount(response.LongLength));
             Logger.Instance.Info(logMsg, Logger.Categories.Data);
 
             return response;
@@ -360,10 +365,14 @@ namespace huypq.SmtWpfClient
             client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
+            var logMsg = string.Format("{0} Post {1} request {2:N0}",
+                nameof(ProtobufDataService), uri, Logger.Instance.FormatByteCount(data.LongLength));
+            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+
             var response = client.UploadData(uri, data);
 
-            var logMsg = string.Format("{0} Post {1} request {2:N0} response {3:N0}",
-                nameof(ProtobufDataService), uri, Logger.Instance.FormatByteCount(data.LongLength), Logger.Instance.FormatByteCount(response.LongLength));
+            logMsg = string.Format("{0} response {1:N0}",
+                nameof(ProtobufDataService), Logger.Instance.FormatByteCount(response.LongLength));
             Logger.Instance.Info(logMsg, Logger.Categories.Data);
 
             return response;
