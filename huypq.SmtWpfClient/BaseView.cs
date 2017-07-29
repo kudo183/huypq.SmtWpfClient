@@ -10,7 +10,8 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public class BaseView<T> : UserControl, IBaseView where T : class, IDto
     {
-        protected string _debugName;
+        string _viewName;
+        public string ViewName { get { return _viewName; } }
 
         protected bool _isLoaded = false;
         public bool LoadModelOnLoaded { get; set; } = true;
@@ -55,7 +56,7 @@ namespace huypq.SmtWpfClient.Abstraction
         private bool _isDesignTime;
         public BaseView()
         {
-            _debugName = NameManager.Instance.GetViewName<T>();
+            _viewName = NameManager.Instance.GetViewName<T>();
             _isDesignTime = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
             if (_isDesignTime == true)
             {
@@ -82,7 +83,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
             ViewModel.SaveCommand = new SimpleCommand("SaveCommand", () =>
             {
-                Logger.Instance.Info(_debugName + " Save", Logger.Categories.Data);
+                Logger.Instance.Info(ViewName + " Save", Logger.Categories.Data);
                 GridView.dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
                 ViewModel.Save();
                 ActionAfterSave?.Invoke();
@@ -90,7 +91,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
             ViewModel.LoadCommand = new SimpleCommand("LoadCommand", () =>
             {
-                Logger.Instance.Info(_debugName + " Load", Logger.Categories.Data);
+                Logger.Instance.Info(ViewName + " Load", Logger.Categories.Data);
                 GridView.dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
                 ViewModel.Load();
                 ActionAfterLoad?.Invoke();
@@ -138,19 +139,19 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected override void OnInitialized(EventArgs e)
         {
-            Logger.Instance.Debug(_debugName + " OnInitialized", Logger.Categories.UI);
+            Logger.Instance.Debug(ViewName + " OnInitialized", Logger.Categories.UI);
             InitView();
             base.OnInitialized(e);
         }
 
         public virtual void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            Logger.Instance.Debug(_debugName + " Unloaded", Logger.Categories.UI);
+            Logger.Instance.Debug(ViewName + " Unloaded", Logger.Categories.UI);
         }
 
         public virtual void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Logger.Instance.Debug(_debugName + " Loaded", Logger.Categories.UI);
+            Logger.Instance.Debug(ViewName + " Loaded", Logger.Categories.UI);
 
             if (_isLoaded == false && LoadModelOnLoaded)
             {

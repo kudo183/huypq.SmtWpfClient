@@ -6,6 +6,7 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public interface IBaseView
     {
+        string ViewName { get; }
         IEditableGridViewModel ViewModel { get; set; }
         EditableGridView GridView { get; set; }
         Action ActionAfterSave { get; set; }
