@@ -12,6 +12,7 @@ namespace huypq.SmtWpfClient.View
     public partial class AllView : UserControl
     {
         private Dictionary<string, UserControl> _views = new Dictionary<string, UserControl>();
+
         public AllView()
         {
             InitializeComponent();
@@ -38,71 +39,44 @@ namespace huypq.SmtWpfClient.View
                 }
             }
 
-            sp.Children.Add(new TextBlock()
-            {
-                Text = "ComplexView",
-                Foreground = System.Windows.Media.Brushes.Blue,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
+            sp.Children.Add(CreateTextBlock("ComplexView"));
             foreach (var item in complexViews.OrderBy(p => p.Name))
             {
-                sp.Children.Add(new Button()
-                {
-                    Content = item.Name,
-                    Tag = item,
-                    HorizontalContentAlignment = HorizontalAlignment.Left
-                });
+                sp.Children.Add(CreateButton(item.Name, item));
             }
 
-            sp.Children.Add(new TextBlock()
-            {
-                Text = "View",
-                Foreground = System.Windows.Media.Brushes.Blue,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
+            sp.Children.Add(CreateTextBlock("View"));
             foreach (var item in views.OrderBy(p => p.Name))
             {
-                sp.Children.Add(new Button()
-                {
-                    Content = item.Name,
-                    Tag = item,
-                    HorizontalContentAlignment = HorizontalAlignment.Left
-                });
+                sp.Children.Add(CreateButton(item.Name, item));
             }
 
-            sp.Children.Add(new TextBlock()
-            {
-                Text = "Report",
-                Foreground = System.Windows.Media.Brushes.Blue,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
+            sp.Children.Add(CreateTextBlock("Report"));
             foreach (var viewType in viewTypes.Where(p => p.Namespace != null && p.Namespace.EndsWith("View.Report") && p.DeclaringType == null).OrderBy(p => p.Name))
             {
-                sp.Children.Add(new Button()
-                {
-                    Content = viewType.Name,
-                    Tag = viewType,
-                    HorizontalContentAlignment = HorizontalAlignment.Left
-                });
+                sp.Children.Add(CreateButton(viewType.Name, viewType));
             }
         }
 
-        private void StackPanel_Click(object sender, RoutedEventArgs e)
+        private Button CreateButton(string name, object tag)
         {
-            var button = (e.OriginalSource as Button);
-            if (button == null)
+            return new Button()
             {
-                return;
-            }
+                Content = name,
+                Tag = tag,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(2)
+            };
+        }
 
-            var viewType = button.Tag as System.Type;
-            var typeName = viewType.Name;
-            if (_views.ContainsKey(typeName) == false)
+        private TextBlock CreateTextBlock(string text)
+        {
+            return new TextBlock()
             {
-                _views[typeName] = System.Activator.CreateInstance(viewType) as UserControl;
-            }
-
-            brd.Child = _views[typeName];
+                Text = text,
+                Foreground = System.Windows.Media.Brushes.Blue,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
         }
     }
 }
