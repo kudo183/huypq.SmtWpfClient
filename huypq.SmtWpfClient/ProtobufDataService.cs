@@ -83,6 +83,7 @@ namespace huypq.SmtWpfClient
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
             var qe = new QueryExpression();
+            qe.PageSize = 30;
             qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
                 WhereExpression.In, path, listInt);
             var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);

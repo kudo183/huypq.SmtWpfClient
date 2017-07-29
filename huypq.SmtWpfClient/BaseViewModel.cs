@@ -38,16 +38,10 @@ namespace huypq.SmtWpfClient.Abstraction
             Entities = new ObservableCollectionEx<T>();
             Entities.CollectionChanged += Entities_CollectionChanged;
             HeaderFilters = new List<HeaderFilterBaseModel>();
-            PagerViewModel = new PagerViewModel()
-            {
-                IsEnablePaging = true,
-                CurrentPageIndex = 1,
-                ItemCount = 0,
-                PageCount = 0
-            };
+            PagerViewModel = new PagerViewModel();
 
             PagerViewModel.ActionCurrentPageIndexChanged = Load;
-            PagerViewModel.ActionIsEnablePagingChanged = Load;
+            PagerViewModel.ActionPageSizeChanged = Load;
 
             SelectedValuePath = nameof(IDto.ID);
         }
@@ -200,8 +194,8 @@ namespace huypq.SmtWpfClient.Abstraction
             PagingResultDto<T> result;
 
             var qe = new QueryBuilder.QueryExpression();
-            qe.PageIndex = PagerViewModel.IsEnablePaging ? PagerViewModel.CurrentPageIndex : 0;
-            qe.PageSize = 30;
+            qe.PageIndex = PagerViewModel.CurrentPageIndex;
+            qe.PageSize = PagerViewModel.PageSize;
 
             try
             {
