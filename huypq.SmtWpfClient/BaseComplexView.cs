@@ -38,10 +38,28 @@ namespace huypq.SmtWpfClient.Abstraction
 
         private bool _isDesignTime = true;
 
+        public List<IBaseView> Views
+        {
+            get
+            {
+                var views = new List<IBaseView>();
+                var panel = Content as Panel;
+                foreach (UIElement item in panel.Children)
+                {
+                    if (item is IBaseView iBaseView)
+                    {
+                        views.Add(iBaseView);
+                    }
+                }
+                return views;
+            }
+        }
+
         public BaseComplexView()
         {
             _isDesignTime = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
+
         protected override void OnInitialized(EventArgs e)
         {
             Logger.Instance.Debug("BaseComplexView OnInitialized", Logger.Categories.UI);
