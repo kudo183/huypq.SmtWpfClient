@@ -16,15 +16,23 @@ namespace huypq.SmtWpfClient
         {
             public string RootUri { get; set; }
             public string Token { get; set; }
+            public int DefaultPageSize { get; set; }
         }
 
         string _token;
         string _rootUri;
+        int _defaultPageSize;
 
         public ProtobufDataService(Options option)
         {
             _token = option.Token;
             _rootUri = option.RootUri;
+            _defaultPageSize = option.DefaultPageSize;
+
+            if (_defaultPageSize == 0)
+            {
+                _defaultPageSize = 30;
+            }
         }
 
         public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
@@ -32,6 +40,11 @@ namespace huypq.SmtWpfClient
             if (controller == null)
             {
                 controller = NameManager.Instance.GetControllerName<T>();
+            }
+
+            if (qe.PageSize == 0)
+            {
+                qe.PageSize = _defaultPageSize;
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
@@ -83,7 +96,7 @@ namespace huypq.SmtWpfClient
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
             var qe = new QueryExpression();
-            qe.PageSize = 30;
+            qe.PageSize = _defaultPageSize;
             qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
                 WhereExpression.In, path, listInt);
             var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
