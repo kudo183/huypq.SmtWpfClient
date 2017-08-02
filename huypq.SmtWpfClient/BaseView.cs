@@ -147,6 +147,8 @@ namespace huypq.SmtWpfClient.Abstraction
         public virtual void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Logger.Instance.Debug(ViewName + " Unloaded", Logger.Categories.UI);
+
+            _isLoaded = false;
         }
 
         public virtual void OnLoaded(object sender, RoutedEventArgs e)
