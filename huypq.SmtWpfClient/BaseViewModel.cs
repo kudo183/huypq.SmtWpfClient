@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SimpleDataGrid.ViewModel;
 using System.Linq;
-using System.Windows;
 using SimpleDataGrid;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -16,6 +15,8 @@ namespace huypq.SmtWpfClient.Abstraction
         protected string _debugName;
 
         protected readonly List<T> _originalEntities = new List<T>();
+
+        public Action<object, string> ShowDialogAction { get; set; }
 
         private IDataService _dataService;
         public IDataService DataService
@@ -55,16 +56,9 @@ namespace huypq.SmtWpfClient.Abstraction
             filter.ActionPredicateChanged = Load;
         }
 
-        protected virtual void ProccessHeaderAddCommand(object view, string title, Action AfterCloseDialogAction)
+        protected virtual void ProccessHeaderAddCommand(object content, string title, Action AfterCloseDialogAction)
         {
-            var w = new Window()
-            {
-                Title = title,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = view
-            };
-            w.ShowDialog();
-
+            ShowDialogAction?.Invoke(content, title);
             AfterCloseDialogAction?.Invoke();
         }
 

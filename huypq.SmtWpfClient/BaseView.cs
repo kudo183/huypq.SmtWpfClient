@@ -81,6 +81,18 @@ namespace huypq.SmtWpfClient.Abstraction
                 ViewModel = viewModelObject as IEditableGridViewModel<T>;
             }
 
+            ViewModel.ShowDialogAction = (content, title) =>
+            {
+                var w = new Window()
+                {
+                    Title = title,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    Content = content,
+                    Owner = Window.GetWindow(this)
+                };
+                w.ShowDialog();
+            };
+
             ViewModel.SaveCommand = new SimpleCommand("SaveCommand", () =>
             {
                 Logger.Instance.Info(ViewName + " Save", Logger.Categories.Data);
