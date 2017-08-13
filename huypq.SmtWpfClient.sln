@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientSQL", "hu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtShared.Framework", "..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj", "{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.QueryBuilder.Framework", "..\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj", "{C3B36888-E0F1-4E30-8549-50D20DD636C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.QueryBuilder.Framework", "..\huypq.dotnet.lib\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj", "{C3B36888-E0F1-4E30-8549-50D20DD636C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

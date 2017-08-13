@@ -58,7 +58,7 @@
     <Compile Include="SqlDataService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj">
+    <ProjectReference Include="..\..\huypq.dotnet.lib\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj">
       <Project>{c3b36888-e0f1-4e30-8549-50d20dd636c5}</Project>
       <Name>huypq.QueryBuilder.Framework</Name>
     </ProjectReference>
