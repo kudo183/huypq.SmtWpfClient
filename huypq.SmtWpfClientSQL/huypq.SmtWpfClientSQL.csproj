@@ -62,6 +62,10 @@
       <Project>{c3b36888-e0f1-4e30-8549-50d20dd636c5}</Project>
       <Name>huypq.QueryBuilder.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\huypq.dotnet.lib\huypq.wpf.Utils\huypq.wpf.Utils\huypq.wpf.Utils.csproj">
+      <Project>{B3180065-6E2E-4EC4-9D02-E8D43D93808A}</Project>
+      <Name>huypq.wpf.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj">
       <Project>{dbb09141-9d0c-4867-9248-1fc2e8a5eec5}</Project>
       <Name>huypq.SmtShared.Framework</Name>

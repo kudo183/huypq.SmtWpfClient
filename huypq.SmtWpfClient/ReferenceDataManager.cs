@@ -5,6 +5,7 @@ using SimpleDataGrid;
 using huypq.QueryBuilder;
 using huypq.SmtShared.Constant;
 using System.Linq;
+using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient
 {
