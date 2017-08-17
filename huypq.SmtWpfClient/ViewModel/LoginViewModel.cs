@@ -1,5 +1,5 @@
 ﻿using huypq.SmtWpfClient.Abstraction;
-using SimpleDataGrid;
+using huypq.wpf.Utils;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;

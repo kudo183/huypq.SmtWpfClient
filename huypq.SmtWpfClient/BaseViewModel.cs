@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using huypq.SmtShared;
 using huypq.SmtShared.Constant;
+using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient.Abstraction
 {

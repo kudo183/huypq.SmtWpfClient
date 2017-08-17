@@ -2,6 +2,7 @@
 using huypq.SmtShared;
 using System.Windows;
 using System;
+using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient.ViewModel
 {
@@ -28,7 +29,7 @@ namespace huypq.SmtWpfClient.ViewModel
         {
             _dataService = ServiceLocator.Get<IDataService>();
 
-            AddCommand = new SimpleDataGrid.SimpleCommand("AddCommand", () =>
+            AddCommand = new SimpleCommand("AddCommand", () =>
             {
                 var dto = new T();
                 var de = new View.DataEditor();
@@ -49,7 +50,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 }
             });
 
-            UpdateCommand = new SimpleDataGrid.SimpleCommand("UpdateCommand", () =>
+            UpdateCommand = new SimpleCommand("UpdateCommand", () =>
             {
                 var dto = SelectedItem as T;
                 var de = new View.DataEditor();
@@ -69,7 +70,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 }
             }, () => SelectedValue != null);
 
-            DeleteCommand = new SimpleDataGrid.SimpleCommand("DeleteCommand", () =>
+            DeleteCommand = new SimpleCommand("DeleteCommand", () =>
             {
                 var dto = SelectedItem as T;
                 if (MessageBox.Show(string.Format("delete user [{0}] ?", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -86,7 +87,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 }
             }, () => SelectedValue != null);
 
-            LockUserCommand = new SimpleDataGrid.SimpleCommand("LockUserCommand", () =>
+            LockUserCommand = new SimpleCommand("LockUserCommand", () =>
             {
                 var dto = SelectedItem as IUserDto;
                 if (MessageBox.Show(string.Format("{0} user [{1}] ?", dto.IsLocked ? "unlock" : "lock", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -117,9 +118,9 @@ namespace huypq.SmtWpfClient.ViewModel
             LockUserButtonContent = dto.IsLocked ? "Unlock" : "Lock";
         }
 
-        public SimpleDataGrid.SimpleCommand AddCommand { get; set; }
-        public SimpleDataGrid.SimpleCommand UpdateCommand { get; set; }
-        public SimpleDataGrid.SimpleCommand DeleteCommand { get; set; }
-        public SimpleDataGrid.SimpleCommand LockUserCommand { get; set; }
+        public SimpleCommand AddCommand { get; set; }
+        public SimpleCommand UpdateCommand { get; set; }
+        public SimpleCommand DeleteCommand { get; set; }
+        public SimpleCommand LockUserCommand { get; set; }
     }
 }
