@@ -11,23 +11,17 @@ namespace huypq.SmtWpfClient.ViewModel
         IDataService _dataService;
 
         private string _lockUserButtonContent;
-
         public string LockUserButtonContent
         {
             get { return _lockUserButtonContent; }
-            set
-            {
-                if (_lockUserButtonContent != value)
-                {
-                    _lockUserButtonContent = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { SetField(ref _lockUserButtonContent, value); }
         }
 
         public SmtUserBaseViewModel()
         {
             _dataService = ServiceLocator.Get<IDataService>();
+
+            PropertyChanged += SmtUserBaseViewModel_PropertyChanged;
 
             AddCommand = new SimpleCommand("AddCommand", () =>
             {
@@ -105,17 +99,21 @@ namespace huypq.SmtWpfClient.ViewModel
             }, () => SelectedValue != null);
         }
 
-        protected override void RaiseCommandCanExecuteChanged()
+        private void SmtUserBaseViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            UpdateCommand.RaiseCanExecuteChanged();
-            DeleteCommand.RaiseCanExecuteChanged();
-            LockUserCommand.RaiseCanExecuteChanged();
-        }
+            switch (e.PropertyName)
+            {
+                case nameof(SelectedValue):
+                    {
+                        UpdateCommand.RaiseCanExecuteChanged();
+                        DeleteCommand.RaiseCanExecuteChanged();
+                        LockUserCommand.RaiseCanExecuteChanged();
 
-        protected override void OnSelectedValueChanged()
-        {
-            var dto = SelectedItem as IUserDto;
-            LockUserButtonContent = dto.IsLocked ? "Unlock" : "Lock";
+                        var dto = SelectedItem as IUserDto;
+                        LockUserButtonContent = dto.IsLocked ? "Unlock" : "Lock";
+                    }
+                    break;
+            }
         }
 
         public SimpleCommand AddCommand { get; set; }

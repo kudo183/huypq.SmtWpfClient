@@ -2,23 +2,14 @@
 using System.Collections.Generic;
 using SimpleDataGrid.ViewModel;
 using System.Linq;
-using SimpleDataGrid;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using huypq.SmtShared;
 using huypq.SmtShared.Constant;
 using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public abstract class BaseViewModel<T> : IEditableGridViewModel<T> where T : class, IDto, new()
+    public abstract class BaseViewModel<T> : EditableGridViewModel<T> where T : class, IDto, new()
     {
-        protected string _debugName;
-
-        protected readonly List<T> _originalEntities = new List<T>();
-
-        public Action<object, string> ShowDialogAction { get; set; }
-
         private IDataService _dataService;
         public IDataService DataService
         {
@@ -37,150 +28,12 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             _debugName = NameManager.Instance.GetViewModelName<T>();
 
-            Entities = new ObservableCollectionEx<T>();
-            Entities.CollectionChanged += Entities_CollectionChanged;
-            HeaderFilters = new List<HeaderFilterBaseModel>();
-            PagerViewModel = new PagerViewModel();
-
-            PagerViewModel.ActionCurrentPageIndexChanged = Load;
-            PagerViewModel.ActionPageSizeChanged = Load;
-
             SelectedValuePath = nameof(IDto.ID);
         }
 
-        protected void AddHeaderFilter(HeaderFilterBaseModel filter)
-        {
-            HeaderFilters.Add(filter);
-            filter.ActionFilterValueChanged = Load;
-            filter.ActionIsUsedChanged = Load;
-            filter.ActionIsSortedChanged = Load;
-            filter.ActionPredicateChanged = Load;
-        }
-
-        protected virtual void ProccessHeaderAddCommand(object content, string title, Action AfterCloseDialogAction)
-        {
-            ShowDialogAction?.Invoke(content, title);
-            AfterCloseDialogAction?.Invoke();
-        }
-
-        protected virtual void ProcessDtoBeforeAddToEntities(T dto)
-        {
-
-        }
-
-        protected virtual void ProcessNewAddedDto(T dto)
-        {
-
-        }
-
-        protected virtual void BeforeLoad()
-        {
-
-        }
-
-        protected virtual void AfterLoad()
-        {
-
-        }
-
         #region IBaseViewModel interface
-        public bool IsValid { get; set; }
 
-        public ObservableCollectionEx<T> Entities { get; set; }
-
-        public object ParentItem { get; set; }
-
-        private string sysMsg;
-
-        public string SysMsg
-        {
-            get { return string.Format("{0:hh:mm:ss.fff}  {1}", DateTime.Now, sysMsg); }
-            set
-            {
-                //if (sysMsg == value)
-                //    return;
-
-                sysMsg = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string msg;
-
-        public string Msg
-        {
-            get { return msg; }
-            set
-            {
-                if (msg == value)
-                    return;
-
-                msg = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public string SelectedValuePath { get; set; }
-
-        private object _selectedValue;
-
-        public object SelectedValue
-        {
-            get { return _selectedValue; }
-            set
-            {
-                if (_selectedValue == value)
-                {
-                    return;
-                }
-
-                _selectedValue = value;
-
-                OnSelectedValueChanged();
-                RaiseCommandCanExecuteChanged();
-                ActionSelectedValueChanged?.Invoke(_selectedValue);
-                OnPropertyChanged();
-            }
-        }
-
-        public T SelectedItem
-        {
-            get
-            {
-                if (_selectedValue == null)
-                    return null;
-
-                return Entities.First(p => p.ID == (int)_selectedValue);
-            }
-        }
-
-        public object GetSelectedItem()
-        {
-            return SelectedItem;
-        }
-
-        public Action<object> ActionSelectedValueChanged { get; set; }
-
-        public List<HeaderFilterBaseModel> HeaderFilters { get; set; }
-
-        public PagerViewModel PagerViewModel { get; set; }
-
-        public SimpleCommand LoadCommand { get; set; }
-
-        public SimpleCommand SaveCommand { get; set; }
-
-        protected virtual void RaiseCommandCanExecuteChanged() { }
-
-        protected virtual void OnSelectedValueChanged() { }
-
-        public void Load()
+        public override void Load()
         {
             Logger.Instance.Debug(_debugName + " BaseViewModel Load", Logger.Categories.UI);
 
@@ -188,14 +41,15 @@ namespace huypq.SmtWpfClient.Abstraction
 
             PagingResultDto<T> result;
 
-            var qe = new QueryBuilder.QueryExpression();
-            qe.PageIndex = PagerViewModel.CurrentPageIndex;
-            qe.PageSize = PagerViewModel.PageSize;
-
             try
             {
-                qe.WhereOptions = WhereOptionsFromHeaderFilter(HeaderFilters);
-                qe.OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters);
+                var qe = new QueryBuilder.QueryExpression()
+                {
+                    PageIndex = PagerViewModel.CurrentPageIndex,
+                    PageSize = PagerViewModel.PageSize,
+                    WhereOptions = WhereOptionsFromHeaderFilter(HeaderFilters),
+                    OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters)
+                };
 
                 result = DataService.Get<T>(qe);
 
@@ -235,7 +89,7 @@ namespace huypq.SmtWpfClient.Abstraction
             }
         }
 
-        public void Save()
+        public override void Save()
         {
             var changedItems = new List<T>();
 
@@ -291,257 +145,6 @@ namespace huypq.SmtWpfClient.Abstraction
             }
         }
 
-        public virtual void LoadReferenceData()
-        {
-        }
-
-        private void Entities_CollectionChanged(
-            object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                ProcessNewAddedDto(e.NewItems[0] as T);
-            }
-        }
         #endregion
-
-        private List<QueryBuilder.WhereExpression.IWhereOption> WhereOptionsFromHeaderFilter(
-            List<HeaderFilterBaseModel> headerFilters)
-        {
-            var result = new List<QueryBuilder.WhereExpression.IWhereOption>();
-
-            foreach (var filter in headerFilters.Where(p => p.IsUsed == true))
-            {
-                var wo = WhereOptionFromHeaderFilter(filter);
-                if (wo != null)
-                {
-                    result.Add(wo);
-                }
-            }
-
-            return result;
-        }
-
-        private QueryBuilder.WhereExpression.IWhereOption WhereOptionFromHeaderFilter(
-            HeaderFilterBaseModel filter)
-        {
-            if (filter.FilterValue != null && filter.PropertyType == typeof(string))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionString()
-                {
-                    PropertyPath = filter.PropertyName,
-                    Value = (string)filter.FilterValue,
-                    Predicate = filter.Predicate
-                };
-                return wo;
-            }
-            else if (filter.FilterValue != null && filter.PropertyType == typeof(int))
-            {
-                int number;
-                if (int.TryParse(filter.FilterValue.ToString(), out number) == true)
-                {
-                    var wo = new QueryBuilder.WhereExpression.WhereOptionInt()
-                    {
-                        PropertyPath = filter.PropertyName,
-                        Value = number,
-                        Predicate = filter.Predicate
-                    };
-                    return wo;
-                }
-                else
-                {
-                    throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                }
-            }
-            else if (filter.PropertyType == typeof(int?))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionNullableInt()
-                {
-                    PropertyPath = filter.PropertyName
-                };
-                if (filter.FilterValue == null)
-                {
-                    if (filter.Predicate == QueryBuilder.WhereExpression.Equal || filter.Predicate == QueryBuilder.WhereExpression.NotEqual)
-                    {
-                        wo.Predicate = filter.Predicate;
-                        wo.Value = null;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                    }
-                }
-                else
-                {
-                    int number;
-                    if (int.TryParse(filter.FilterValue.ToString(), out number) == true)
-                    {
-                        wo.Predicate = filter.Predicate;
-                        wo.Value = number;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                    }
-                }
-                return wo;
-            }
-            else if (filter.FilterValue != null && filter.PropertyType == typeof(long))
-            {
-                long number;
-                if (long.TryParse(filter.FilterValue.ToString(), out number) == true)
-                {
-                    var wo = new QueryBuilder.WhereExpression.WhereOptionLong()
-                    {
-                        PropertyPath = filter.PropertyName,
-                        Value = number,
-                        Predicate = filter.Predicate
-                    };
-                    return wo;
-                }
-                else
-                {
-                    throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                }
-            }
-            else if (filter.PropertyType == typeof(long?))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionNullableLong()
-                {
-                    PropertyPath = filter.PropertyName
-                };
-                if (filter.FilterValue == null)
-                {
-                    if (filter.Predicate == QueryBuilder.WhereExpression.Equal || filter.Predicate == QueryBuilder.WhereExpression.NotEqual)
-                    {
-                        wo.Predicate = filter.Predicate;
-                        wo.Value = null;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                    }
-                }
-                else
-                {
-                    long number;
-                    if (long.TryParse(filter.FilterValue.ToString(), out number) == true)
-                    {
-                        wo.Predicate = filter.Predicate;
-                        wo.Value = number;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                    }
-                }
-                return wo;
-            }
-            else if (filter.FilterValue != null && filter.PropertyType == typeof(bool))
-            {
-                if (filter.Predicate == QueryBuilder.WhereExpression.Equal || filter.Predicate == QueryBuilder.WhereExpression.NotEqual)
-                {
-                    var wo = new QueryBuilder.WhereExpression.WhereOptionBool()
-                    {
-                        Predicate = filter.Predicate,
-                        PropertyPath = filter.PropertyName,
-                        Value = (bool)filter.FilterValue
-                    };
-                    return wo;
-                }
-                else
-                {
-                    throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                }
-            }
-            else if (filter.PropertyType == typeof(bool?))
-            {
-                if (filter.Predicate == QueryBuilder.WhereExpression.Equal || filter.Predicate == QueryBuilder.WhereExpression.NotEqual)
-                {
-                    var wo = new QueryBuilder.WhereExpression.WhereOptionNullableBool()
-                    {
-                        Predicate = filter.Predicate,
-                        PropertyPath = filter.PropertyName,
-                        Value = (bool?)filter.FilterValue
-                    };
-                    return wo;
-                }
-                else
-                {
-                    throw new ArgumentException(string.Format("filter: {0} not valid", filter.Name));
-                }
-            }
-            else if (filter.FilterValue != null && filter.PropertyType == typeof(DateTime))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionDate()
-                {
-                    Predicate = filter.Predicate,
-                    PropertyPath = filter.PropertyName,
-                    Value = (DateTime)filter.FilterValue
-                };
-                return wo;
-            }
-            else if (filter.PropertyType == typeof(DateTime?))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionNullableDate()
-                {
-                    Predicate = filter.Predicate,
-                    PropertyPath = filter.PropertyName,
-                    Value = (DateTime?)filter.FilterValue
-                };
-                return wo;
-            }
-            else if (filter.FilterValue != null && filter.PropertyType == typeof(TimeSpan))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionTime()
-                {
-                    Predicate = filter.Predicate,
-                    PropertyPath = filter.PropertyName,
-                    Value = (TimeSpan)filter.FilterValue
-                };
-                return wo;
-            }
-            else if (filter.PropertyType == typeof(TimeSpan?))
-            {
-                var wo = new QueryBuilder.WhereExpression.WhereOptionNullableTime()
-                {
-                    Predicate = filter.Predicate,
-                    PropertyPath = filter.PropertyName,
-                    Value = (TimeSpan?)filter.FilterValue
-                };
-                return wo;
-            }
-
-            return null;
-        }
-
-        private List<QueryBuilder.OrderByExpression.OrderOption> OrderOptionsFromHeaderFilter(
-            List<HeaderFilterBaseModel> headerFilters)
-        {
-            var result = new List<QueryBuilder.OrderByExpression.OrderOption>();
-
-            foreach (var filter in headerFilters)
-            {
-                switch (filter.IsSorted)
-                {
-                    case HeaderFilterBaseModel.SortDirection.Ascending:
-                        result.Add(new QueryBuilder.OrderByExpression.OrderOption()
-                        {
-                            PropertyPath = filter.SortPropertyName,
-                            IsAscending = true
-                        });
-                        break;
-                    case HeaderFilterBaseModel.SortDirection.Descending:
-                        result.Add(new QueryBuilder.OrderByExpression.OrderOption()
-                        {
-                            PropertyPath = filter.SortPropertyName,
-                            IsAscending = false
-                        });
-                        break;
-                }
-            }
-
-            return result;
-        }
     }
 }

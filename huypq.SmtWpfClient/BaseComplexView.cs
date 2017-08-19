@@ -147,9 +147,9 @@ namespace huypq.SmtWpfClient.Abstraction
             var headerFilter = childViewModel.HeaderFilters.First(p => p.PropertyName == filterProperty);
             headerFilter.DisableChangedAction(p => { p.IsUsed = true; p.FilterValue = 0; });
 
-            currentView.ViewModel.ActionSelectedValueChanged = (selectedValue) =>
+            currentView.ViewModel.PropertyChanged += (sender, e) =>
             {
-                OnSelectedIndexChanged(currentView, nextView, selectedValue);
+                OnSelectedIndexChanged(currentView, nextView, currentView.ViewModel.SelectedValue);
             };
         }
 
