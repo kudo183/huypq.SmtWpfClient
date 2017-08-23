@@ -4,7 +4,6 @@ using huypq.SmtWpfClient.Abstraction;
 using SimpleDataGrid;
 using huypq.QueryBuilder;
 using huypq.SmtShared.Constant;
-using System.Linq;
 using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient
@@ -36,29 +35,27 @@ namespace huypq.SmtWpfClient
         private readonly SortedObservableCollection<T> _datas = new SortedObservableCollection<T>();
 
         private List<WhereExpression.IWhereOption> _whereOptions = new List<WhereExpression.IWhereOption>();
+        private System.Action<T> _processDtoBeforeAddToSortedCollectionAction;
+
         private long _lastUpdate;
         private bool _isLoaded = false;
         private const string LastUpdateTimePropertyName = nameof(IDto.LastUpdateTime);
 
-        public ReferenceDataManager()
+        private ReferenceDataManager()
         {
             _datas.SetOrderChecker((p1, p2) => { return string.Compare(p1.DisplayText, p2.DisplayText) < 0; });
         }
 
-        public void SetOrderChecker(System.Func<T, T, bool> checker)
+        public void Init(System.Action<T> processDtoBeforeAddToSortedCollection, List<WhereExpression.IWhereOption> whereOptions = null, System.Func<T, T, bool> checker = null)
         {
-            _datas.SetOrderChecker(checker);
-        }
-
-        public void SetWhereOptions(List<WhereExpression.IWhereOption> whereOptions)
-        {
-            if (whereOptions == null)
-            {
-                _whereOptions.Clear();
-            }
-            else
+            _processDtoBeforeAddToSortedCollectionAction = processDtoBeforeAddToSortedCollection;
+            if (whereOptions != null)
             {
                 _whereOptions = whereOptions;
+            }
+            if (checker != null)
+            {
+                _datas.SetOrderChecker(checker);
             }
         }
 
@@ -66,6 +63,14 @@ namespace huypq.SmtWpfClient
         {
             var result = DataService.GetAll<T>(_whereOptions);
             _lastUpdate = result.LastUpdateTime;
+
+            if (_processDtoBeforeAddToSortedCollectionAction != null)
+            {
+                foreach (var item in result.Items)
+                {
+                    _processDtoBeforeAddToSortedCollectionAction(item);
+                }
+            }
             _datas.Reset(result.Items);
 
             _isLoaded = true;
@@ -99,9 +104,11 @@ namespace huypq.SmtWpfClient
                     switch (item.State)
                     {
                         case DtoState.Add:
+                            _processDtoBeforeAddToSortedCollectionAction?.Invoke(item);
                             _datas.Add(item);
                             break;
                         case DtoState.Update:
+                            _processDtoBeforeAddToSortedCollectionAction?.Invoke(item);
                             _datas.UpdateFirst(p => p.ID == item.ID, p => p.Update(item));
                             break;
                         case DtoState.Delete:
@@ -130,11 +137,19 @@ namespace huypq.SmtWpfClient
 
         public ObservableCollectionEx<T> Get()
         {
+            if (_isLoaded == false)
+            {
+                Load();
+            }
             return _datas;
         }
 
         public T GetByID(int id)
         {
+            if (_isLoaded == false)
+            {
+                Load();
+            }
             return _datas.FindFirst(p => p.ID == id);
         }
     }
