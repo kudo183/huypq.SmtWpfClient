@@ -1,4 +1,6 @@
-﻿using System;
+﻿using huypq.wpf.Utils;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -8,6 +10,8 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public abstract class BaseComplexView : UserControl
     {
+        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseComplexView>();
+
         public static int GetViewLevel(DependencyObject obj)
         {
             return (int)obj.GetValue(ViewLevelProperty);
@@ -62,7 +66,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected override void OnInitialized(EventArgs e)
         {
-            Logger.Instance.Debug("BaseComplexView OnInitialized", Logger.Categories.UI);
+            _logger.LogDebug("BaseComplexView OnInitialized");
             InitView();
             base.OnInitialized(e);
         }
@@ -124,7 +128,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected virtual void OnAfterSave(IBaseView previousView, IBaseView currentView, IBaseView nextView)
         {
-            Logger.Instance.Debug("BaseComplexView OnAfterSave " + currentView.GetType().Name, Logger.Categories.UI);
+            _logger.LogDebug("BaseComplexView OnAfterSave {0}", currentView.GetType().Name);
         }
 
         void InitAfterLoad(IBaseView previousView, IBaseView currentView, IBaseView nextView)
@@ -137,7 +141,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected virtual void OnAfterLoad(IBaseView previousView, IBaseView currentView, IBaseView nextView)
         {
-            Logger.Instance.Debug("BaseComplexView OnAfterLoad " + currentView.GetType().Name, Logger.Categories.UI);
+            _logger.LogDebug("BaseComplexView OnAfterLoad {0}", currentView.GetType().Name);
         }
 
         private void InitSelectedIndexChangedAction(IBaseView currentView, IBaseView nextView)
@@ -155,7 +159,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected virtual void OnSelectedIndexChanged(IBaseView currentView, IBaseView nextView, object selectedValue)
         {
-            Logger.Instance.Debug("BaseComplexView OnSelectedIndexChanged " + currentView.GetType().Name, Logger.Categories.UI);
+            _logger.LogDebug("BaseComplexView OnSelectedIndexChanged {0}", currentView.GetType().Name);
             var viewModel = currentView.ViewModel;
             var childViewModel = nextView.ViewModel;
             var filterProperty = BaseComplexView.GetFilterProperty(nextView as UIElement);
@@ -182,7 +186,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected virtual void OnMoveFocus(IBaseView currentView, IBaseView nextView)
         {
-            Logger.Instance.Debug("BaseComplexView OnMoveFocus " + currentView.GetType().Name, Logger.Categories.UI);
+            _logger.LogDebug("BaseComplexView OnMoveFocus {0}", currentView.GetType().Name);
             var nextDataGrid = nextView.GridView.dataGrid;
 
             nextDataGrid.FocusCell(

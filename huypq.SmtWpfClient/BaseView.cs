@@ -1,5 +1,6 @@
 ﻿using huypq.SmtShared;
 using huypq.wpf.Utils;
+using Microsoft.Extensions.Logging;
 using SimpleDataGrid;
 using SimpleDataGrid.ViewModel;
 using System;
@@ -11,6 +12,8 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public class BaseView<T> : UserControl, IBaseView where T : class, IDto
     {
+        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseView<T>>();
+
         string _viewName;
         public string ViewName { get { return _viewName; } }
 
@@ -96,7 +99,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
             ViewModel.SaveCommand = new SimpleCommand("SaveCommand", () =>
             {
-                Logger.Instance.Info(ViewName + " Save", Logger.Categories.Data);
+                _logger.LogInformation("Save {0}", ViewName);
                 GridView.dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
                 ViewModel.Save();
                 ActionAfterSave?.Invoke();
@@ -104,7 +107,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
             ViewModel.LoadCommand = new SimpleCommand("LoadCommand", () =>
             {
-                Logger.Instance.Info(ViewName + " Load", Logger.Categories.Data);
+                _logger.LogInformation("Load {0}", ViewName);
                 GridView.dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
                 ViewModel.Load();
                 ActionAfterLoad?.Invoke();
@@ -152,21 +155,21 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected override void OnInitialized(EventArgs e)
         {
-            Logger.Instance.Debug(ViewName + " OnInitialized", Logger.Categories.UI);
+            _logger.LogDebug("OnInitialized {0}", ViewName);
             InitView();
             base.OnInitialized(e);
         }
 
         public virtual void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            Logger.Instance.Debug(ViewName + " Unloaded", Logger.Categories.UI);
+            _logger.LogDebug("Unloaded {0}", ViewName);
 
             _isLoaded = false;
         }
 
         public virtual void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Logger.Instance.Debug(ViewName + " Loaded", Logger.Categories.UI);
+            _logger.LogDebug("Loaded {0}", ViewName);
 
             if (_isLoaded == false && LoadModelOnLoaded)
             {

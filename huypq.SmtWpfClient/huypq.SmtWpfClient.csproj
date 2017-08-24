@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>huypq.SmtWpfClient</RootNamespace>
     <AssemblyName>huypq.SmtWpfClient</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,7 +73,6 @@
     <Compile Include="Interface\IBaseView.cs" />
     <Compile Include="Interface\IDataService.cs" />
     <Compile Include="Interface\IViewModelFactory.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="View\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -85,6 +85,10 @@
     <Compile Include="View\SmtUserClaimBaseView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\huypq.dotnet.lib\huypq.Logging\huypq.Logging.Framework\huypq.Logging.Framework.csproj">
+      <Project>{f4abc0f4-c860-44a4-8bf7-58be106e17e4}</Project>
+      <Name>huypq.Logging.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\huypq.dotnet.lib\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj">
       <Project>{c3b36888-e0f1-4e30-8549-50d20dd636c5}</Project>
       <Name>huypq.QueryBuilder.Framework</Name>

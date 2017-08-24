@@ -5,11 +5,14 @@ using System.Linq;
 using huypq.SmtShared;
 using huypq.SmtShared.Constant;
 using huypq.wpf.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
     public abstract class BaseViewModel<T> : EditableGridViewModel<T> where T : class, IDto, new()
     {
+        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseViewModel<T>>();
+
         private IDataService _dataService;
         public IDataService DataService
         {
@@ -35,7 +38,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public override void Load()
         {
-            Logger.Instance.Debug(_debugName + " BaseViewModel Load", Logger.Categories.UI);
+            _logger.LogDebug("Load {0}", _debugName);
 
             BeforeLoad();
 

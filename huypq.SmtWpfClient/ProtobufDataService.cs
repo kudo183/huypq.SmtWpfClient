@@ -7,11 +7,15 @@ using huypq.SmtShared;
 using huypq.SmtShared.Constant;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.QueryBuilder;
+using Microsoft.Extensions.Logging;
+using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient
 {
     public class ProtobufDataService : IDataService
     {
+        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<ProtobufDataService>();
+
         public class Options
         {
             public string RootUri { get; set; }
@@ -55,9 +59,7 @@ namespace huypq.SmtWpfClient
                 item.SetCurrentValueAsOriginalValue();
             }
 
-            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("Get {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
 
             return result;
         }
@@ -75,9 +77,7 @@ namespace huypq.SmtWpfClient
             var response = PostValues(uri, data, SerializeType.Protobuf);
             var result = FromBytes<T>(response);
 
-            var logMsg = string.Format("{0} GetByID {1} {2}",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength));
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("GetByID {0} {1:N0} bytes", controller, response.LongLength);
 
             return result;
         }
@@ -106,9 +106,7 @@ namespace huypq.SmtWpfClient
                 item.SetCurrentValueAsOriginalValue();
             }
 
-            var logMsg = string.Format("{0} GetByListInt {1} {2}",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength));
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("GetByListInt {0} {1:N0} bytes", controller, response.LongLength);
 
             return result.Items;
         }
@@ -128,9 +126,7 @@ namespace huypq.SmtWpfClient
                 item.SetCurrentValueAsOriginalValue();
             }
 
-            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("GetAll {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
 
             return result;
         }
@@ -150,9 +146,7 @@ namespace huypq.SmtWpfClient
                 item.SetCurrentValueAsOriginalValue();
             }
 
-            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("GetUpdate {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
 
             return result;
         }
@@ -216,9 +210,7 @@ namespace huypq.SmtWpfClient
             var response = PostValues(uri, reportParams, SerializeType.Protobuf);
             var result = FromBytes<PagingResultDto<T>>(response);
 
-            var logMsg = string.Format("{0} Get {1} {2} {3:N0} Items",
-                nameof(ProtobufDataService), controller, Logger.Instance.FormatByteCount(response.LongLength), result.Items.Count);
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("Report {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
 
             return result;
         }
@@ -359,15 +351,9 @@ namespace huypq.SmtWpfClient
                 totalRequestLength = reportParameters[item].Length + item.Length;
             }
 
-            var logMsg = string.Format("{0} PostValues {1} request {2:N0}",
-                nameof(ProtobufDataService), uri, totalRequestLength);
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("PostValues {0} {1:N0} bytes", uri, totalRequestLength);
 
             var response = client.UploadValues(uri, reportParameters);
-
-            logMsg = string.Format("{0} PostValues response {1:N0}",
-                nameof(ProtobufDataService), Logger.Instance.FormatByteCount(response.LongLength));
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
 
             return response;
         }
@@ -379,15 +365,9 @@ namespace huypq.SmtWpfClient
             client.Headers["response"] = responseType;
             client.Headers["token"] = _token;
 
-            var logMsg = string.Format("{0} Post {1} request {2:N0}",
-                nameof(ProtobufDataService), uri, Logger.Instance.FormatByteCount(data.LongLength));
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
+            _logger.LogInformation("Post {0} {1:N0} bytes", uri, data.LongLength);
 
             var response = client.UploadData(uri, data);
-
-            logMsg = string.Format("{0} response {1:N0}",
-                nameof(ProtobufDataService), Logger.Instance.FormatByteCount(response.LongLength));
-            Logger.Instance.Info(logMsg, Logger.Categories.Data);
 
             return response;
         }
