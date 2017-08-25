@@ -194,8 +194,6 @@ namespace huypq.SmtWpfClient.ViewModel
             {
                 IsLoggedIn = false;
                 IsTenant = false;
-                TenantName = string.Empty;
-                Email = string.Empty;
                 Pass = string.Empty;
                 Token = string.Empty;
                 Msg = string.Empty;

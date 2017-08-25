@@ -6,6 +6,9 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public interface IDataService
     {
+        bool IsLoggedIn();
+        bool IsTenant();
+        string GetBase64ProtectedToken();
         string Register(string tenantLoginName, string tenantName);
         string TenantRequestToken(string email, string purpose);
         string UserRequestToken(string email, string tenantName, string purpose);

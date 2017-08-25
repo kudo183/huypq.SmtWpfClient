@@ -10,6 +10,21 @@ namespace huypq.SmtWpfClientSQL
 {
     public class SqlDataService : IDataService
     {
+        public bool IsLoggedIn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsTenant()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetBase64ProtectedToken()
+        {
+            throw new NotImplementedException();
+        }
+
         public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
         {
             var result = CallDataProvierMethod<T>("Get", qe) as PagingResultDto<T>;

@@ -19,17 +19,71 @@ namespace huypq.SmtWpfClient
         public class Options
         {
             public string RootUri { get; set; }
+            public bool IsTenant { get; set; }
             public string Token { get; set; }
             public int DefaultPageSize { get; set; }
         }
 
+        bool _isTenant;
         string _token;
         string _rootUri;
         int _defaultPageSize;
 
+        private string ProtectString(string text)
+        {
+            if (string.IsNullOrEmpty(text) == true)
+            {
+                return string.Empty;
+            }
+
+            try
+            {
+                var bytes = System.Text.Encoding.ASCII.GetBytes(text);
+                var protectedBytes = System.Security.Cryptography.ProtectedData.Protect(bytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                return Convert.ToBase64String(protectedBytes);
+            }
+            catch { }
+
+            return string.Empty;
+        }
+
+        private string UnprotectString(string base64)
+        {
+            if (string.IsNullOrEmpty(base64) == true)
+            {
+                return string.Empty;
+            }
+
+            try
+            {
+                var bytes = Convert.FromBase64String(base64);
+                var unprotectedBytes = System.Security.Cryptography.ProtectedData.Unprotect(bytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                return System.Text.Encoding.ASCII.GetString(unprotectedBytes);
+            }
+            catch { }
+
+            return string.Empty;
+        }
+
+        public bool IsTenant()
+        {
+            return _isTenant;
+        }
+
+        public bool IsLoggedIn()
+        {
+            return string.IsNullOrEmpty(_token) == false;
+        }
+
+        public string GetBase64ProtectedToken()
+        {
+            return ProtectString(_token);
+        }
+
         public ProtobufDataService(Options option)
         {
-            _token = option.Token;
+            _isTenant = option.IsTenant;
+            _token = UnprotectString(option.Token);
             _rootUri = option.RootUri;
             _defaultPageSize = option.DefaultPageSize;
 
@@ -284,6 +338,7 @@ namespace huypq.SmtWpfClient
             var result = PostValues(uri, data, SerializeType.Json);
 
             _token = GetStringFromBytes(result);
+            _isTenant = true;
         }
 
         public void UserLogin(string tenantName, string username, string password)
@@ -299,6 +354,7 @@ namespace huypq.SmtWpfClient
             var result = PostValues(uri, data, SerializeType.Json);
 
             _token = GetStringFromBytes(result);
+            _isTenant = false;
         }
 
         public string LockUser(string username, bool isLocked)
@@ -337,6 +393,8 @@ namespace huypq.SmtWpfClient
 
             //choose json response type because when respone is a string, json is better than protobuf
             var result = PostValues(uri, data, SerializeType.Json);
+
+            _token = string.Empty;
         }
 
         private byte[] PostValues(string uri, NameValueCollection reportParameters, string responseType)
