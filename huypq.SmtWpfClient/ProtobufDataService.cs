@@ -9,6 +9,7 @@ using huypq.SmtWpfClient.Abstraction;
 using huypq.QueryBuilder;
 using Microsoft.Extensions.Logging;
 using huypq.wpf.Utils;
+using System.Linq;
 
 namespace huypq.SmtWpfClient
 {
@@ -152,7 +153,7 @@ namespace huypq.SmtWpfClient
             var qe = new QueryExpression();
             qe.PageSize = _defaultPageSize;
             qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
-                WhereExpression.In, path, listInt);
+                WhereExpression.In, path, listInt.Distinct().ToList());
             var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
             var result = FromBytes<PagingResultDto<T>>(response);
             foreach (var item in result.Items)
