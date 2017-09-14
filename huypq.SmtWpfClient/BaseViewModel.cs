@@ -38,14 +38,14 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public override void Load()
         {
-            _logger.LogDebug("Load {0}", _debugName);
-
-            BeforeLoad();
-
-            PagingResultDto<T> result;
-
             try
             {
+                _logger.LogDebug("Load {0}", _debugName);
+
+                BeforeLoad();
+
+                PagingResultDto<T> result;
+
                 var qe = new QueryBuilder.QueryExpression()
                 {
                     PageIndex = PagerViewModel.CurrentPageIndex,
@@ -94,40 +94,45 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public override void Save()
         {
-            var changedItems = new List<T>();
-
-            foreach (var entity in _originalEntities)
-            {
-                if (Entities.Any(p => p.ID == entity.ID) == false)
-                {
-                    entity.State = DtoState.Delete;
-                    changedItems.Add(entity);
-                }
-            }
-
-            foreach (var entity in Entities)
-            {
-                if (entity.ID == 0)
-                {
-                    entity.State = DtoState.Add;
-                    changedItems.Add(entity);
-                }
-                else if (entity.HasChange())
-                {
-                    entity.State = DtoState.Update;
-                    changedItems.Add(entity);
-                }
-            }
-
-            if (changedItems.Count == 0)
-            {
-                return;
-            }
-
             try
             {
+                BeforeSave();
+
+                var changedItems = new List<T>();
+
+                foreach (var entity in _originalEntities)
+                {
+                    if (Entities.Any(p => p.ID == entity.ID) == false)
+                    {
+                        entity.State = DtoState.Delete;
+                        changedItems.Add(entity);
+                    }
+                }
+
+                foreach (var entity in Entities)
+                {
+                    if (entity.ID == 0)
+                    {
+                        entity.State = DtoState.Add;
+                        changedItems.Add(entity);
+                    }
+                    else if (entity.HasChange())
+                    {
+                        entity.State = DtoState.Update;
+                        changedItems.Add(entity);
+                    }
+                }
+
+                if (changedItems.Count == 0)
+                {
+                    return;
+                }
+
                 var response = DataService.Save(changedItems);
                 SysMsg = response;
+
+                AfterSave();
+
                 Load();
             }
             catch (System.Net.WebException ex)
