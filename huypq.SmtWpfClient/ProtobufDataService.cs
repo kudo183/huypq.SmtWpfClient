@@ -270,6 +270,85 @@ namespace huypq.SmtWpfClient
             return result;
         }
 
+        public Stream GetFileByID(int id, string controller = null, string action = null)
+        {
+            if (controller == null)
+            {
+                controller = "SmtFile";
+            }
+            if (action == null)
+            {
+                action = ControllerAction.SmtFileBase.GetByID;
+            }
+            var uri = GetFullUri(controller, action);
+
+            var client = new MyWebClient();
+            client.Headers["token"] = _token;
+            client.QueryString.Add("id", id.ToString());
+            var result = client.DownloadData(uri);
+
+            return new MemoryStream(result);
+        }
+
+        public string AddFile(string filePath, string controller = null)
+        {
+            if (controller == null)
+            {
+                controller = "SmtFile";
+            }
+            var uri = GetFullUri(controller, ControllerAction.SmtFileBase.Add);
+
+            var client = new MyWebClient();
+            client.Headers["response"] = SerializeType.Json;
+            client.Headers["token"] = _token;
+
+            var result = client.UploadFile(uri, filePath);
+
+            return GetStringFromBytes(result);
+        }
+
+        public string UpdateFile(int id, string filePath, string controller = null)
+        {
+            if (controller == null)
+            {
+                controller = "SmtFile";
+            }
+            var uri = GetFullUri(controller, ControllerAction.SmtFileBase.Update);
+
+            var client = new MyWebClient();
+            client.Headers["response"] = SerializeType.Json;
+            client.Headers["token"] = _token;
+            client.QueryString = new NameValueCollection()
+            {
+                ["id"] = id.ToString()
+            };
+            var result = client.UploadFile(uri, filePath);
+
+            return GetStringFromBytes(result);
+        }
+
+        public string DeteleFile(int id, string controller = null)
+        {
+            if (controller == null)
+            {
+                controller = "SmtFile";
+            }
+            var uri = GetFullUri(controller, ControllerAction.SmtFileBase.Delete);
+
+            var client = new MyWebClient();
+            client.Headers["response"] = SerializeType.Json;
+            client.Headers["token"] = _token;
+
+            var data = new NameValueCollection
+            {
+                ["id"] = id.ToString()
+            };
+
+            var response = client.UploadValues(uri, data);
+
+            return GetStringFromBytes(response);
+        }
+
         public string Register(string tenantLoginName, string tenantName)
         {
             var uri = GetFullUri(ControllerAction.Smt.ControllerName, ControllerAction.Smt.Register);

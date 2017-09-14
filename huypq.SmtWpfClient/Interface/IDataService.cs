@@ -1,6 +1,7 @@
 ﻿using huypq.SmtShared;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
@@ -28,5 +29,9 @@ namespace huypq.SmtWpfClient.Abstraction
         string Update<T>(T item, string controller = null) where T : IDto;
         string Delete<T>(T item, string controller = null) where T : IDto;
         PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams);
+        Stream GetFileByID(int id, string controller = null, string action = null);
+        string AddFile(string filePath, string controller = null);
+        string UpdateFile(int id, string filePath, string controller = null);
+        string DeteleFile(int id, string controller = null);
     }
 }

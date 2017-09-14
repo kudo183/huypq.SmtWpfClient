@@ -5,6 +5,7 @@ using huypq.SmtShared;
 using huypq.SmtWpfClient.Abstraction;
 using huypq.QueryBuilder;
 using System.Linq;
+using System.IO;
 
 namespace huypq.SmtWpfClientSQL
 {
@@ -148,6 +149,26 @@ namespace huypq.SmtWpfClientSQL
         }
 
         PagingResultDto<T> IDataService.Report<T>(string reportName, NameValueCollection reportParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetFileByID(int id, string controller = null, string action = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string AddFile(string filePath, string controller = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string UpdateFile(int id, string filePath, string controller = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeteleFile(int id, string controller = null)
         {
             throw new NotImplementedException();
         }
