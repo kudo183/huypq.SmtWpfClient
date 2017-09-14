@@ -12,7 +12,7 @@ namespace huypq.SmtWpfClient.Abstraction
 {
     public class BaseView<T> : UserControl, IBaseView where T : class, IDto
     {
-        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseView<T>>();
+        ILogger _logger;
 
         string _viewName;
         public string ViewName { get { return _viewName; } }
@@ -60,13 +60,14 @@ namespace huypq.SmtWpfClient.Abstraction
         private bool _isDesignTime;
         public BaseView()
         {
-            _viewName = NameManager.Instance.GetViewName<T>();
             _isDesignTime = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
             if (_isDesignTime == true)
             {
                 return;
             }
 
+            _viewName = NameManager.Instance.GetViewName<T>();
+            _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseView<T>>();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -77,6 +78,8 @@ namespace huypq.SmtWpfClient.Abstraction
             {
                 return;
             }
+
+            _logger.LogDebug("InitView {0}", ViewName);
 
             GridView = Content as EditableGridView;
             if (ViewModel == null)
@@ -155,7 +158,6 @@ namespace huypq.SmtWpfClient.Abstraction
 
         protected override void OnInitialized(EventArgs e)
         {
-            _logger.LogDebug("OnInitialized {0}", ViewName);
             InitView();
             base.OnInitialized(e);
         }
