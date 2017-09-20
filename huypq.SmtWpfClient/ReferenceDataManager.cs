@@ -108,8 +108,12 @@ namespace huypq.SmtWpfClient
                             _datas.Add(item);
                             break;
                         case DtoState.Update:
-                            _processDtoBeforeAddToSortedCollectionAction?.Invoke(item);
-                            _datas.UpdateFirst(p => p.ID == item.ID, p => p.Update(item));
+                            _datas.UpdateFirst(p => p.ID == item.ID,
+                                p =>
+                                {
+                                    p.Update(item);
+                                    _processDtoBeforeAddToSortedCollectionAction?.Invoke(p);
+                                });
                             break;
                         case DtoState.Delete:
                             _datas.RemoveFirst(p => p.ID == item.ID);
