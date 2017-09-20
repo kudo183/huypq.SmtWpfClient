@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public abstract class BaseViewModel<T> : EditableGridViewModel<T> where T : class, IDto, new()
+    public abstract class BaseViewModel<T, T1> : EditableGridViewModel<T1> where T : class, IDto, new() where T1 : class, IDataModel<T>, new()
     {
-        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseViewModel<T>>();
+        ILogger _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseViewModel<T, T1>>();
 
         private IDataService _dataService;
         public IDataService DataService
@@ -29,7 +29,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
         public BaseViewModel()
         {
-            _debugName = NameManager.Instance.GetViewModelName<T>();
+            _debugName = NameManager.Instance.GetViewModelName<T, T1>();
 
             SelectedValuePath = nameof(IDto.ID);
         }
@@ -44,7 +44,7 @@ namespace huypq.SmtWpfClient.Abstraction
 
                 BeforeLoad();
 
-                PagingResultDto<T> result;
+                PagingResultDto<T1> result;
 
                 var qe = new QueryBuilder.QueryExpression()
                 {
@@ -54,13 +54,13 @@ namespace huypq.SmtWpfClient.Abstraction
                     OrderOptions = OrderOptionsFromHeaderFilter(HeaderFilters)
                 };
 
-                result = DataService.Get<T>(qe);
+                result = DataService.Get<T, T1>(qe);
 
                 _originalEntities.Clear();
 
                 foreach (var dto in result.Items)
                 {
-                    ProcessDtoBeforeAddToEntities(dto);
+                    ProcessDataModelBeforeAddToEntities(dto);
                     _originalEntities.Add(dto);
                 }
 
@@ -98,7 +98,7 @@ namespace huypq.SmtWpfClient.Abstraction
             {
                 BeforeSave();
 
-                var changedItems = new List<T>();
+                var changedItems = new List<T1>();
 
                 foreach (var entity in _originalEntities)
                 {
@@ -128,7 +128,7 @@ namespace huypq.SmtWpfClient.Abstraction
                     return;
                 }
 
-                var response = DataService.Save(changedItems);
+                var response = DataService.Save<T, T1>(changedItems);
                 SysMsg = response;
 
                 AfterSave();

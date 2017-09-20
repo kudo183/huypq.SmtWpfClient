@@ -20,9 +20,9 @@ namespace huypq.SmtWpfClient
             _viewModelAssembly = options.ViewModelAssembly;
         }
 
-        public object CreateViewModel<T>() where T : IDto
+        public object CreateViewModel<T, T1>() where T : class, IDto, new() where T1 : class, IDataModel<T>, new()
         {
-            var vmName = NameManager.Instance.GetViewModelName<T>();
+            var vmName = NameManager.Instance.GetViewModelName<T, T1>();
             var viewModelType = _viewModelAssembly.GetType(string.Format("{0}.{1}", _viewModelNamespace, vmName));
             return System.Activator.CreateInstance(viewModelType);
         }

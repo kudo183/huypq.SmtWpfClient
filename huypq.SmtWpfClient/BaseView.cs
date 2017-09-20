@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public class BaseView<T> : UserControl, IBaseView where T : class, IDto
+    public class BaseView<T, T1> : UserControl, IBaseView where T : class, IDto, new() where T1 : class, IDataModel<T>, new()
     {
         ILogger _logger;
 
@@ -66,8 +66,8 @@ namespace huypq.SmtWpfClient.Abstraction
                 return;
             }
 
-            _viewName = NameManager.Instance.GetViewName<T>();
-            _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseView<T>>();
+            _viewName = NameManager.Instance.GetViewName<T, T1>();
+            _logger = ServiceLocator.Get<ILoggerProvider>().CreateLogger<BaseView<T, T1>>();
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -84,8 +84,8 @@ namespace huypq.SmtWpfClient.Abstraction
             GridView = Content as EditableGridView;
             if (ViewModel == null)
             {
-                var viewModelObject = ViewModelFactory.CreateViewModel<T>();
-                ViewModel = viewModelObject as IEditableGridViewModel<T>;
+                var viewModelObject = ViewModelFactory.CreateViewModel<T, T1>();
+                ViewModel = viewModelObject as IEditableGridViewModel<T1>;
             }
 
             ViewModel.ShowDialogAction = (content, title) =>

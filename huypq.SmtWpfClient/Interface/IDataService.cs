@@ -19,16 +19,19 @@ namespace huypq.SmtWpfClient.Abstraction
         string LockUser(string username, bool isLocked);
         void Logout();
         string ChangePassword(string currentPass, string newPass);
-        PagingResultDto<T> Get<T>(QueryBuilder.QueryExpression qe, string controller = null) where T : IDto;
-        T GetByID<T>(int ID, string controller = null) where T : IDto;
-        List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto;
-        PagingResultDto<T> GetAll<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto;
-        PagingResultDto<T> GetUpdate<T>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto;
-        string Save<T>(List<T> changedItems, string controller = null) where T : IDto;
-        string Add<T>(T item, string controller = null) where T : IDto;
-        string Update<T>(T item, string controller = null) where T : IDto;
-        string Delete<T>(T item, string controller = null) where T : IDto;
+
+        PagingResultDto<T1> Get<T, T1>(QueryBuilder.QueryExpression qe, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
+        T1 GetByID<T, T1>(int ID, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
+        List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
+        PagingResultDto<T1> GetAll<T, T1>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
+        PagingResultDto<T1> GetUpdate<T, T1>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
+        string Save<T, T1>(List<T1> changedItems, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
+        string Add<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
+        string Update<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
+        string Delete<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
+
         PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams);
+
         Stream GetFileByID(int id, string controller = null, string action = null);
         string AddFile(string filePath, string controller = null);
         string UpdateFile(int id, string filePath, string controller = null);

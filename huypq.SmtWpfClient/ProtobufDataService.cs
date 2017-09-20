@@ -94,11 +94,11 @@ namespace huypq.SmtWpfClient
             }
         }
 
-        public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
+        public PagingResultDto<T1> Get<T, T1>(QueryExpression qe, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
 
             if (qe.PageSize == 0)
@@ -107,46 +107,36 @@ namespace huypq.SmtWpfClient
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
-            var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
-            var result = FromBytes<PagingResultDto<T>>(response);
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            var responseBytes = Post(uri, ToBytes(qe), SerializeType.Protobuf);
 
-            _logger.LogInformation("Get {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
-
-            return result;
+            return ProcessPagingResult<T, T1>(responseBytes);
         }
 
-        public T GetByID<T>(int ID, string controller = null) where T : IDto
+        public T1 GetByID<T, T1>(int ID, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetByID);
             var data = new NameValueCollection();
             data["id"] = ID.ToString();
-            var response = PostValues(uri, data, SerializeType.Protobuf);
-            var result = FromBytes<T>(response);
+            var responseBytes = PostValues(uri, data, SerializeType.Protobuf);
 
-            _logger.LogInformation("GetByID {0} {1:N0} bytes", controller, response.LongLength);
-
-            return result;
+            return ProcessResult<T, T1>(responseBytes);
         }
 
-        public List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto
+        public List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
 
             if (listInt == null || listInt.Count == 0)
             {
-                return new List<T>();
+                return new List<T1>();
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Get);
@@ -154,106 +144,92 @@ namespace huypq.SmtWpfClient
             qe.PageSize = _defaultPageSize;
             qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
                 WhereExpression.In, path, listInt.Distinct().ToList());
-            var response = Post(uri, ToBytes(qe), SerializeType.Protobuf);
-            var result = FromBytes<PagingResultDto<T>>(response);
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            var responseBytes = Post(uri, ToBytes(qe), SerializeType.Protobuf);
 
-            _logger.LogInformation("GetByListInt {0} {1:N0} bytes", controller, response.LongLength);
-
-            return result.Items;
+            return ProcessPagingResult<T, T1>(responseBytes).Items;
         }
 
-        public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
+        public PagingResultDto<T1> GetAll<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetAll);
-            var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
-            var result = FromBytes<PagingResultDto<T>>(response);
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
-
-            _logger.LogInformation("GetAll {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
-
-            return result;
+            var responseBytes = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
+            
+            return ProcessPagingResult<T, T1>(responseBytes);
         }
 
-        public PagingResultDto<T> GetUpdate<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
+        public PagingResultDto<T1> GetUpdate<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetUpdate);
-            var response = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
-            var result = FromBytes<PagingResultDto<T>>(response);
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            var responseBytes = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
 
-            _logger.LogInformation("GetUpdate {0} {1:N0} bytes {2:N0} Items", controller, response.LongLength, result.Items.Count);
-
-            return result;
+            return ProcessPagingResult<T, T1>(responseBytes);
         }
 
-        public string Save<T>(List<T> changedItems, string controller = null) where T : IDto
+        public string Save<T, T1>(List<T1> changedItems, string controller = null) where T : class, IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Save);
+
+            var changedDto = new List<T>();
+
+            foreach (var item in changedItems)
+            {
+                changedDto.Add(item.ToDto());
+            }
 
             var result = Post(uri, ToBytes(changedItems), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
-        public string Add<T>(T item, string controller = null) where T : IDto
+        public string Add<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Add);
 
-            var result = Post(uri, ToBytes(item), SerializeType.Json);
+            var result = Post(uri, ToBytes(item.ToDto()), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
-        public string Update<T>(T item, string controller = null) where T : IDto
+        public string Update<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Update);
 
-            var result = Post(uri, ToBytes(item), SerializeType.Json);
+            var result = Post(uri, ToBytes(item.ToDto()), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
 
-        public string Delete<T>(T item, string controller = null) where T : IDto
+        public string Delete<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
-                controller = NameManager.Instance.GetControllerName<T>();
+                controller = NameManager.Instance.GetControllerName<T, T1>();
             }
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.Delete);
 
-            var result = Post(uri, ToBytes(item), SerializeType.Json);
+            var result = Post(uri, ToBytes(item.ToDto()), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
@@ -541,6 +517,42 @@ namespace huypq.SmtWpfClient
                 _rootUri, controller, action);
 
             return uri;
+        }
+
+        private PagingResultDto<T1> ProcessPagingResult<T, T1>(byte[] responseBytes) where T : IDto where T1 : IDataModel<T>, new()
+        {
+            var response = FromBytes<PagingResultDto<T>>(responseBytes);
+            var result = new PagingResultDto<T1>()
+            {
+                LastUpdateTime = response.LastUpdateTime,
+                PageCount = response.PageCount,
+                PageIndex = response.PageIndex,
+                TotalItemCount = response.TotalItemCount
+            };
+            foreach (var item in response.Items)
+            {
+                var dataModel = new T1();
+                dataModel.FromDto(item);
+                dataModel.SetCurrentValueAsOriginalValue();
+                result.Items.Add(dataModel);
+            }
+
+            _logger.LogInformation("Get {0} {1:N0} bytes {2:N0} Items", NameManager.Instance.GetControllerName<T, T1>(), responseBytes.LongLength, result.Items.Count);
+
+            return result;
+        }
+
+        private T1 ProcessResult<T, T1>(byte[] responseBytes) where T : IDto where T1 : IDataModel<T>, new()
+        {
+            var response = FromBytes<T>(responseBytes);
+
+            _logger.LogInformation("GetByID {0} {1:N0} bytes", NameManager.Instance.GetControllerName<T, T1>(), responseBytes.LongLength);
+
+            var result = new T1();
+            result.FromDto(response);
+            result.SetCurrentValueAsOriginalValue();
+
+            return result;
         }
 
         private class MyWebClient : WebClient

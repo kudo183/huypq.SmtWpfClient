@@ -6,7 +6,7 @@ using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient.ViewModel
 {
-    public class SmtUserBaseViewModel<T> : BaseViewModel<T> where T : class, IUserDto, new()
+    public class SmtUserBaseViewModel<T, T1> : BaseViewModel<T, T1> where T : class, IUserDto, new() where T1 : class, IUserDataModel<T>, new()
     {
         IDataService _dataService;
 
@@ -25,7 +25,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
             AddCommand = new SimpleCommand("AddCommand", () =>
             {
-                var dto = new T();
+                var dto = new T1();
                 var de = new View.DataEditor();
                 de.Add(nameof(IUserDto.Email), nameof(IUserDto.Email), View.DataEditor.DataType.Text);
                 de.Add(nameof(IUserDto.UserName), nameof(IUserDto.UserName), View.DataEditor.DataType.Text);
@@ -34,7 +34,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        SysMsg = _dataService.Add(dto);
+                        SysMsg = _dataService.Add<T, T1>(dto);
                     }
                     catch (Exception ex)
                     {
@@ -46,7 +46,7 @@ namespace huypq.SmtWpfClient.ViewModel
 
             UpdateCommand = new SimpleCommand("UpdateCommand", () =>
             {
-                var dto = SelectedItem as T;
+                var dto = SelectedItem as T1;
                 var de = new View.DataEditor();
                 de.Add(nameof(IUserDto.UserName), nameof(IUserDto.UserName), View.DataEditor.DataType.Text);
                 de.DataContext = dto;
@@ -54,7 +54,7 @@ namespace huypq.SmtWpfClient.ViewModel
                 {
                     try
                     {
-                        SysMsg = _dataService.Update(dto);
+                        SysMsg = _dataService.Update<T, T1>(dto);
                     }
                     catch (Exception ex)
                     {
@@ -66,12 +66,12 @@ namespace huypq.SmtWpfClient.ViewModel
 
             DeleteCommand = new SimpleCommand("DeleteCommand", () =>
             {
-                var dto = SelectedItem as T;
+                var dto = SelectedItem as T1;
                 if (MessageBox.Show(string.Format("delete user [{0}] ?", dto.Email), "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     try
                     {
-                        SysMsg = _dataService.Delete(dto);
+                        SysMsg = _dataService.Delete<T, T1>(dto);
                     }
                     catch (Exception ex)
                     {

@@ -11,19 +11,19 @@ namespace huypq.SmtWpfClient.Abstraction
             get { return _instance; }
         }
 
-        public string GetControllerName<T>() where T : IDto
+        public string GetControllerName<T, T1>() where T : IDto where T1 : IDataModel<T>
         {
-            return typeof(T).Name.Replace("Dto", "").ToLower();
+            return typeof(T1).Name.Replace("DataModel", "").ToLower();
         }
 
-        public string GetViewName<T>() where T : IDto
+        public string GetViewName<T, T1>() where T : IDto where T1 : IDataModel<T>
         {
-            return typeof(T).Name.Replace("Dto", "View");
+            return typeof(T1).Name.Replace("DataModel", "View");
         }
 
-        public string GetViewModelName<T>() where T : IDto
+        public string GetViewModelName<T, T1>() where T : IDto where T1 : IDataModel<T>
         {
-            return typeof(T).Name.Replace("Dto", "ViewModel");
+            return typeof(T1).Name.Replace("DataModel", "ViewModel");
         }
     }
 }

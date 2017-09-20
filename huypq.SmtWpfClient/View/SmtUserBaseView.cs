@@ -7,7 +7,7 @@ using System.Windows.Data;
 
 namespace huypq.SmtWpfClient.View
 {
-    public class SmtUserBaseView<T> : BaseView<T> where T : class, IUserDto, new()
+    public class SmtUserBaseView<T, T1> : BaseView<T, T1> where T : class, IUserDto, new() where T1 : class, IUserDataModel<T>, new()
     {
         public SmtUserBaseView()
         {
@@ -96,7 +96,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnAdd);
-            btnAdd.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.AddCommand)));
+            btnAdd.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T, T1>.AddCommand)));
 
             var btnUpdate = new Button()
             {
@@ -105,7 +105,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnUpdate);
-            btnUpdate.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.UpdateCommand)));
+            btnUpdate.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T, T1>.UpdateCommand)));
 
             var btnDelete = new Button()
             {
@@ -114,7 +114,7 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnDelete);
-            btnDelete.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.DeleteCommand)));
+            btnDelete.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T, T1>.DeleteCommand)));
 
             var btnLockUser = new Button()
             {
@@ -122,8 +122,8 @@ namespace huypq.SmtWpfClient.View
                 Margin = new Thickness(5)
             };
             grid.CustomMenuItems.Add(btnLockUser);
-            btnLockUser.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserCommand)));
-            btnLockUser.SetBinding(Button.ContentProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T>.LockUserButtonContent)));
+            btnLockUser.SetBinding(Button.CommandProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T, T1>.LockUserCommand)));
+            btnLockUser.SetBinding(Button.ContentProperty, new Binding(nameof(SmtWpfClient.ViewModel.SmtUserBaseViewModel<T, T1>.LockUserButtonContent)));
 
             Content = grid;
         }

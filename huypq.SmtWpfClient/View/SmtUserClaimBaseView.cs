@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace huypq.SmtWpfClient.View
 {
-    public class SmtUserClaimBaseView<T> : BaseView<T> where T : class, IUserClaimDto, new()
+    public class SmtUserClaimBaseView<T, T1> : BaseView<T, T1> where T : class, IUserClaimDto, new() where T1 : class, IUserClaimDataModel<T>, new()
     {
         public SmtUserClaimBaseView()
         {
