@@ -190,7 +190,7 @@ namespace huypq.SmtWpfClient
                 changedDto.Add(item.ToDto());
             }
 
-            var result = Post(uri, ToBytes(changedItems), SerializeType.Json);
+            var result = Post(uri, ToBytes(changedDto), SerializeType.Json);
 
             return GetStringFromBytes(result);
         }
