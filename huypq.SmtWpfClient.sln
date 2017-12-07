@@ -1,23 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClient", "huypq.SmtWpfClient\huypq.SmtWpfClient.csproj", "{8E941C6E-74CA-4BAA-AF1D-9D98283DB1D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDataGrid", "..\huypq.SimpleDataGrid\SimpleDataGrid\SimpleDataGrid.csproj", "{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtWpfClientSQL", "huypq.SmtWpfClientSQL\huypq.SmtWpfClientSQL.csproj", "{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtShared.Framework", "..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj", "{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.QueryBuilder.Framework", "..\huypq.dotnet.lib\huypq.QueryBuilder\huypq.QueryBuilder.Framework\huypq.QueryBuilder.Framework.csproj", "{C3B36888-E0F1-4E30-8549-50D20DD636C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.Logging.Framework", "..\huypq.dotnet.lib\huypq.Logging\huypq.Logging.Framework\huypq.Logging.Framework.csproj", "{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.wpf.Utils", "..\huypq.dotnet.lib\huypq.wpf.Utils\huypq.wpf.Utils\huypq.wpf.Utils.csproj", "{B3180065-6E2E-4EC4-9D02-E8D43D93808A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDataGrid", "..\huypq.SimpleDataGrid\SimpleDataGrid\SimpleDataGrid.csproj", "{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.wpf.controls", "..\huypq.wpf.controls\huypq.wpf.controls\huypq.wpf.controls.csproj", "{2A2BA72B-C536-419C-8741-A09E21ED70C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.Logging.Framework", "..\huypq.dotnet.lib\huypq.Logging\huypq.Logging.Framework\huypq.Logging.Framework.csproj", "{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "huypq.SmtShared.Framework", "..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj", "{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,36 +31,47 @@ Global
 		{8E941C6E-74CA-4BAA-AF1D-9D98283DB1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E941C6E-74CA-4BAA-AF1D-9D98283DB1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E941C6E-74CA-4BAA-AF1D-9D98283DB1D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA39722F-A8EF-40DE-9B40-E2B99CA226AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3B36888-E0F1-4E30-8549-50D20DD636C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3B36888-E0F1-4E30-8549-50D20DD636C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3B36888-E0F1-4E30-8549-50D20DD636C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3B36888-E0F1-4E30-8549-50D20DD636C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3180065-6E2E-4EC4-9D02-E8D43D93808A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2BA72B-C536-419C-8741-A09E21ED70C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C3B36888-E0F1-4E30-8549-50D20DD636C5} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+		{F4ABC0F4-C860-44A4-8BF7-58BE106E17E4} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+		{B3180065-6E2E-4EC4-9D02-E8D43D93808A} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+		{9CFA4FE9-01D0-4BD1-AA8A-BCA4B4A60375} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+		{2A2BA72B-C536-419C-8741-A09E21ED70C7} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+		{DBB09141-9D0C-4867-9248-1FC2E8A5EEC5} = {2CCCECA8-9EAD-4775-BA00-C0B8E3DEEC0A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A27640B5-D324-4FB7-B0DF-A0FED292BC61}
 	EndGlobalSection
 EndGlobal

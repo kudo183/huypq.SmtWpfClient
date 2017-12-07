@@ -29,10 +29,10 @@ namespace huypq.SmtWpfClientSQL
         public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
         {
             var result = CallDataProvierMethod<T>("Get", qe) as PagingResultDto<T>;
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            //foreach (var item in result.Items)
+            //{
+            //    item.SetCurrentValueAsOriginalValue();
+            //}
             return result;
         }
 
@@ -40,10 +40,10 @@ namespace huypq.SmtWpfClientSQL
         {
             var qe = new QueryExpression() { WhereOptions = we };
             var result = CallDataProvierMethod<T>("GetAll", qe) as PagingResultDto<T>;
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            //foreach (var item in result.Items)
+            //{
+            //    item.SetCurrentValueAsOriginalValue();
+            //}
             return result;
         }
 
@@ -51,10 +51,10 @@ namespace huypq.SmtWpfClientSQL
         {
             var qe = new QueryExpression() { WhereOptions = we };
             var result = CallDataProvierMethod<T>("GetUpdate", qe) as PagingResultDto<T>;
-            foreach (var item in result.Items)
-            {
-                item.SetCurrentValueAsOriginalValue();
-            }
+            //foreach (var item in result.Items)
+            //{
+            //    item.SetCurrentValueAsOriginalValue();
+            //}
             return result;
         }
 
@@ -169,6 +169,61 @@ namespace huypq.SmtWpfClientSQL
         }
 
         public string DeteleFile(int id, string controller = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagingResultDto<T1> Get<T, T1>(QueryExpression qe, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T1 GetByID<T, T1>(int ID, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagingResultDto<T1> GetAll<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagingResultDto<T1> GetUpdate<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        string IDataService.Save<T, T1>(List<T1> changedItems, string controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IDataService.Add<T, T1>(T1 item, string controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IDataService.Update<T, T1>(T1 item, string controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IDataService.Delete<T, T1>(T1 item, string controller)
         {
             throw new NotImplementedException();
         }
