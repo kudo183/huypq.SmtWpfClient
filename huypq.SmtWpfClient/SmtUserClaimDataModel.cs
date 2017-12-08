@@ -11,8 +11,8 @@ namespace Shared
         int _UserID;
         string _Claim;
 
-        public int UserID { get { return _UserID; } set { _UserID = value; OnPropertyChanged(); } }
-        public string Claim { get { return _Claim; } set { _Claim = value; OnPropertyChanged(); } }
+        public int UserID { get { return _UserID; } set { SetField(ref _UserID, value); } }
+        public string Claim { get { return _Claim; } set { SetField(ref _Claim, value); } }
 
         public override void SetCurrentValueAsOriginalValue()
         {
@@ -46,7 +46,7 @@ namespace Shared
         object _UserIDDataSource;
         object _TenantIDDataSource;
 
-        public object UserIDDataSource { get { return _UserIDDataSource; } set { _UserIDDataSource = value; OnPropertyChanged(); } }
-        public object TenantIDDataSource { get { return _TenantIDDataSource; } set { _TenantIDDataSource = value; OnPropertyChanged(); } }
+        public object UserIDDataSource { get { return _UserIDDataSource; } set { SetField(ref _UserIDDataSource, value); } }
+        public object TenantIDDataSource { get { return _TenantIDDataSource; } set { SetField(ref _TenantIDDataSource, value); } }
     }
 }

@@ -12,7 +12,7 @@ namespace Shared
         long oTokenValidTime;
         bool oIsConfirmed;
         bool oIsLocked;
-        
+
         System.DateTime _CreateDate;
         string _Email;
         string _PasswordHash;
@@ -20,15 +20,15 @@ namespace Shared
         long _TokenValidTime;
         bool _IsConfirmed;
         bool _IsLocked;
-        
-        public System.DateTime CreateDate { get { return _CreateDate; } set { _CreateDate = value; OnPropertyChanged(); } }
-        public string Email { get { return _Email; } set { _Email = value; OnPropertyChanged(); } }
-        public string PasswordHash { get { return _PasswordHash; } set { _PasswordHash = value; OnPropertyChanged(); } }
-        public string UserName { get { return _UserName; } set { _UserName = value; OnPropertyChanged(); } }
-        public long TokenValidTime { get { return _TokenValidTime; } set { _TokenValidTime = value; OnPropertyChanged(); } }
-        public bool IsConfirmed { get { return _IsConfirmed; } set { _IsConfirmed = value; OnPropertyChanged(); } }
-        public bool IsLocked { get { return _IsLocked; } set { _IsLocked = value; OnPropertyChanged(); } }
-        
+
+        public System.DateTime CreateDate { get { return _CreateDate; } set { SetField(ref _CreateDate, value); } }
+        public string Email { get { return _Email; } set { SetField(ref _Email, value); } }
+        public string PasswordHash { get { return _PasswordHash; } set { SetField(ref _PasswordHash, value); } }
+        public string UserName { get { return _UserName; } set { SetField(ref _UserName, value); } }
+        public long TokenValidTime { get { return _TokenValidTime; } set { SetField(ref _TokenValidTime, value); } }
+        public bool IsConfirmed { get { return _IsConfirmed; } set { SetField(ref _IsConfirmed, value); } }
+        public bool IsLocked { get { return _IsLocked; } set { SetField(ref _IsLocked, value); } }
+
         public override void SetCurrentValueAsOriginalValue()
         {
             oCreateDate = CreateDate;
@@ -76,6 +76,6 @@ namespace Shared
         object _TenantIDDataSource;
 
         [Newtonsoft.Json.JsonIgnore]
-        public object TenantIDDataSource { get { return _TenantIDDataSource; } set { _TenantIDDataSource = value; OnPropertyChanged(); } }
+        public object TenantIDDataSource { get { return _TenantIDDataSource; } set { SetField(ref _TenantIDDataSource, value); } }
     }
 }

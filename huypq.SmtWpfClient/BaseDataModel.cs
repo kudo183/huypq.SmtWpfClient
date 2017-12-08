@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using huypq.SmtShared;
+﻿using huypq.SmtShared;
+using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClient.Abstraction
 {
-    public abstract class BaseDataModel<T> : IDataModel<T> where T : IDto
+    public abstract class BaseDataModel<T> : BindableObject, IDataModel<T> where T : IDto
     {
         public int ID { get; set; }
         public int TenantID { get; set; }
@@ -21,16 +20,7 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             get { return ID.ToString(); }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            RaiseDependentPropertyChanged(name);
-        }
-
-        protected virtual void RaiseDependentPropertyChanged(string basePropertyName) { }
-
+        
         public virtual T ToDto()
         {
             throw new System.NotImplementedException();
