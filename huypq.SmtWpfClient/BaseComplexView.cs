@@ -42,20 +42,14 @@ namespace huypq.SmtWpfClient.Abstraction
 
         private bool _isDesignTime = true;
 
+        public Action AllViewLoadedAction;
+
+        List<IBaseView> _views;
         public List<IBaseView> Views
         {
             get
             {
-                var views = new List<IBaseView>();
-                var panel = Content as Panel;
-                foreach (UIElement item in panel.Children)
-                {
-                    if (item is IBaseView iBaseView)
-                    {
-                        views.Add(iBaseView);
-                    }
-                }
-                return views;
+                return _views;
             }
         }
 
@@ -80,27 +74,32 @@ namespace huypq.SmtWpfClient.Abstraction
 
             var panel = Content as Panel;
 
-            var _views = new Dictionary<int, IBaseView>();
+            _views = new List<IBaseView>();
+            var _viewsDic = new Dictionary<int, IBaseView>();
             foreach (UIElement item in panel.Children)
             {
-                var level = BaseComplexView.GetViewLevel(item);
-                var view = item as IBaseView;
-                if (view != null && _views.ContainsKey(level) == false)
+                if (item is IBaseView iBaseView)
                 {
-                    _views.Add(level, view);
+                    _views.Add(iBaseView);
+                    var level = BaseComplexView.GetViewLevel(item);
+                    if (_viewsDic.ContainsKey(level) == false)
+                    {
+                        _viewsDic.Add(level, iBaseView);
+                    }
+                    (item as UserControl).Loaded += Item_Loaded;
                 }
             }
 
-            if (_views.Count == 0)
+            if (_viewsDic.Count == 0)
                 return;
 
-            var viewList = new List<IBaseView>(_views.Count + 2);
-            viewList.Add(_views[_views.Count - 1]);
-            for (int i = 0; i < _views.Count; i++)
+            var viewList = new List<IBaseView>(_viewsDic.Count + 2);
+            viewList.Add(_viewsDic[_viewsDic.Count - 1]);
+            for (int i = 0; i < _viewsDic.Count; i++)
             {
-                viewList.Add(_views[i]);
+                viewList.Add(_viewsDic[i]);
             }
-            viewList.Add(_views[0]);
+            viewList.Add(_viewsDic[0]);
 
             for (int i = 1; i < viewList.Count - 1; i++)
             {
@@ -115,6 +114,14 @@ namespace huypq.SmtWpfClient.Abstraction
                 InitMoveFocusAction(currentView, nextView);
                 InitAfterSave(previousView, currentView, nextView);
                 InitAfterLoad(previousView, currentView, nextView);
+            }
+        }
+
+        private void Item_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_views.Any(p => p.IsLoadedViewModel == false) == false)
+            {
+                AllViewLoadedAction?.Invoke();
             }
         }
 

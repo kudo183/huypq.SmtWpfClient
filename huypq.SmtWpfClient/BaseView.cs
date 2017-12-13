@@ -18,7 +18,7 @@ namespace huypq.SmtWpfClient.Abstraction
         public string ViewName { get { return _viewName; } }
 
         protected bool _isLoaded = false;
-        public bool LoadModelOnLoaded { get; set; } = true;
+        public bool IsLoadedViewModel { get { return _isLoaded; } }
         public Action ActionAfterSave { get; set; }
         public Action ActionAfterLoad { get; set; }
         public Action ActionMoveFocusToNextView { get; set; }
@@ -173,7 +173,7 @@ namespace huypq.SmtWpfClient.Abstraction
         {
             _logger.LogDebug("Loaded {0}", ViewName);
 
-            if (_isLoaded == false && LoadModelOnLoaded)
+            if (_isLoaded == false)
             {
                 try
                 {
