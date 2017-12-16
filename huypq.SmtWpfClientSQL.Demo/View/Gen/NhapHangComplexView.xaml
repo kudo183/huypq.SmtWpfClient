@@ -1,0 +1,19 @@
+﻿<Abstraction:BaseComplexView
+    x:Class="huypq.SmtWpfClientSQL.Demo.View.NhapHangComplexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:SimpleDataGrid="clr-namespace:SimpleDataGrid;assembly=SimpleDataGrid"
+    xmlns:Abstraction="clr-namespace:huypq.SmtWpfClient.Abstraction;assembly=huypq.SmtWpfClient"
+    xmlns:view="clr-namespace:huypq.SmtWpfClientSQL.Demo.View">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <view:tNhapHangView Grid.Row="0" Abstraction:BaseComplexView.ViewLevel="0"/>
+        <view:tChiTietNhapHangView Grid.Row="1" Abstraction:BaseComplexView.ViewLevel="1" Abstraction:BaseComplexView.FilterProperty="MaNhapHang"/>
+        <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="2"/>
+    </Grid>
+</Abstraction:BaseComplexView>

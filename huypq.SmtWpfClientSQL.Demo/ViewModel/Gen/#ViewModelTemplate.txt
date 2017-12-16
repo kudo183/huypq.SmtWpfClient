@@ -1,0 +1,51 @@
+using huypq.SmtWpfClient;
+using huypq.SmtWpfClient.Abstraction;
+using huypq.wpf.Utils;
+using SimpleDataGrid;
+using SimpleDataGrid.ViewModel;
+using huypq.SmtWpfClientSQL.Demo.DataModel;
+using huypq.SmtWpfClientSQL.Demo.Dto;
+
+namespace huypq.SmtWpfClientSQL.Demo.ViewModel
+{
+    public partial class <EntityName>ViewModel : BaseViewModel<<EntityName>Dto, <EntityName>DataModel>
+    {
+        partial void InitFilterPartial();
+        partial void LoadReferenceDataPartial();
+        partial void ProcessDataModelBeforeAddToEntitiesPartial(<EntityName>DataModel dataModel);
+        partial void ProcessNewAddedDataModelPartial(<EntityName>DataModel dataModel);
+
+        <DeclareHeaderFilters>
+
+        public <EntityName>ViewModel() : base()
+        {
+            <InitHeaderFilters>
+
+            InitFilterPartial();
+
+            <AddHeaderFiltersToHeaderFilterCollection>
+        }
+
+        public override void LoadReferenceData()
+        {
+            <LoadReferenceDatas>
+
+            LoadReferenceDataPartial();
+        }
+
+        protected override void ProcessDataModelBeforeAddToEntities(<EntityName>DataModel dataModel)
+        {
+            <SetDataModelsReferenceDataSource>
+
+            ProcessDataModelBeforeAddToEntitiesPartial(dataModel);
+        }
+
+        protected override void ProcessNewAddedDataModel(<EntityName>DataModel dataModel)
+        {
+            <SetDataModelsDefaultValue>
+
+            ProcessNewAddedDataModelPartial(dataModel);
+            ProcessDataModelBeforeAddToEntities(dataModel);
+        }
+    }
+}

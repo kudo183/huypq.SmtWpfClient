@@ -1,0 +1,33 @@
+﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+
+namespace huypq.SmtWpfClientSQL.Demo.Entities
+{
+    public partial class SqlDbContext : DbContext, IDbContext
+    {
+        public SqlDbContext() : base(Settings.ConnectionString)
+        {
+            Configuration.AutoDetectChangesEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            <ModelBuilderConfigEFFull>
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(DbModelBuilder modelBuilder);
+
+        public DbSet<SmtTable> SmtTable { get; set; }
+        public DbSet<SmtDeletedItem> SmtDeletedItem { get; set; }
+        public DbSet<SmtTenant> SmtTenant { get; set; }
+        public DbSet<SmtUser> SmtUser { get; set; }
+        public DbSet<SmtUserClaim> SmtUserClaim { get; set; }
+        <DbSetProperties>
+    }
+}

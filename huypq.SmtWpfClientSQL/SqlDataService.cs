@@ -6,11 +6,33 @@ using huypq.SmtWpfClient.Abstraction;
 using huypq.QueryBuilder;
 using System.Linq;
 using System.IO;
+using huypq.SmtShared.Constant;
 
 namespace huypq.SmtWpfClientSQL
 {
     public class SqlDataService : IDataService
     {
+        public class Options
+        {
+            public string DbName { get; set; }
+            public bool IsTenant { get; set; }
+            public string Token { get; set; }
+            public int DefaultPageSize { get; set; }
+        }
+
+        bool _isTenant;
+        string _token;
+        string _dbName;
+        int _defaultPageSize;
+
+        public SqlDataService(Options options)
+        {
+            _isTenant = options.IsTenant;
+            _token = options.Token;
+            _dbName = options.DbName;
+            _defaultPageSize = options.DefaultPageSize;
+        }
+
         public bool IsLoggedIn()
         {
             throw new NotImplementedException();
@@ -26,42 +48,34 @@ namespace huypq.SmtWpfClientSQL
             throw new NotImplementedException();
         }
 
-        public PagingResultDto<T> Get<T>(QueryExpression qe, string controller = null) where T : IDto
+        public string Register(string tenantLoginName, string tenantName)
         {
-            var result = CallDataProvierMethod<T>("Get", qe) as PagingResultDto<T>;
-            //foreach (var item in result.Items)
-            //{
-            //    item.SetCurrentValueAsOriginalValue();
-            //}
-            return result;
+            throw new NotImplementedException();
         }
 
-        public PagingResultDto<T> GetAll<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
+        public string TenantRequestToken(string email, string purpose)
         {
-            var qe = new QueryExpression() { WhereOptions = we };
-            var result = CallDataProvierMethod<T>("GetAll", qe) as PagingResultDto<T>;
-            //foreach (var item in result.Items)
-            //{
-            //    item.SetCurrentValueAsOriginalValue();
-            //}
-            return result;
+            throw new NotImplementedException();
         }
 
-        public PagingResultDto<T> GetUpdate<T>(List<WhereExpression.IWhereOption> we, string controller = null) where T : IDto
+        public string UserRequestToken(string email, string tenantName, string purpose)
         {
-            var qe = new QueryExpression() { WhereOptions = we };
-            var result = CallDataProvierMethod<T>("GetUpdate", qe) as PagingResultDto<T>;
-            //foreach (var item in result.Items)
-            //{
-            //    item.SetCurrentValueAsOriginalValue();
-            //}
-            return result;
+            throw new NotImplementedException();
         }
 
-        public string Save<T>(List<T> changedItems, string controller = null) where T : IDto
+        public string ResetPassword(string token, string pass)
         {
-            var result = CallDataProvierMethod<T>("Save", changedItems) as string;
-            return result;
+            throw new NotImplementedException();
+        }
+
+        public void TenantLogin(string tenantLoginName, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UserLogin(string tenantName, string username, string password)
+        {
+            throw new NotImplementedException();
         }
 
         public string LockUser(string username, bool isLocked)
@@ -74,81 +88,141 @@ namespace huypq.SmtWpfClientSQL
             throw new NotImplementedException();
         }
 
-        public string Register(string tenantLoginName, string tenantName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T> Report<T>(string reportName, NameValueCollection reportParams)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string ResetPassword(string token, string pass)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Add<T>(T item, string controller = null) where T : IDto
-        {
-            throw new NotImplementedException();
-        }
-
         public string ChangePassword(string currentPass, string newPass)
         {
             throw new NotImplementedException();
         }
 
-        public string Delete<T>(T item, string controller = null) where T : IDto
+        public PagingResultDto<T1> Get<T, T1>(QueryExpression qe, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            if (qe.PageSize == 0)
+            {
+                qe.PageSize = _defaultPageSize;
+            }
+
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            var result = dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.Get, qe) as PagingResultDto<T>;
+
+            return DataServiceUtils.ProcessPagingResult<T, T1>(result);
+        }
+
+        public T1 GetByID<T, T1>(int ID, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            var result = (T)dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.GetByID, ID);
+
+            return DataServiceUtils.ProcessResult<T, T1>(result);
+        }
+
+        public List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            if (listInt == null || listInt.Count == 0)
+            {
+                return new List<T1>();
+            }
+
+            var qe = new QueryExpression();
+            qe.PageSize = _defaultPageSize;
+            qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
+                WhereExpression.In, path, listInt.Distinct().ToList());
+            
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            var result = dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.Get, qe) as PagingResultDto<T>;
+
+            return DataServiceUtils.ProcessPagingResult<T, T1>(result).Items;
+        }
+
+        public PagingResultDto<T1> GetAll<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            var result = dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.GetAll, new QueryExpression() { WhereOptions = we }) as PagingResultDto<T>;
+
+            return DataServiceUtils.ProcessPagingResult<T, T1>(result);
+        }
+
+        public PagingResultDto<T1> GetUpdate<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            var result = dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.GetUpdate, new QueryExpression() { WhereOptions = we }) as PagingResultDto<T>;
+
+            return DataServiceUtils.ProcessPagingResult<T, T1>(result);
+        }
+
+        string IDataService.Save<T, T1>(List<T1> changedItems, string controller)
+        {
+            if (controller == null)
+            {
+                controller = NameManager.Instance.GetControllerName<T, T1>();
+            }
+
+            var changedDto = new List<T>();
+
+            foreach (var item in changedItems)
+            {
+                changedDto.Add(item.ToDto());
+            }
+
+            var dataProvider = DataServiceUtils.GetDataController(controller);
+
+            return dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.Save, changedDto) as string;
+        }
+
+        string IDataService.Add<T, T1>(T1 item, string controller)
         {
             throw new NotImplementedException();
         }
 
-        public void TenantLogin(string tenantLoginName, string password)
+        string IDataService.Update<T, T1>(T1 item, string controller)
         {
             throw new NotImplementedException();
         }
 
-        public string TenantRequestToken(string email, string purpose)
+        string IDataService.Delete<T, T1>(T1 item, string controller)
         {
             throw new NotImplementedException();
         }
 
-        public string Update<T>(T item, string controller = null) where T : IDto
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UserLogin(string tenantName, string username, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string UserRequestToken(string email, string tenantName, string purpose)
-        {
-            throw new NotImplementedException();
-        }
-
-        private object CallDataProvierMethod<T>(string methodName, params object[] parameters)
-        {
-            var dataProviderTypeName = typeof(T).Name.Replace("Dto", "DataProvider");
-            var dataProviderType = System.Reflection.Assembly.GetEntryAssembly().GetTypes().First(p => p.Name == dataProviderTypeName);
-            var methodInfo = dataProviderType.GetMethod(methodName);
-            var dataProvider = Activator.CreateInstance(dataProviderType);
-            return methodInfo.Invoke(dataProvider, parameters);
-        }
-
-        public T GetByID<T>(int ID, string controller = null) where T : IDto
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T> GetByListInt<T>(string path, List<int> listInt, string controller = null) where T : IDto
-        {
-            throw new NotImplementedException();
-        }
-
-        PagingResultDto<T> IDataService.Report<T>(string reportName, NameValueCollection reportParams)
+        public PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams)
         {
             throw new NotImplementedException();
         }
@@ -169,61 +243,6 @@ namespace huypq.SmtWpfClientSQL
         }
 
         public string DeteleFile(int id, string controller = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagingResultDto<T1> Get<T, T1>(QueryExpression qe, string controller = null)
-            where T : IDto
-            where T1 : IDataModel<T>, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T1 GetByID<T, T1>(int ID, string controller = null)
-            where T : IDto
-            where T1 : IDataModel<T>, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null)
-            where T : IDto
-            where T1 : IDataModel<T>, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagingResultDto<T1> GetAll<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
-            where T : IDto
-            where T1 : IDataModel<T>, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagingResultDto<T1> GetUpdate<T, T1>(List<WhereExpression.IWhereOption> we, string controller = null)
-            where T : IDto
-            where T1 : IDataModel<T>, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        string IDataService.Save<T, T1>(List<T1> changedItems, string controller)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IDataService.Add<T, T1>(T1 item, string controller)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IDataService.Update<T, T1>(T1 item, string controller)
-        {
-            throw new NotImplementedException();
-        }
-
-        string IDataService.Delete<T, T1>(T1 item, string controller)
         {
             throw new NotImplementedException();
         }

@@ -1,0 +1,18 @@
+using huypq.SmtWpfClient.Abstraction;
+using huypq.SmtWpfClientSQL.Demo.Dto;
+using huypq.SmtWpfClientSQL.Demo.DataModel;
+
+namespace huypq.SmtWpfClientSQL.Demo.View
+{
+    public partial class <EntityName>View : BaseView<<EntityName>Dto, <EntityName>DataModel>
+    {
+        partial void InitUIPartial();
+
+        public <EntityName>View() : base()
+        {
+            InitializeComponent();
+
+            InitUIPartial();
+        }
+    }
+}

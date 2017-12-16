@@ -1,0 +1,37 @@
+using huypq.SmtWpfClientSQL.Demo.Dto;
+using huypq.SmtWpfClientSQL.Demo.Entities;
+
+namespace huypq.SmtWpfClientSQL.Demo.DataController
+{
+    public partial class <EntityName>Controller : BaseDataController<SqlDbContext, <EntityName>, <EntityName>Dto>
+    {
+        partial void ConvertToDtoPartial(ref <EntityName>Dto dto, <EntityName> entity);
+        partial void ConvertToEntityPartial(ref <EntityName> entity, <EntityName>Dto dto);
+
+        public override <EntityName>Dto ConvertToDto(<EntityName> entity)
+        {
+            var dto = new <EntityName>Dto()
+            {
+                <InitDtoProperties>
+            };
+
+            ConvertToDtoPartial(ref dto, entity);
+
+            return dto;
+        }
+
+        public override <EntityName> ConvertToEntity(<EntityName>Dto dto)
+        {
+            var entity = new <EntityName>()
+            {
+                <InitEntityProperties>
+            };
+
+            ConvertToEntityPartial(ref entity, dto);
+
+            return entity;
+        }
+
+        <OverrideUpdateEntityEFFull>
+    }
+}

@@ -1,6 +1,5 @@
 ﻿using huypq.SmtShared;
 using huypq.SmtShared.Constant;
-using huypq.SmtWpfClient;
 using huypq.QueryBuilder;
 using System;
 using System.Collections.Generic;
@@ -10,55 +9,89 @@ using huypq.wpf.Utils;
 
 namespace huypq.SmtWpfClientSQL
 {
-    public abstract class BaseDataProvider<ContextType, EntityType, DtoType>
+    public abstract class BaseDataController<ContextType, EntityType, DtoType> : IDataProvider
         where ContextType : DbContext, IDbContext
-        where DtoType : IDto, new()
+        where DtoType : class, IDto, new()
         where EntityType : class, IEntity
     {
-        ContextType _context = ServiceLocator.Get<ContextType>();
+        ContextType _context = ServiceLocator.Get<IDbContext>() as ContextType;
 
-        OrderByExpression.OrderOption DefaultOrderOption = new OrderByExpression.OrderOption()
+        protected virtual OrderByExpression.OrderOption GetDefaultOrderOption()
         {
-            PropertyPath = nameof(IDto.ID),
-            IsAscending = false
-        };
+            return Settings.DefaultOrderOption;
+        }
 
-        public PagingResultDto<DtoType> Get(QueryExpression qe)
+        public object ActionInvoker(string actionName, object parameters)
+        {
+            object result = null;
+
+            switch (actionName)
+            {
+                case ControllerAction.SmtEntityBase.Get:
+                    result = Get(parameters as QueryExpression, GetQuery());
+                    break;
+                case ControllerAction.SmtEntityBase.GetByID:
+                    result = GetByID((int)parameters, GetQuery());
+                    break;
+                case ControllerAction.SmtEntityBase.GetAll:
+                    result = GetAll(parameters as QueryExpression, GetQuery());
+                    break;
+                case ControllerAction.SmtEntityBase.GetUpdate:
+                    result = GetUpdate(parameters as QueryExpression, GetQuery());
+                    break;
+                case ControllerAction.SmtEntityBase.Save:
+                    result = Save(parameters as List<DtoType>);
+                    break;
+                case ControllerAction.SmtEntityBase.Add:
+                    result = Add(parameters as DtoType);
+                    break;
+                case ControllerAction.SmtEntityBase.Update:
+                    result = Update(parameters as DtoType);
+                    break;
+                case ControllerAction.SmtEntityBase.Delete:
+                    result = Delete(parameters as DtoType);
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        protected object Get(QueryExpression filter, IQueryable<EntityType> includedQuery)
         {
             int pageCount = 1;
-            var query = GetQuery();
+            var query = includedQuery;
             var result = new PagingResultDto<DtoType>
             {
                 Items = new List<DtoType>()
             };
 
-            if (qe != null)
+            if (filter != null)
             {
-                if (qe.PageIndex > 0)
+                var maxItemAllowed = GetMaxItemAllowed();
+                if (filter.PageSize > 0 && filter.PageSize <= maxItemAllowed)
                 {
-                    if (qe.OrderOptions.Count == 0)
+                    if (filter.PageIndex <= 0)//forced to use paging
                     {
-                        qe.OrderOptions.Add(DefaultOrderOption);
+                        filter.PageIndex = 1;
+                    }
+
+                    if (filter.OrderOptions.Count == 0)
+                    {
+                        filter.OrderOptions.Add(GetDefaultOrderOption());
                     }
                     query = QueryExpression.AddQueryExpression(
-                    query, ref qe, out pageCount);
+                    query, ref filter, out pageCount);
 
-                    result.PageIndex = qe.PageIndex;
+                    result.PageIndex = filter.PageIndex;
                     result.PageCount = pageCount;
                 }
                 else
                 {
-                    query = WhereExpression.AddWhereExpression(query, qe.WhereOptions);
-                    query = OrderByExpression.AddOrderByExpression(query, qe.OrderOptions);
+                    var msg = string.Format("PageSize must greater than zero and lower than {0}", maxItemAllowed + 1);
+                    throw new Exception(msg);
                 }
-            }
-
-            var itemCount = query.Count();
-            var maxItem = GetMaxItemAllowed();
-
-            if (itemCount > maxItem)
-            {
-                throw new Exception(string.Format("Entity set too large, max item allowed is {0}", maxItem));
             }
 
             result.LastUpdateTime = DateTime.UtcNow.Ticks;
@@ -73,9 +106,15 @@ namespace huypq.SmtWpfClientSQL
             return result;
         }
 
-        public PagingResultDto<DtoType> GetAll(QueryExpression filter)
+        protected object GetByID(int id, IQueryable<EntityType> includedQuery)
         {
-            var query = GetQuery();
+            var entity = includedQuery.FirstOrDefault(p => p.ID == id);
+            return ConvertToDto(entity);
+        }
+
+        protected object GetAll(QueryExpression filter, IQueryable<EntityType> includedQuery)
+        {
+            var query = includedQuery;
             var result = new PagingResultDto<DtoType>
             {
                 Items = new List<DtoType>()
@@ -99,20 +138,22 @@ namespace huypq.SmtWpfClientSQL
             return result;
         }
 
-        public PagingResultDto<DtoType> GetUpdate(QueryExpression filter)
+        protected object GetUpdate(QueryExpression filter, IQueryable<EntityType> includedQuery)
         {
             if (filter == null)
             {
-                throw new Exception(string.Format(string.Format("Need specify {0} where options", nameof(IDto.LastUpdateTime))));
+                var msg = string.Format(string.Format("Need specify {0} where options", nameof(IDto.LastUpdateTime)));
+                throw new Exception(msg);
             }
 
             var lastUpdateWhereOption = filter.WhereOptions.Find(p => p.PropertyPath == nameof(IDto.LastUpdateTime));
             if (lastUpdateWhereOption == null)
             {
-                throw new Exception(string.Format(string.Format("Need specify {0} where options", nameof(IDto.LastUpdateTime))));
+                var msg = string.Format(string.Format("Need specify {0} where options", nameof(IDto.LastUpdateTime)));
+                throw new Exception(msg);
             }
 
-            var query = GetQuery();
+            var query = includedQuery;
             var tableName = GetTableName();
             var result = new PagingResultDto<DtoType>
             {
@@ -131,7 +172,8 @@ namespace huypq.SmtWpfClientSQL
 
             if (itemCount > maxItem)
             {
-                throw new Exception(string.Format("Entity set too large, max item allowed is {0}", maxItem));
+                var msg = string.Format("Entity set too large, max item allowed is {0}", maxItem);
+                throw new Exception(msg);
             }
 
             result.LastUpdateTime = DateTime.UtcNow.Ticks;
@@ -153,7 +195,8 @@ namespace huypq.SmtWpfClientSQL
             }
             return result;
         }
-        public string Save(List<DtoType> items)
+
+        protected object Save(List<DtoType> items)
         {
             List<EntityType> changedEntities = new List<EntityType>();
             var tableName = GetTableName();
@@ -174,10 +217,11 @@ namespace huypq.SmtWpfClientSQL
                         break;
                     case DtoState.Update:
                         entity.LastUpdateTime = now;
-                        _context.Entry(entity).State = EntityState.Modified;
+                        UpdateEntity(_context, entity);
                         changedEntities.Add(entity);
                         break;
                     case DtoState.Delete:
+                        _context.Set<EntityType>().Attach(entity);
                         _context.Set<EntityType>().Remove(entity);
                         _context.SmtDeletedItem.Add(new SmtDeletedItem()
                         {
@@ -188,11 +232,49 @@ namespace huypq.SmtWpfClientSQL
                         changedEntities.Add(entity);
                         break;
                     default:
-                        break;
+                        throw new Exception("invalid dto State");
                 }
             }
 
             return SaveChanges(items, changedEntities);
+        }
+
+        protected object Add(DtoType dto)
+        {
+            dto.State = DtoState.Add;
+            var entity = ConvertToEntity(dto);
+            entity.LastUpdateTime = DateTime.UtcNow.Ticks;
+            _context.Set<EntityType>().Add(entity);
+
+            return SaveChanges(new List<DtoType>() { dto }, new List<EntityType>() { entity });
+        }
+
+        protected object Update(DtoType dto)
+        {
+            dto.State = DtoState.Update;
+            var entity = ConvertToEntity(dto);
+            entity.LastUpdateTime = DateTime.UtcNow.Ticks;
+
+            UpdateEntity(_context, entity);
+
+            return SaveChanges(new List<DtoType>() { dto }, new List<EntityType>() { entity });
+        }
+
+        protected object Delete(DtoType dto)
+        {
+            dto.State = DtoState.Delete;
+            var entity = ConvertToEntity(dto);
+
+            var tableName = GetTableName();
+            _context.Set<EntityType>().Attach(entity);
+            _context.Set<EntityType>().Remove(entity);
+            _context.SmtDeletedItem.Add(new SmtDeletedItem()
+            {
+                DeletedID = entity.ID,
+                TableID = _context.SmtTable.FirstOrDefault(p => p.TableName == tableName).ID,
+                CreateTime = DateTime.UtcNow.Ticks
+            });
+            return SaveChanges(new List<DtoType>() { dto }, new List<EntityType>() { entity });
         }
 
         protected string SaveChanges(List<DtoType> items, List<EntityType> changedEntities)
@@ -210,6 +292,11 @@ namespace huypq.SmtWpfClientSQL
             return "OK";
         }
 
+        protected virtual void UpdateEntity(ContextType context, EntityType entity)
+        {
+            context.Entry(entity).State = EntityState.Modified;
+        }
+
         protected virtual void AfterSave(List<DtoType> items, List<EntityType> changedEntities)
         {
 
@@ -225,9 +312,9 @@ namespace huypq.SmtWpfClientSQL
             return _context.Set<EntityType>();
         }
 
-        protected abstract DtoType ConvertToDto(EntityType entity);
+        public abstract DtoType ConvertToDto(EntityType entity);
 
-        protected abstract EntityType ConvertToEntity(DtoType dto);
+        public abstract EntityType ConvertToEntity(DtoType dto);
 
         protected string GetTableName()
         {

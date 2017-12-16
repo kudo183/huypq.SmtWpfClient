@@ -1,0 +1,15 @@
+using huypq.SmtShared;
+
+namespace huypq.SmtWpfClientSQL.Demo.Dto
+{
+    [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptIn)]
+    [ProtoBuf.ProtoContract]
+    public partial class <EntityName>Dto : IDto
+    {
+        <PublicProperties>
+
+        [Newtonsoft.Json.JsonProperty]
+        [ProtoBuf.ProtoMember(100)]
+        public int State { get; set; }
+    }
+}

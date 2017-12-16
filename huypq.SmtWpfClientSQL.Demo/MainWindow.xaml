@@ -1,0 +1,43 @@
+﻿<Window x:Class="huypq.SmtWpfClientSQL.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:view="clr-namespace:huypq.SmtWpfClientSQL.Demo.View"
+        Title="MainWindow" WindowState="Maximized"
+        Background="#FF627E97">
+    <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" Button.Click="ViewButton_Click">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Margin" Value="10"/>
+                </Style>
+            </StackPanel.Resources>
+            <StackPanel Width="200" Orientation="Vertical">
+                <Button Height="80" Content="Canh Bao Ton Kho" Tag="{x:Type view:rCanhBaoTonKhoView}"/>
+                <Button Height="80" Content="Chi Phi" Tag="{x:Type view:tChiPhiView}"/>
+            </StackPanel>
+            <StackPanel Width="150" Orientation="Vertical">
+                <Button Height="80" Content="Nhan Vien" Tag="{x:Type view:rNhanVienView}"/>
+                <Button Height="80" Content="Nhap Hang" Tag="{x:Type view:NhapHangComplexView}"/>
+                <Button Height="80" Content="Don Hang" Tag="{x:Type view:DonHangComplexView}"/>
+                <Button Height="80" Content="Chuyen Hang" Tag="{x:Type view:ChuyenHangComplexView}"/>
+            </StackPanel>
+            <StackPanel Width="150" Orientation="Vertical">
+                <Button Height="80" Content="Mat Hang" Tag="{x:Type view:tMatHangView}"/>
+                <Button Height="80" Content="Khach Hang" Tag="{x:Type view:rKhachHangView}"/>
+                <Button Height="80" Content="Ton Kho" Tag="{x:Type view:tTonKhoView}"/>
+                <Button Height="80" Content="Chuyen Kho" Tag="{x:Type view:ChuyenKhoComplexView}"/>
+            </StackPanel>
+            <StackPanel Width="150" Orientation="Vertical" Background="BlanchedAlmond">
+                <Button Height="80" Content="Toa Hang" Tag="{x:Type view:ToaHangComplexView}"/>
+                <Button Height="80" Content="Nhan Tien" Tag="{x:Type view:tNhanTienKhachHangView}"/>
+                <Button Height="80" Content="Cong No" Tag="{x:Type view:tCongNoKhachHangView}"/>
+                <Button Height="80" Content="Phu Thu" Tag="{x:Type view:tPhuThuKhachHangView}"/>
+                <Button Height="80" Content="Giam Tru" Tag="{x:Type view:tGiamTruKhachHangView}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
