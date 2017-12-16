@@ -5,6 +5,9 @@ using SimpleDataGrid;
 using SimpleDataGrid.ViewModel;
 using huypq.SmtWpfClientSQL.Demo.DataModel;
 using huypq.SmtWpfClientSQL.Demo.Dto;
+using huypq.SmtShared;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace huypq.SmtWpfClientSQL.Demo.ViewModel
 {
@@ -14,6 +17,7 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
         partial void LoadReferenceDataPartial();
         partial void ProcessDataModelBeforeAddToEntitiesPartial(tMatHangDataModel dataModel);
         partial void ProcessNewAddedDataModelPartial(tMatHangDataModel dataModel);
+        partial void AfterLoadPartial();
 
         HeaderFilterBaseModel _IDFilter;
         HeaderFilterBaseModel _MaLoaiFilter;
@@ -66,6 +70,12 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
             AddHeaderFilter(_CreateTimeFilter);
             AddHeaderFilter(_LastUpdateTimeFilter);
             AddHeaderFilter(_MaHinhAnhFilter);
+        }
+
+        protected override void AfterLoad()
+        {
+
+            AfterLoadPartial();
         }
 
         public override void LoadReferenceData()

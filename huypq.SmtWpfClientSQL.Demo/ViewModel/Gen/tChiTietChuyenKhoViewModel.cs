@@ -5,6 +5,9 @@ using SimpleDataGrid;
 using SimpleDataGrid.ViewModel;
 using huypq.SmtWpfClientSQL.Demo.DataModel;
 using huypq.SmtWpfClientSQL.Demo.Dto;
+using huypq.SmtShared;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace huypq.SmtWpfClientSQL.Demo.ViewModel
 {
@@ -14,6 +17,7 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
         partial void LoadReferenceDataPartial();
         partial void ProcessDataModelBeforeAddToEntitiesPartial(tChiTietChuyenKhoDataModel dataModel);
         partial void ProcessNewAddedDataModelPartial(tChiTietChuyenKhoDataModel dataModel);
+        partial void AfterLoadPartial();
 
         HeaderFilterBaseModel _IDFilter;
         HeaderFilterBaseModel _MaChuyenKhoFilter;
@@ -22,6 +26,7 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
         HeaderFilterBaseModel _TenantIDFilter;
         HeaderFilterBaseModel _CreateTimeFilter;
         HeaderFilterBaseModel _LastUpdateTimeFilter;
+        Dictionary<int, tChuyenKhoDataModel> _MaChuyenKhos;
 
         public tChiTietChuyenKhoViewModel() : base()
         {
@@ -54,6 +59,17 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
             AddHeaderFilter(_TenantIDFilter);
             AddHeaderFilter(_CreateTimeFilter);
             AddHeaderFilter(_LastUpdateTimeFilter);
+        }
+
+        protected override void AfterLoad()
+        {
+            _MaChuyenKhos = DataService.GetByListInt<tChuyenKhoDto, tChuyenKhoDataModel>(nameof(IDto.ID), Entities.Select(p => p.MaChuyenKho).ToList()).ToDictionary(p => p.ID);
+            foreach (var dataModel in Entities)
+            {
+                dataModel.MaChuyenKhoNavigation = _MaChuyenKhos[dataModel.MaChuyenKho];
+            }
+
+            AfterLoadPartial();
         }
 
         public override void LoadReferenceData()

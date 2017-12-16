@@ -5,6 +5,9 @@ using SimpleDataGrid;
 using SimpleDataGrid.ViewModel;
 using huypq.SmtWpfClientSQL.Demo.DataModel;
 using huypq.SmtWpfClientSQL.Demo.Dto;
+using huypq.SmtShared;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace huypq.SmtWpfClientSQL.Demo.ViewModel
 {
@@ -14,6 +17,7 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
         partial void LoadReferenceDataPartial();
         partial void ProcessDataModelBeforeAddToEntitiesPartial(tChiTietChuyenHangDonHangDataModel dataModel);
         partial void ProcessNewAddedDataModelPartial(tChiTietChuyenHangDonHangDataModel dataModel);
+        partial void AfterLoadPartial();
 
         HeaderFilterBaseModel _IDFilter;
         HeaderFilterBaseModel _MaChuyenHangDonHangFilter;
@@ -23,6 +27,8 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
         HeaderFilterBaseModel _TenantIDFilter;
         HeaderFilterBaseModel _CreateTimeFilter;
         HeaderFilterBaseModel _LastUpdateTimeFilter;
+        Dictionary<int, tChuyenHangDonHangDataModel> _MaChuyenHangDonHangs;
+        Dictionary<int, tChiTietDonHangDataModel> _MaChiTietDonHangs;
 
         public tChiTietChuyenHangDonHangViewModel() : base()
         {
@@ -46,6 +52,19 @@ namespace huypq.SmtWpfClientSQL.Demo.ViewModel
             AddHeaderFilter(_TenantIDFilter);
             AddHeaderFilter(_CreateTimeFilter);
             AddHeaderFilter(_LastUpdateTimeFilter);
+        }
+
+        protected override void AfterLoad()
+        {
+            _MaChuyenHangDonHangs = DataService.GetByListInt<tChuyenHangDonHangDto, tChuyenHangDonHangDataModel>(nameof(IDto.ID), Entities.Select(p => p.MaChuyenHangDonHang).ToList()).ToDictionary(p => p.ID);
+            _MaChiTietDonHangs = DataService.GetByListInt<tChiTietDonHangDto, tChiTietDonHangDataModel>(nameof(IDto.ID), Entities.Select(p => p.MaChiTietDonHang).ToList()).ToDictionary(p => p.ID);
+            foreach (var dataModel in Entities)
+            {
+                dataModel.MaChuyenHangDonHangNavigation = _MaChuyenHangDonHangs[dataModel.MaChuyenHangDonHang];
+                dataModel.MaChiTietDonHangNavigation = _MaChiTietDonHangs[dataModel.MaChiTietDonHang];
+            }
+
+            AfterLoadPartial();
         }
 
         public override void LoadReferenceData()
