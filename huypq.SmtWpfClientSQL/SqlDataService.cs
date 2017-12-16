@@ -31,6 +31,11 @@ namespace huypq.SmtWpfClientSQL
             _token = options.Token;
             _dbName = options.DbName;
             _defaultPageSize = options.DefaultPageSize;
+
+            if (_defaultPageSize == 0)
+            {
+                _defaultPageSize = 30;
+            }
         }
 
         public bool IsLoggedIn()
