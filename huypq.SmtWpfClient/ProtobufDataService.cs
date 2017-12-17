@@ -158,7 +158,7 @@ namespace huypq.SmtWpfClient
 
             var uri = GetFullUri(controller, ControllerAction.SmtEntityBase.GetAll);
             var responseBytes = Post(uri, ToBytes(new QueryExpression() { WhereOptions = we }), SerializeType.Protobuf);
-            
+
             return ProcessPagingResult<T, T1>(responseBytes);
         }
 
@@ -175,7 +175,7 @@ namespace huypq.SmtWpfClient
             return ProcessPagingResult<T, T1>(responseBytes);
         }
 
-        public string Save<T, T1>(List<T1> changedItems, string controller = null) where T : class, IDto where T1 : IDataModel<T>
+        public string Save<T, T1>(List<T1> changedItems, string controller = null) where T : IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
@@ -195,7 +195,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Add<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
+        public string Add<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
@@ -208,7 +208,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Update<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
+        public string Update<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
@@ -221,7 +221,7 @@ namespace huypq.SmtWpfClient
             return GetStringFromBytes(result);
         }
 
-        public string Delete<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>
+        public string Delete<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {

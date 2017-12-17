@@ -25,10 +25,10 @@ namespace huypq.SmtWpfClient.Abstraction
         List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
         PagingResultDto<T1> GetAll<T, T1>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
         PagingResultDto<T1> GetUpdate<T, T1>(List<QueryBuilder.WhereExpression.IWhereOption> we, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
-        string Save<T, T1>(List<T1> changedItems, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
-        string Add<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
-        string Update<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
-        string Delete<T, T1>(T1 item, string controller = null) where T : class, IDto where T1 : IDataModel<T>;
+        string Save<T, T1>(List<T1> changedItems, string controller = null) where T : IDto where T1 : IDataModel<T>;
+        string Add<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>;
+        string Update<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>;
+        string Delete<T, T1>(T1 item, string controller = null) where T : IDto where T1 : IDataModel<T>;
 
         PagingResultDto<T> Report<T>(string reportName, NameValueCollection reportParams);
 

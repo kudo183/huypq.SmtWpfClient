@@ -153,7 +153,7 @@ namespace huypq.SmtWpfClientSQL
             qe.PageSize = _defaultPageSize;
             qe.AddWhereOption<WhereExpression.WhereOptionIntList, List<int>>(
                 WhereExpression.In, path, listInt.Distinct().ToList());
-            
+
             var dataProvider = DataServiceUtils.GetDataController(controller);
 
             var result = dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.Get, qe) as PagingResultDto<T>;
@@ -193,7 +193,7 @@ namespace huypq.SmtWpfClientSQL
             return DataServiceUtils.ProcessPagingResult<T, T1>(result);
         }
 
-        string IDataService.Save<T, T1>(List<T1> changedItems, string controller)
+        public string Save<T, T1>(List<T1> changedItems, string controller) where T : IDto where T1 : IDataModel<T>
         {
             if (controller == null)
             {
@@ -212,17 +212,17 @@ namespace huypq.SmtWpfClientSQL
             return dataProvider.ActionInvoker(ControllerAction.SmtEntityBase.Save, changedDto) as string;
         }
 
-        string IDataService.Add<T, T1>(T1 item, string controller)
+        public string Add<T, T1>(T1 item, string controller) where T : IDto where T1 : IDataModel<T>
         {
             throw new NotImplementedException();
         }
 
-        string IDataService.Update<T, T1>(T1 item, string controller)
+        public string Update<T, T1>(T1 item, string controller) where T : IDto where T1 : IDataModel<T>
         {
             throw new NotImplementedException();
         }
 
-        string IDataService.Delete<T, T1>(T1 item, string controller)
+        public string Delete<T, T1>(T1 item, string controller) where T : IDto where T1 : IDataModel<T>
         {
             throw new NotImplementedException();
         }
