@@ -286,7 +286,7 @@ namespace huypq.SmtWpfClientSQL
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                throw new Exception(ex.Message);
             }
             //need return an json object, if just return status code, jquery will treat as fail.
             return "OK";
