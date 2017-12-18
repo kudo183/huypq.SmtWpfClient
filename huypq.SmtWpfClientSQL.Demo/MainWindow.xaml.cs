@@ -29,12 +29,9 @@ namespace huypq.SmtWpfClientSQL.Demo
 
         private void Init()
         {
+            LoginToken.Instance.TenantID = 1;
+
             Database.SetInitializer<SqlDbContext>(null);
-
-            var entryAssembly = Assembly.Load(new AssemblyName("huypq.SmtWpfClientSQL.Demo"));
-
-            Settings.DataControllerNamespacePattern = string.Format("{0}.DataController.{{0}}Controller, {1}",
-               entryAssembly.FullName.Split(',')[0], entryAssembly.FullName);
 
             ServiceLocator.AddTypeMapping(typeof(ILoggerProvider), typeof(LoggerProviderWithOptions), true, new LoggerProviderWithOptions.Options()
             {
@@ -43,19 +40,21 @@ namespace huypq.SmtWpfClientSQL.Demo
                 Processor = new LoggerBatchingProcessor(1000, 1024, 1024, @"logs", 31, 20 * 1024 * 1024)
             });
 
-            ServiceLocator.AddTypeMapping(typeof(IDbContext), typeof(SqlDbContext), false, null);
-
             ServiceLocator.AddTypeMapping(typeof(IViewModelFactory), typeof(ViewModelFactory), true, new ViewModelFactory.Options()
             {
                 ViewModelNamespace = "huypq.SmtWpfClientSQL.Demo.ViewModel",
                 ViewModelAssembly = System.Reflection.Assembly.GetExecutingAssembly()
             });
 
+            ServiceLocator.AddTypeMapping(typeof(IDbContext), typeof(SqlDbContext), false, null);
+            
+            Settings.DataControllerNamespacePattern = "huypq.SmtWpfClientSQL.Demo.DataController.{0}Controller";
+
+            Settings.DataControllerAssembly = Assembly.Load(new AssemblyName("huypq.SmtWpfClientSQL.Demo"));
+
             ServiceLocator.AddTypeMapping(typeof(IDataService), typeof(SqlDataService), true, new SqlDataService.Options()
             {
-                Token = "",
-                IsTenant = true,
-                DbName = "Test"
+                Token = ""
             });
         }
 

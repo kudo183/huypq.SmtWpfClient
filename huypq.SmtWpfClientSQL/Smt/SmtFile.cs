@@ -1,4 +1,4 @@
-﻿namespace huypq.SmtWpfClientSQL.Entities
+﻿namespace huypq.SmtWpfClientSQL
 {
     public class SmtFile : IFileEntity
     {

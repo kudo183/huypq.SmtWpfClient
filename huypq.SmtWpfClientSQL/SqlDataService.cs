@@ -14,22 +14,56 @@ namespace huypq.SmtWpfClientSQL
     {
         public class Options
         {
-            public string DbName { get; set; }
-            public bool IsTenant { get; set; }
             public string Token { get; set; }
             public int DefaultPageSize { get; set; }
         }
-
-        bool _isTenant;
-        string _token;
-        string _dbName;
+        
         int _defaultPageSize;
+
+        private string ProtectString(string text)
+        {
+            if (string.IsNullOrEmpty(text) == true)
+            {
+                return string.Empty;
+            }
+
+            try
+            {
+                var bytes = System.Text.Encoding.ASCII.GetBytes(text);
+                var protectedBytes = System.Security.Cryptography.ProtectedData.Protect(bytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                return Convert.ToBase64String(protectedBytes);
+            }
+            catch { }
+
+            return string.Empty;
+        }
+
+        private string UnprotectString(string base64)
+        {
+            if (string.IsNullOrEmpty(base64) == true)
+            {
+                return string.Empty;
+            }
+
+            try
+            {
+                var bytes = Convert.FromBase64String(base64);
+                var unprotectedBytes = System.Security.Cryptography.ProtectedData.Unprotect(bytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                return System.Text.Encoding.ASCII.GetString(unprotectedBytes);
+            }
+            catch { }
+
+            return string.Empty;
+        }
 
         public SqlDataService(Options options)
         {
-            _isTenant = options.IsTenant;
-            _token = options.Token;
-            _dbName = options.DbName;
+            var token = UnprotectString(options.Token);
+            if (string.IsNullOrEmpty(token) == false)
+            {
+                LoginToken.Instance.FromBase64(token);
+            }
+
             _defaultPageSize = options.DefaultPageSize;
 
             if (_defaultPageSize == 0)
@@ -40,22 +74,30 @@ namespace huypq.SmtWpfClientSQL
 
         public bool IsLoggedIn()
         {
-            throw new NotImplementedException();
+            return LoginToken.Instance.TenantID != 0;
         }
 
         public bool IsTenant()
         {
-            throw new NotImplementedException();
+            return LoginToken.Instance.IsTenant;
         }
 
         public string GetBase64ProtectedToken()
         {
-            throw new NotImplementedException();
+            return ProtectString(LoginToken.Instance.ToBase64());
         }
 
         public string Register(string tenantLoginName, string tenantName)
         {
-            throw new NotImplementedException();
+            var data = new NameValueCollection();
+            data["user"] = tenantLoginName;
+            data["tenantname"] = tenantName;
+
+            var dataProvider = DataServiceUtils.GetDataController(ControllerAction.Smt.ControllerName);
+
+            var result = dataProvider.ActionInvoker(ControllerAction.Smt.Register, data) as string;
+
+            return result;
         }
 
         public string TenantRequestToken(string email, string purpose)
@@ -75,7 +117,13 @@ namespace huypq.SmtWpfClientSQL
 
         public void TenantLogin(string tenantLoginName, string password)
         {
-            throw new NotImplementedException();
+            var data = new NameValueCollection();
+            data["user"] = tenantLoginName;
+            data["pass"] = password;
+
+            var dataProvider = DataServiceUtils.GetDataController(ControllerAction.Smt.ControllerName);
+
+            dataProvider.ActionInvoker(ControllerAction.Smt.TenantLogin, data);
         }
 
         public void UserLogin(string tenantName, string username, string password)

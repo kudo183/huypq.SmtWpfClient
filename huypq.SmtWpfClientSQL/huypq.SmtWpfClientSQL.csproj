@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,9 +60,11 @@
     <Compile Include="Interface\ITenant.cs" />
     <Compile Include="Interface\IUser.cs" />
     <Compile Include="Interface\IUserClaim.cs" />
+    <Compile Include="LoginToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseDataController.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SmtBaseController.cs" />
     <Compile Include="Smt\SmtDeletedItem.cs" />
     <Compile Include="Smt\SmtFile.cs" />
     <Compile Include="Smt\SmtTable.cs" />

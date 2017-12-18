@@ -1,11 +1,13 @@
 ﻿using huypq.QueryBuilder;
 using huypq.SmtShared;
+using System.Reflection;
 
 namespace huypq.SmtWpfClientSQL
 {
     public static class Settings
     {
         public static string DataControllerNamespacePattern;
+        public static Assembly DataControllerAssembly;
 
         public static OrderByExpression.OrderOption DefaultOrderOption = new OrderByExpression.OrderOption()
         {

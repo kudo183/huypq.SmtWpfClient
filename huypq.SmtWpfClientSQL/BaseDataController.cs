@@ -165,7 +165,7 @@ namespace huypq.SmtWpfClientSQL
             //query = OrderByExpression.AddOrderByExpression(query, filter.OrderOptions); //must order in client for perfomance
 
             var lastUpdate = (long)lastUpdateWhereOption.GetValue();
-            var deletedItemsQuery = _context.SmtDeletedItem.Where(p => p.TableID == tableID && p.CreateTime > lastUpdate);
+            var deletedItemsQuery = _context.SmtDeletedItem.Where(p => p.TableID == tableID && p.TenantID == LoginToken.Instance.TenantID && p.CreateTime > lastUpdate);
 
             var itemCount = query.Count() + deletedItemsQuery.Count();
             var maxItem = GetMaxItemAllowed();
@@ -212,6 +212,7 @@ namespace huypq.SmtWpfClientSQL
                     case DtoState.Add:
                         entity.CreateTime = now;
                         entity.LastUpdateTime = now;
+                        entity.TenantID = LoginToken.Instance.TenantID;
                         _context.Set<EntityType>().Add(entity);
                         changedEntities.Add(entity);
                         break;
@@ -225,6 +226,7 @@ namespace huypq.SmtWpfClientSQL
                         _context.Set<EntityType>().Remove(entity);
                         _context.SmtDeletedItem.Add(new SmtDeletedItem()
                         {
+                            TenantID = LoginToken.Instance.TenantID,
                             DeletedID = entity.ID,
                             TableID = tableID,
                             CreateTime = now
@@ -243,6 +245,7 @@ namespace huypq.SmtWpfClientSQL
         {
             dto.State = DtoState.Add;
             var entity = ConvertToEntity(dto);
+            entity.TenantID = LoginToken.Instance.TenantID;
             entity.LastUpdateTime = DateTime.UtcNow.Ticks;
             _context.Set<EntityType>().Add(entity);
 
@@ -270,6 +273,7 @@ namespace huypq.SmtWpfClientSQL
             _context.Set<EntityType>().Remove(entity);
             _context.SmtDeletedItem.Add(new SmtDeletedItem()
             {
+                TenantID = LoginToken.Instance.TenantID,
                 DeletedID = entity.ID,
                 TableID = _context.SmtTable.FirstOrDefault(p => p.TableName == tableName).ID,
                 CreateTime = DateTime.UtcNow.Ticks
@@ -309,7 +313,7 @@ namespace huypq.SmtWpfClientSQL
 
         protected virtual IQueryable<EntityType> GetQuery()
         {
-            return _context.Set<EntityType>();
+            return _context.Set<EntityType>().Where(p => p.TenantID == LoginToken.Instance.TenantID);
         }
 
         public abstract DtoType ConvertToDto(EntityType entity);

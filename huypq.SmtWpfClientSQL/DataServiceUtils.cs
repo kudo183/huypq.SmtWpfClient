@@ -8,7 +8,7 @@ namespace huypq.SmtWpfClientSQL
     {
         public static IDataProvider GetDataController(string type)
         {
-            var dataProviderType = Type.GetType(
+            var dataProviderType = Settings.DataControllerAssembly.GetType(
                 string.Format(Settings.DataControllerNamespacePattern, type), true, true);
 
             return Activator.CreateInstance(dataProviderType) as IDataProvider;
