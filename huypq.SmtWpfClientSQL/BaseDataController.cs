@@ -313,7 +313,8 @@ namespace huypq.SmtWpfClientSQL
 
         protected virtual IQueryable<EntityType> GetQuery()
         {
-            return _context.Set<EntityType>().Where(p => p.TenantID == LoginToken.Instance.TenantID);
+            //return _context.Set<EntityType>().Where(p => p.TenantID == LoginToken.Instance.TenantID);
+            return _context.Set<EntityType>();
         }
 
         public abstract DtoType ConvertToDto(EntityType entity);
