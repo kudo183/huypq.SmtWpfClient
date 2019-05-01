@@ -15,7 +15,7 @@ namespace huypq.SmtWpfClientSQL
             IsAscending = false
         };
 
-        public static string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PhuDinh;Integrated Security=True";
+        public static string ConnectionString = "";
 
         public static void SetConnection(string dataSource, string dbName)
         {
