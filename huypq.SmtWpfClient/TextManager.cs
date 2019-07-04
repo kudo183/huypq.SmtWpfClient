@@ -20,6 +20,7 @@
             Token = "Token";
             UserReset = "User Reset";
             TenantReset = "Tenant Reset";
+            Server = "Server";
         }
 
         public static string OK { get; set; }
@@ -38,5 +39,6 @@
         public static string Token { get; set; }
         public static string UserReset { get; set; }
         public static string TenantReset { get; set; }
+        public static string Server { get; set; }
     }
 }

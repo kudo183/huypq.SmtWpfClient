@@ -4,69 +4,74 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:smtWpfClient="clr-namespace:huypq.SmtWpfClient"
-             mc:Ignorable="d"
-             Width="450" Height="300">
-    <TabControl>
-        <TabItem Header="{x:Static smtWpfClient:TextManager.Login}">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+             mc:Ignorable="d" Width="410" Height="255">
+    <StackPanel Orientation="Vertical" Background="White">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{x:Static smtWpfClient:TextManager.Server}" Width="50" Margin="5" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Server, UpdateSourceTrigger=PropertyChanged}" Width="333" Margin="5"/>
+        </StackPanel>
+        <TabControl>
+            <TabItem Header="{x:Static smtWpfClient:TextManager.Login}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Password}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <PasswordBox x:Name="passboxLogin" PasswordChar="*" PasswordChanged="login_PasswordChanged" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="{x:Static smtWpfClient:TextManager.UserLogin}" IsDefault="True" Command="{Binding UserLoginCommand}" Margin="5" Width="100"/>
+                        <Button Content="{x:Static smtWpfClient:TextManager.TenantLogin}" Command="{Binding TenantLoginCommand}" Margin="5" Width="100"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Msg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+            </TabItem>
+            <TabItem Header="{x:Static smtWpfClient:TextManager.Register}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <Button Content="{x:Static smtWpfClient:TextManager.OK}" IsDefault="True" Command="{Binding RegisterCommand}" Margin="5" HorizontalAlignment="Center" Width="100"/>
+                    <TextBlock Text="{Binding RMsg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Password}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <PasswordBox x:Name="passboxLogin" PasswordChar="*" PasswordChanged="login_PasswordChanged" Width="250" Margin="5"/>
+            </TabItem>
+            <TabItem Header="{x:Static smtWpfClient:TextManager.ResetPassword}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="{x:Static smtWpfClient:TextManager.UserReset}" IsDefault="True" Command="{Binding UserResetCommand}" Margin="5" Width="100"/>
+                        <Button Content="{x:Static smtWpfClient:TextManager.TenantReset}" IsDefault="True" Command="{Binding TenantResetCommand}" Margin="5" Width="100"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Token}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Token, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static smtWpfClient:TextManager.Password}" Width="130" Margin="5" VerticalAlignment="Center"/>
+                        <PasswordBox x:Name="passboxReset" PasswordChar="*" PasswordChanged="reset_PasswordChanged" Width="250" Margin="5"/>
+                    </StackPanel>
+                    <Button Content="{x:Static smtWpfClient:TextManager.OK}" IsDefault="True" Command="{Binding ResetCommand}" Margin="5" HorizontalAlignment="Center" Width="100"/>
+                    <TextBlock Text="{Binding Msg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="{x:Static smtWpfClient:TextManager.UserLogin}" IsDefault="True" Command="{Binding UserLoginCommand}" Margin="5" Width="100"/>
-                    <Button Content="{x:Static smtWpfClient:TextManager.TenantLogin}" Command="{Binding TenantLoginCommand}" Margin="5" Width="100"/>
-                </StackPanel>
-                <TextBlock Text="{Binding Msg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="{x:Static smtWpfClient:TextManager.Register}">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
-                </StackPanel>
-                <Button Content="{x:Static smtWpfClient:TextManager.OK}" IsDefault="True" Command="{Binding RegisterCommand}" Margin="5" HorizontalAlignment="Center" Width="100"/>
-                <TextBlock Text="{Binding RMsg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="{x:Static smtWpfClient:TextManager.ResetPassword}">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Email}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.TenantName}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding TenantName, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="{x:Static smtWpfClient:TextManager.UserReset}" IsDefault="True" Command="{Binding UserResetCommand}" Margin="5" Width="100"/>
-                    <Button Content="{x:Static smtWpfClient:TextManager.TenantReset}" IsDefault="True" Command="{Binding TenantResetCommand}" Margin="5" Width="100"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Token}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Token, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="5"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static smtWpfClient:TextManager.Password}" Width="130" Margin="5" VerticalAlignment="Center"/>
-                    <PasswordBox x:Name="passboxReset" PasswordChar="*" PasswordChanged="reset_PasswordChanged" Width="250" Margin="5"/>
-                </StackPanel>
-                <Button Content="{x:Static smtWpfClient:TextManager.OK}" IsDefault="True" Command="{Binding ResetCommand}" Margin="5" HorizontalAlignment="Center" Width="100"/>
-                <TextBlock Text="{Binding Msg}" Foreground="Red" Margin="5" TextWrapping="Wrap"/>
-            </StackPanel>
-        </TabItem>
-    </TabControl>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </UserControl>

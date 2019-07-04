@@ -39,6 +39,20 @@ namespace huypq.SmtWpfClient.ViewModel
             }
         }
 
+        private string _server;
+        public string Server
+        {
+            get { return _server; }
+            set
+            {
+                if (_server != value)
+                {
+                    _server = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _tenantName;
         public string TenantName
         {
