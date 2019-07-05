@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -486,9 +483,9 @@
       <Project>{9cfa4fe9-01d0-4bd1-aa8a-bca4b4a60375}</Project>
       <Name>SimpleDataGrid</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj">
-      <Project>{dbb09141-9d0c-4867-9248-1fc2e8a5eec5}</Project>
-      <Name>huypq.SmtShared.Framework</Name>
+    <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.NETStandard\huypq.SmtShared.NETStandard.csproj">
+      <Project>{95f58585-e3ea-4c8a-bcd2-2b70eaa4d3a0}</Project>
+      <Name>huypq.SmtShared.NETStandard</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\huypq.wpf.controls\huypq.wpf.controls\huypq.wpf.controls.csproj">
       <Project>{2a2ba72b-c536-419c-8741-a09e21ed70c7}</Project>
@@ -534,10 +531,10 @@
       <Version>6.2.0</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="protobuf-net">
-      <Version>2.3.3</Version>
+      <Version>2.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

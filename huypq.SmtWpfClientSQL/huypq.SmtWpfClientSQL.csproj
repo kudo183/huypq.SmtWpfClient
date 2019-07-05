@@ -74,9 +74,9 @@
       <Project>{B3180065-6E2E-4EC4-9D02-E8D43D93808A}</Project>
       <Name>huypq.wpf.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.Framework\huypq.SmtShared.Framework.csproj">
-      <Project>{dbb09141-9d0c-4867-9248-1fc2e8a5eec5}</Project>
-      <Name>huypq.SmtShared.Framework</Name>
+    <ProjectReference Include="..\..\huypq.SmtShared\huypq.SmtShared.NETStandard\huypq.SmtShared.NETStandard.csproj">
+      <Project>{95f58585-e3ea-4c8a-bcd2-2b70eaa4d3a0}</Project>
+      <Name>huypq.SmtShared.NETStandard</Name>
     </ProjectReference>
     <ProjectReference Include="..\huypq.SmtWpfClient\huypq.SmtWpfClient.csproj">
       <Project>{8e941c6e-74ca-4baa-af1d-9d98283db1d1}</Project>
