@@ -94,6 +94,30 @@ namespace huypq.SmtWpfClient
             }
         }
 
+        public async System.Threading.Tasks.Task<PagingResultDto<T1>> CustomFormPostActionWithPagingResultAsync<T, T1>(
+            string controller, string action, List<KeyValuePair<string, string>> parameters) where T : IDto where T1 : IDataModel<T>, new()
+        {
+            var requestMessage = new System.Net.Http.HttpRequestMessage
+            {
+                RequestUri = new Uri(GetFullUri(controller, action)),
+                Method = System.Net.Http.HttpMethod.Post,
+            };
+            requestMessage.Headers.Add("response", SerializeType.Protobuf);
+            requestMessage.Headers.Add("token", _token);
+
+            requestMessage.Content = new System.Net.Http.FormUrlEncodedContent(parameters);
+
+
+            var handler = new System.Net.Http.HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            var client = new System.Net.Http.HttpClient(handler);
+            var response = await client.SendAsync(requestMessage);
+            var responseBytes = await response.Content.ReadAsByteArrayAsync();
+            return ProcessPagingResult<T, T1>(responseBytes);
+        }
+
         public PagingResultDto<T1> Get<T, T1>(QueryExpression qe, string controller = null) where T : IDto where T1 : IDataModel<T>, new()
         {
             if (controller == null)

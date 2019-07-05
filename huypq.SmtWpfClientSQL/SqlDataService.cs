@@ -7,6 +7,7 @@ using huypq.QueryBuilder;
 using System.Linq;
 using System.IO;
 using huypq.SmtShared.Constant;
+using System.Threading.Tasks;
 
 namespace huypq.SmtWpfClientSQL
 {
@@ -296,6 +297,13 @@ namespace huypq.SmtWpfClientSQL
         }
 
         public string DeteleFile(int id, string controller = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PagingResultDto<T1>> CustomFormPostActionWithPagingResultAsync<T, T1>(string controller, string action, List<KeyValuePair<string, string>> parameters)
+            where T : IDto
+            where T1 : IDataModel<T>, new()
         {
             throw new NotImplementedException();
         }
