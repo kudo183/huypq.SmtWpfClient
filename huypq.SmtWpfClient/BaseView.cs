@@ -106,7 +106,7 @@ namespace huypq.SmtWpfClient.Abstraction
                 GridView.dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
                 ViewModel.Save();
                 ActionAfterSave?.Invoke();
-            });
+            }, () => CanSave());
 
             ViewModel.LoadCommand = new SimpleCommand("LoadCommand", () =>
             {
@@ -198,6 +198,11 @@ namespace huypq.SmtWpfClient.Abstraction
                 ViewModel.Load();
                 _isLoaded = true;
             }
+        }
+
+        public virtual bool CanSave()
+        {
+            return true;
         }
     }
 }
