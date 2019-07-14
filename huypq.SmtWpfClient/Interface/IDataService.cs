@@ -22,6 +22,7 @@ namespace huypq.SmtWpfClient.Abstraction
         string ChangePassword(string currentPass, string newPass);
 
         Task<PagingResultDto<T1>> CustomFormPostActionWithPagingResultAsync<T, T1>(string controller, string action, List<KeyValuePair<string, string>> parameters) where T : IDto where T1 : IDataModel<T>, new();
+        Task<string> CustomFormPostActionWithStringResultAsync(string controller, string action, List<KeyValuePair<string, string>> parameters);
         PagingResultDto<T1> Get<T, T1>(QueryBuilder.QueryExpression qe, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
         T1 GetByID<T, T1>(int ID, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
         List<T1> GetByListInt<T, T1>(string path, List<int> listInt, string controller = null) where T : IDto where T1 : IDataModel<T>, new();
