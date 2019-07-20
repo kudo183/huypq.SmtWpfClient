@@ -307,5 +307,10 @@ namespace huypq.SmtWpfClientSQL
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> CustomFormPostActionWithStringResultAsync(string controller, string action, List<KeyValuePair<string, string>> parameters)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
